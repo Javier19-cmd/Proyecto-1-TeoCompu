@@ -25,6 +25,8 @@ public class regex {
         while (!pila.isEmpty()) {
             postfix += pila.pop();
         }
+
+        System.out.println("Expresión regular postfix: " + postfix);
         return postfix;
     }
 }
