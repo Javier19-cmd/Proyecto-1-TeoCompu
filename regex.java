@@ -4,7 +4,8 @@ public class regex {
     static String evaluar(String infix) {
         String postfix = "";
         Stack<String> pila = new Stack<String>();
-        for (int i = 0; i < infix.length(); i++) {
+        for (int i = 0; i < infix.length(); i++) { // Recorriendo la expresión regular para quitarle los paréntesis y
+                                                   // pasarlo todo a posfijo.
             char c = infix.charAt(i);
             if (c == '(') {
                 pila.push(String.valueOf(c));
