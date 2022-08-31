@@ -56,28 +56,28 @@ public class Thompson {
 
         }
 
-        System.out.println("Expresión regular: " + alfabeto);
+        // System.out.println("Expresión regular: " + alfabeto);
 
         // Recorriendo la pila de la expresión regular.
         for (int x = 0; x < alfabeto.size(); x++) {
             // System.out.println("Caracter: " + pila.get(x));
             // Pusheando los estados de la expresión regular a un arraylist, iniciando en 0.
-            estados.push(x);
+            estados.add(x);
         }
 
         // System.out.println("Estados: " + estados);
 
         // System.out.println("Expresion regular dentro de un stack: " + expresion);
-        System.out.println("Pila: " + alfabeto);
-        System.out.println("Operaciones: " + operaciones);
-        System.out.println("Estados: " + estados);
+        // System.out.println("Pila: " + alfabeto);
+        // System.out.println("Operaciones: " + operaciones);
+        // System.out.println("Estados: " + estados);
+        // System.out.println("");
 
         // Recorriendo e imprimiendo la pila de estados y la pila del alfabeto de la
         // expresión regular.
         for (int i = 0; i < estados.size(); i++) {
             System.out.println("Estado: " + estados.get(i));
             System.out.println("Caracter: " + alfabeto.get(i));
-            System.out.println("");
 
             // Variable que guarda cada estado inicial y final.
             int estado_inicial1 = estados.get(i);
@@ -85,8 +85,15 @@ public class Thompson {
             // Variable que guarda cada letra.
             String letra = alfabeto.get(i);
 
-            // Fabricando las transiciones.
+            // Fabricando las transiciones. Aún falta meter el epsilon.
             transicion.Transicion(estado_inicial1, estado_inicial1 + 1, letra.charAt(0));
+            System.out.println("");
+
+            // System.out.println("Estado: " + i);
+
+            // estados.removeElement(i);
+
+            // System.out.println("Estados: " + estados);
 
         }
 
