@@ -67,6 +67,8 @@ public class Thompson {
 
         // System.out.println("Estados: " + estados);
 
+        // Pushear toda la expresión y analizar con pop las expresiones.
+
         // System.out.println("Expresion regular dentro de un stack: " + expresion);
         // System.out.println("Pila: " + alfabeto);
         // System.out.println("Operaciones: " + operaciones);
