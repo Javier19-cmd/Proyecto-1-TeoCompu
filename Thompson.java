@@ -57,18 +57,19 @@ public class Thompson {
 
             // Identificando el tipo de operación que se va a realizar.
             if (expresion_postfix.peek().equals("|")) { // Operación OR.
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
                 System.out.println("Operación OR");
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
             } else if (expresion_postfix.peek().equals("*")) { // Operación KLEENE.
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
                 System.out.println("Operación KLEENE");
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
             } else if (expresion_postfix.peek().equals("+")) { // Operación CERRADURA POSITIVA.
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
                 System.out.println("Operación CERRADURA POSITIVA");
-            } else { // Operación CONCATENACIÓN.
                 System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
-                System.out.println("Operación CONCATENACIÓN");
+            } else { // Operación CONCATENACIÓN.
+                System.out.println("Operador");
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
             }
+
         }
 
         // Recorriendo la expresión regular.
