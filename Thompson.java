@@ -50,6 +50,39 @@ public class Thompson {
 
         System.out.println("Expresión regular postfix invertida en el Stack: " + expresion_postfix);
 
+        // Verificando la popeada de la expresión postfix invertida.
+        while (!expresion_postfix.isEmpty()) {
+            // System.out.println("Valor de la expresión postfix invertida: " +
+            // expresion_postfix.pop());
+
+            // Identificando el tipo de operación que se va a realizar.
+            if (expresion_postfix.peek().equals("|")) { // Operación OR.
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
+                System.out.println("Operación OR");
+            } else if (expresion_postfix.peek().equals("*")) { // Operación KLEENE.
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
+                System.out.println("Operación KLEENE");
+            } else if (expresion_postfix.peek().equals("+")) { // Operación CERRADURA POSITIVA.
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
+                System.out.println("Operación CERRADURA POSITIVA");
+            } else { // Operación CONCATENACIÓN.
+                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
+                System.out.println("Operación CONCATENACIÓN");
+            }
+            // switch (expresion_postfix.pop()) {
+            // case "|": // Operación OR.
+            // // System.out.println("Operación OR");
+            // break;
+            // case "*": // Operación KLEENE.
+            // System.out.println("Operación KLEENE");
+            // System.out.println(expresion_postfix.pop());
+            // break;
+            // case "+": // Operación CERRADURA POSITIVA.
+            // System.out.println("Operación CERRADURA POSITIVA");
+            // break;
+            // }
+        }
+
         // Recorriendo la expresión regular.
 
         for (int i = 0; i < postfix.length(); i++) {
