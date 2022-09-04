@@ -5,8 +5,11 @@ public class Thompson {
     static String post(String postfix) {
 
         // System.out.println("Valor postfix: " + postfix);
-        // Defininiendo arraylist para el alfabeto.
-        ArrayList<String> expresion = new ArrayList<String>();
+        // Defininiendo arraylist para la expresión original.
+        ArrayList<String> expresion_orig = new ArrayList<String>();
+
+        // Definiendo Stack para la expresión postfix invertida.
+        Stack<String> expresion_postfix = new Stack<String>();
 
         // Defininendo una pila para el alfabeto.
         Stack<String> alfabeto = new Stack<String>();
@@ -32,13 +35,31 @@ public class Thompson {
         // Definiendo los estados de las transiciones. Esto es una clase aparte.
         // ArrayList<Transiciones> transiciones = new ArrayList<Transiciones>();
 
+        // Invirtiendo la expresión regular.
+        StringBuilder strb = new StringBuilder(postfix);
+
+        postfix = strb.reverse().toString(); // Invierto la expresión regular.
+
+        System.out.println("Expresión regular invertida: " + postfix);
+
+        // Insertando la expresión postfix invertida al Stack.
+        for (int x = 0; x < postfix.length(); x++) {
+            expresion_postfix.push(String.valueOf(postfix.charAt(x))); // Insertando la expresión postfix invertida al
+                                                                       // Stack.
+        }
+
+        System.out.println("Expresión regular postfix invertida en el Stack: " + expresion_postfix);
+
+        // Recorriendo la expresión regular.
+
         for (int i = 0; i < postfix.length(); i++) {
             // Pusheando los caracteres de la expresion regular en el arraylist.
-            expresion.add(String.valueOf(postfix.charAt(i)));
+            expresion_orig.add(String.valueOf(postfix.charAt(i)));
 
             /*
              * Si el caracter es diferente de | o * o +, se agrega a la pila.
              */
+
             switch (postfix.charAt(i)) { // Quitando el or. Esto se pushea al stack de operaciones.
                 case '|':
                     operaciones.push(String.valueOf(postfix.charAt(i)));
@@ -46,14 +67,13 @@ public class Thompson {
                 case '*': // Quitando el kleene. Esto se pushea al stack de operaciones.
                     operaciones.push(String.valueOf(postfix.charAt(i)));
                     break;
-                case '+': // Quitando la cerradura positiva. Esto se pushea al stack de operaciones.
+                case '+': // Quitando la cerradura positiva. Esto se pushea al stack de operaciones
                     operaciones.push(String.valueOf(postfix.charAt(i)));
                     break;
-                default: // Agregando el caracter de la expresión a la pila de la expresión regular.
+                default: // Agregando el caracter de la expresión a la pila de la expresión regular
                     alfabeto.push(String.valueOf(postfix.charAt(i)));
                     break;
             }
-
         }
 
         // System.out.println("Expresión regular: " + alfabeto);
@@ -67,37 +87,16 @@ public class Thompson {
 
         // System.out.println("Estados: " + estados);
 
-        // Pushear toda la expresión y analizar con pop las expresiones.
+        // Pushear toda la expresión con las operaciones y analizar con pop las
+        // expresiones. Puede ser útil tener en el stack la expresión ya analizada para
+        // poder ir juntando las
+        // operaciones.
 
         // System.out.println("Expresion regular dentro de un stack: " + expresion);
         // System.out.println("Pila: " + alfabeto);
         // System.out.println("Operaciones: " + operaciones);
         // System.out.println("Estados: " + estados);
         // System.out.println("");
-
-        // Recorriendo e imprimiendo la pila de estados y la pila del alfabeto de la
-        // expresión regular.
-        for (int i = 0; i < estados.size(); i++) {
-            System.out.println("Estado: " + estados.get(i));
-            System.out.println("Caracter: " + alfabeto.get(i));
-
-            // Variable que guarda cada estado inicial y final.
-            int estado_inicial1 = estados.get(i);
-
-            // Variable que guarda cada letra.
-            String letra = alfabeto.get(i);
-
-            // Fabricando las transiciones. Aún falta meter el epsilon.
-            transicion.Transicion(estado_inicial1, estado_inicial1 + 1, letra.charAt(0));
-            System.out.println("");
-
-            // System.out.println("Estado: " + i);
-
-            // estados.removeElement(i);
-
-            // System.out.println("Estados: " + estados);
-
-        }
 
         // // Llenar el ArrayList de transiciones.
         // while (pila.size() > 0) {
