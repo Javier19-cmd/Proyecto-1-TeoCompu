@@ -69,18 +69,6 @@ public class Thompson {
                 System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
                 System.out.println("Operación CONCATENACIÓN");
             }
-            // switch (expresion_postfix.pop()) {
-            // case "|": // Operación OR.
-            // // System.out.println("Operación OR");
-            // break;
-            // case "*": // Operación KLEENE.
-            // System.out.println("Operación KLEENE");
-            // System.out.println(expresion_postfix.pop());
-            // break;
-            // case "+": // Operación CERRADURA POSITIVA.
-            // System.out.println("Operación CERRADURA POSITIVA");
-            // break;
-            // }
         }
 
         // Recorriendo la expresión regular.
