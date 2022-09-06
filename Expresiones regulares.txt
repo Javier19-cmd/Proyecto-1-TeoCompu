@@ -5,3 +5,27 @@ a∗b∗
 1(0|1)(0|1)(0|1)(0|1)((0|1)(0|1))*1|0(0|1)(0|1)(0|1)(0|1)((0|1)(0|1))*0
 (a|b)*abb
 (a|b)*(abba*|(ab)*ba)
+
+
+switch (expresion_postfix.peek()) {
+                            case "|":
+                                System.out.println("Operación OR");
+                                break;
+                            case "*":
+                                System.out.println("Operación KLEENE");
+                                break;
+                            case "+":
+                                System.out.println("Operación CERRADURA POSITIVA");
+                                break;
+                            default:
+                                // Obteniendo dos estados de la pila de estados para la operación OR.
+                                String estado1 = expresion_postfix.pop();
+                                String estado2 = expresion_postfix.pop();
+
+                                System.out.println("Estados: " + estado1 + " " + estado2);
+
+                                // Creando las transiciones.
+
+                                // Enviando los estados a la clase de transiciones.
+                                transicion.Transicion(estado_inicial, 2, simbolo);
+                        }

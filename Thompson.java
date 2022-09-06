@@ -55,46 +55,27 @@ public class Thompson {
             // System.out.println("Valor de la expresión postfix invertida: " +
             // expresion_postfix.pop());
 
+            // Sacando el primer estado de la pila de estados.
+
             // Identificando los caracteres de la expresión postfix invertida.
             switch (expresion_postfix.pop()) {
                 case "|":
-                    System.out.println("Operación OR");
+                    System.out.println("Operación OR " + expresion_postfix.peek());
+
+                    String estado1 = String.valueOf(expresion_postfix.pop());
+                    String estado2 = String.valueOf(expresion_postfix.pop());
+
+                    System.out.println("Estado 1: " + estado1 + "Estado 2 " + estado2);
+
                     break;
                 case "*":
-                    System.out.println("Operación KLEENE");
+                    System.out.println("Operación KLEENE ");
                     break;
                 case "+":
-                    System.out.println("Operación CERRADURA POSITIVA");
+                    System.out.println("Operación CERRADURA POSITIVA ");
                     break;
                 default:
-                    System.out.println("Caracter de la expresión regular");
-                    // Identificar si el caracter tiene un operador después de él.
-                    if (!expresion_postfix.isEmpty()) {
-                        switch (expresion_postfix.peek()) {
-                            case "|":
-                                // Obteniendo dos estados de la pila de estados para la operación OR.
-                                int estado1 = estados.pop();
-                                int estado2 = estados.pop();
-
-                                // Creando el estado inicial.
-                                estado_inicial = estado1;
-
-                                // Creando los estados de aceptación.
-                                estados_aceptacion.push(estado2 + 1);
-
-                                // Creando las transiciones.
-
-                                // Enviando los estados a la clase de transiciones.
-                                transicion.Transicion(estado1, estado2, simbolo);
-                                break;
-                            case "*":
-                                System.out.println("Operación KLEENE");
-                                break;
-                            case "+":
-                                System.out.println("Operación CERRADURA POSITIVA");
-                                break;
-                        }
-                    }
+                    System.out.println("Caracter de la expresión regular ");
                     break;
             }
 
