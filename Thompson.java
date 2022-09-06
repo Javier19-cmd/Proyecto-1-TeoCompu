@@ -6,7 +6,7 @@ public class Thompson {
 
         // System.out.println("Valor postfix: " + postfix);
         // Defininiendo arraylist para la expresión original.
-        ArrayList<String> expresion_orig = new ArrayList<String>();
+        ArrayList<String> expresion_resultante = new ArrayList<String>();
 
         // Definiendo Stack para la expresión postfix invertida.
         Stack<String> expresion_postfix = new Stack<String>();
@@ -68,8 +68,33 @@ public class Thompson {
                     break;
                 default:
                     System.out.println("Caracter de la expresión regular");
-                    // Concantenando los caracteres de la expresión regular.
-                    expresion_orig.add(expresion_postfix.pop());
+                    // Identificar si el caracter tiene un operador después de él.
+                    if (!expresion_postfix.isEmpty()) {
+                        switch (expresion_postfix.peek()) {
+                            case "|":
+                                // Obteniendo dos estados de la pila de estados para la operación OR.
+                                int estado1 = estados.pop();
+                                int estado2 = estados.pop();
+
+                                // Creando el estado inicial.
+                                estado_inicial = estado1;
+
+                                // Creando los estados de aceptación.
+                                estados_aceptacion.push(estado2 + 1);
+
+                                // Creando las transiciones.
+
+                                // Enviando los estados a la clase de transiciones.
+                                transicion.Transicion(estado1, estado2, simbolo);
+                                break;
+                            case "*":
+                                System.out.println("Operación KLEENE");
+                                break;
+                            case "+":
+                                System.out.println("Operación CERRADURA POSITIVA");
+                                break;
+                        }
+                    }
                     break;
             }
 
