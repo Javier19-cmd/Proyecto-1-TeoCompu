@@ -55,57 +55,64 @@ public class Thompson {
             // System.out.println("Valor de la expresión postfix invertida: " +
             // expresion_postfix.pop());
 
-            // Identificando el tipo de operación que se va a realizar.
-            if (expresion_postfix.peek().equals("|")) { // Operación OR.
-                System.out.println("Operación OR");
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
-            } else if (expresion_postfix.peek().equals("*")) { // Operación KLEENE.
-                System.out.println("Operación KLEENE");
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
-            } else if (expresion_postfix.peek().equals("+")) { // Operación CERRADURA POSITIVA.
-                System.out.println("Operación CERRADURA POSITIVA");
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
-            } else { // Operación CONCATENACIÓN.
-                System.out.println("Operador");
-                System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.pop());
+            // Identificando los caracteres de la expresión postfix invertida.
+            switch (expresion_postfix.pop()) {
+                case "|":
+                    System.out.println("Operación OR");
+                    break;
+                case "*":
+                    System.out.println("Operación KLEENE");
+                    break;
+                case "+":
+                    System.out.println("Operación CERRADURA POSITIVA");
+                    break;
+                default:
+                    System.out.println("Caracter de la expresión regular");
+                    // Concantenando los caracteres de la expresión regular.
+                    expresion_orig.add(expresion_postfix.pop());
+                    break;
             }
 
         }
 
         // Recorriendo la expresión regular.
 
-        for (int i = 0; i < postfix.length(); i++) {
-            // Pusheando los caracteres de la expresion regular en el arraylist.
-            expresion_orig.add(String.valueOf(postfix.charAt(i)));
+        // for (int i = 0; i < postfix.length(); i++) {
+        // // Pusheando los caracteres de la expresion regular en el arraylist.
+        // expresion_orig.add(String.valueOf(postfix.charAt(i)));
 
-            /*
-             * Si el caracter es diferente de | o * o +, se agrega a la pila.
-             */
+        // /*
+        // * Si el caracter es diferente de | o * o +, se agrega a la pila.
+        // */
 
-            switch (postfix.charAt(i)) { // Quitando el or. Esto se pushea al stack de operaciones.
-                case '|':
-                    operaciones.push(String.valueOf(postfix.charAt(i)));
-                    break;
-                case '*': // Quitando el kleene. Esto se pushea al stack de operaciones.
-                    operaciones.push(String.valueOf(postfix.charAt(i)));
-                    break;
-                case '+': // Quitando la cerradura positiva. Esto se pushea al stack de operaciones
-                    operaciones.push(String.valueOf(postfix.charAt(i)));
-                    break;
-                default: // Agregando el caracter de la expresión a la pila de la expresión regular
-                    alfabeto.push(String.valueOf(postfix.charAt(i)));
-                    break;
-            }
-        }
+        // switch (postfix.charAt(i)) { // Quitando el or. Esto se pushea al stack de
+        // operaciones.
+        // case '|':
+        // operaciones.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // case '*': // Quitando el kleene. Esto se pushea al stack de operaciones.
+        // operaciones.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // case '+': // Quitando la cerradura positiva. Esto se pushea al stack de
+        // operaciones
+        // operaciones.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // default: // Agregando el caracter de la expresión a la pila de la expresión
+        // regular
+        // alfabeto.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // }
+        // }
 
-        // System.out.println("Expresión regular: " + alfabeto);
+        // // System.out.println("Expresión regular: " + alfabeto);
 
-        // Recorriendo la pila de la expresión regular.
-        for (int x = 0; x < alfabeto.size(); x++) {
-            // System.out.println("Caracter: " + pila.get(x));
-            // Pusheando los estados de la expresión regular a un arraylist, iniciando en 0.
-            estados.add(x);
-        }
+        // // Recorriendo la pila de la expresión regular.
+        // for (int x = 0; x < alfabeto.size(); x++) {
+        // // System.out.println("Caracter: " + pila.get(x));
+        // // Pusheando los estados de la expresión regular a un arraylist, iniciando en
+        // 0.
+        // estados.add(x);
+        // }
 
         // System.out.println("Estados: " + estados);
 
