@@ -63,27 +63,23 @@ public class Thompson {
             }
         }
 
-        System.out.println("Alfabeto: " + alfabeto);
+        // System.out.println("Alfabeto: " + alfabeto);
 
-        for (int i = 0; i < expresion_postfix.size(); i++) {
-            System.out.println("Valor de la expresión postfix invertida: " + expresion_postfix.get(i));
+        int i = 0; // Variable para recorrer el stack.
+
+        while (i < expresion_postfix.size()) {
+            // System.out.println("Valor de la expresión postfix invertida: " +
+            // expresion_postfix.get(i));
 
             // Identificando los caracteres de la expresión postfix invertida.
             switch (expresion_postfix.get(i)) {
                 case "|":
-
                     // Sacando los estados de la derecha e izquierda de la operación OR.
                     System.out.println("Operación OR " + expresion_postfix.get(i));
-                    System.out.println("Estado 1: " + expresion_postfix.get(i + 1));
-                    System.out.println("Estado 2: " + expresion_postfix.get(i + 2));
-
-                    // Si el estado 1 es igual a un caracter del alfabeto, entonces se crea un
-                    // estado. Si no, se busca el estado en la pila de estados.
 
                     if (expresion_postfix.get(i + 1).equals(alfabeto)) {
                         // Creando un estado.
-                        estados.push(estado_inicial);
-                        estado_inicial++;
+                        System.out.println("Estado 1: " + expresion_postfix.get(i + 1));
                     } else {
                         // Buscando el estado en la pila de estados.
                         estados.push(estados.search(expresion_postfix.get(i + 1)));
@@ -91,22 +87,24 @@ public class Thompson {
 
                     if (expresion_postfix.get(i + 2).equals(alfabeto)) {
                         // Creando un estado.
-                        estados.push(estado_inicial);
-                        estado_inicial++;
+                        System.out.println("El estado es: " + estado_inicial);
                     } else {
                         // Buscando el estado en la pila de estados.
                         estados.push(estados.search(expresion_postfix.get(i + 1)));
                     }
-                case "*":
-                    System.out.println("Operación KLEENE " + expresion_postfix.get(i));
                     break;
                 case ".":
                     System.out.println("Operación CONCATENACION " + expresion_postfix.get(i));
                     break;
-                default:
-                    System.out.println("Caracter: " + expresion_postfix.get(i));
+                case "*":
+                    System.out.println("Operación KLEENE " + expresion_postfix.get(i));
+                    break;
+                case "+":
+                    System.out.println("Operación POSITIVA " + expresion_postfix.get(i));
                     break;
             }
+
+            i++;
         }
 
         // Verificando la popeada de la expresión postfix invertida.

@@ -1,12 +1,12 @@
 a(aa)∗+b+a(aa)∗bb(bb)∗
-(b|b)*abb(a|b)*
-aa*|bb*
-a∗b∗
+(b|b)*.a.b.b.(a|b)*
+a.a*|b.b*
+a∗.b∗
 1(0|1)(0|1)(0|1)(0|1)((0|1)(0|1))*1|0(0|1)(0|1)(0|1)(0|1)((0|1)(0|1))*0
 (a|b)*.a.b.b
-(a|b)*(abba*|(ab)*ba)
+(a|b)*.(a.b.b.a*|(a.b)*b.a)
 
-
+----------------------------------------------------------------------------------------
 switch (expresion_postfix.peek()) {
                             case "|":
                                 System.out.println("Operación OR");
@@ -29,3 +29,19 @@ switch (expresion_postfix.peek()) {
                                 // Enviando los estados a la clase de transiciones.
                                 transicion.Transicion(estado_inicial, 2, simbolo);
                         }
+--------------------------------------------------------------------------------------------------
+if (expresion_postfix.get(i + 1).equals(alfabeto)) {
+                        // Creando un estado.
+                        System.out.println("Estado 1: " + expresion_postfix.get(i + 1));
+                    } else {
+                        // Buscando el estado en la pila de estados.
+                        estados.push(estados.search(expresion_postfix.get(i + 1)));
+                    }
+
+                    if (expresion_postfix.get(i + 2).equals(alfabeto)) {
+                        // Creando un estado.
+                        System.out.println("El estado es: " + estado_inicial);
+                    } else {
+                        // Buscando el estado en la pila de estados.
+                        estados.push(estados.search(expresion_postfix.get(i + 1)));
+                    }
