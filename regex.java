@@ -27,7 +27,7 @@ public class regex {
             postfix += pila.pop();
         }
 
-        System.out.println("Expresión regular postfix: " + postfix);
+        // System.out.println("Expresión regular postfix: " + postfix);
         return postfix;
     }
 }
