@@ -29,6 +29,9 @@ public class Thompson {
         // Definiendo una pila para los estados de la expresión.
         Stack<Integer> estados = new Stack<Integer>();
 
+        // Definiendo un Arraylist temporal para la expresión invertida.
+        ArrayList<String> temporal = new ArrayList<String>();
+
         // Arreglo para determinar la precedencia de operaciones.
         String[][] precedencia = { { "*", "+", ".", "|" }, { "100", "80", "60", "40" } };
 
@@ -39,6 +42,14 @@ public class Thompson {
         StringBuilder strb = new StringBuilder(postfix);
 
         postfix = strb.reverse().toString(); // Invierto la expresión regular.
+
+        String recorrido = "";
+
+        // Variable para sacar primer elemento a operar.
+        String elemento1 = "";
+
+        // Variable para sacar segundo elemento a operar.
+        String elemento2 = "";
 
         // System.out.println("Expresión regular invertida: " + postfix);
 
@@ -51,14 +62,20 @@ public class Thompson {
         }
 
         // Insertando la expresión postfix invertida al Stack.
-        for (
-
-                int x = 0; x < postfix.length(); x++) {
+        for (int x = 0; x < postfix.length(); x++) {
             expresion_postfix.push(String.valueOf(postfix.charAt(x))); // Insertando la expresión postfix invertida al
                                                                        // Stack.
         }
 
         System.out.println("Expresión regular postfix invertida en el Stack: " + expresion_postfix);
+
+        // Insertando la expresión postfix invertida al ArrayList temporal.
+        for (int x = 0; x < postfix.length(); x++) {
+            temporal.add(String.valueOf(postfix.charAt(x))); // Insertando la expresión postfix invertida al ArrayList
+                                                             // temporal.
+        }
+
+        System.out.println("Expresión regular postfix en el ArrayList temporal: " + temporal.toString());
 
         // Identificando el alfabeto de la expresión regular.
         for (int i = 0; i < expresion_postfix.size(); i++) {
@@ -75,155 +92,59 @@ public class Thompson {
 
         // System.out.println("Alfabeto: " + alfabeto);
 
-        int i = 0; // Variable para recorrer el stack.
-
-        while (i < expresion_postfix.size()) {
+        // Recorriendo el ArrayList temporal hacia atrás.
+        for (int i = temporal.size() - 1; i >= 0; i--) {
             // System.out.println("Valor de la expresión postfix invertida: " +
-            // expresion_postfix.get(i));
+            // temporal.get(i));
 
-            // Identificando los caracteres de la expresión postfix invertida.
-            switch (expresion_postfix.get(i)) {
-                case "|":
-                    // Sacando los estados de la derecha e izquierda de la operación OR.
-                    System.out.println("Operación OR " + expresion_postfix.get(i));
+            // Identificando si el elemento es un operador.
+            if (temporal.get(i).equals("*") || temporal.get(i).equals(".") || temporal.get(i).equals("|")) {
+                System.out.println("Operador: " + temporal.get(i));
 
-                    // Sacando el primer estado de la pila de estados.
-                    String estado1 = String.valueOf(expresion_postfix.get(i + 1));
-                    String estado2 = String.valueOf(expresion_postfix.get(i + 2));
+                // Insertando el operador al Stack de operaciones.
+                // operaciones.push(temporal.get(i));
 
-                    System.out.println("Estado 1: " + estado1);
-                    System.out.println("Estado 2: " + estado2);
+                // System.out.println("Operaciones: " + operaciones);
 
-                    break;
-                case ".":
-                    System.out.println("Operación CONCATENACION " + expresion_postfix.get(i));
+                // Identificando si el elemento es un operando.
+            } else {
+                System.out.println("Operando: " + temporal.get(i));
 
-                    // Sacando el primer estado de la pila de estados.
-                    String estado3 = String.valueOf(expresion_postfix.get(i + 1));
-                    String estado4 = String.valueOf(expresion_postfix.get(i + 2));
+                // Insertando el operando al Stack de operaciones.
+                // operaciones.push(temporal.get(i));
 
-                    System.out.println("Estado 1: " + estado3);
-                    System.out.println("Estado 2: " + estado4);
-                    break;
-                case "*":
-                    System.out.println("Operación KLEENE " + expresion_postfix.get(i));
-
-                    // Sacando el primer estado de la pila de estados.
-                    String estado5 = String.valueOf(expresion_postfix.get(i + 1));
-
-                    System.out.println("Estado 1: " + estado5);
-                    break;
-                case "+":
-                    System.out.println("Operación POSITIVA " + expresion_postfix.get(i));
-                    break;
-                default:
-                    // Creando un estado.
-                    System.out.println("Estado: " + expresion_postfix.get(i));
-                    break;
+                // System.out.println("Operaciones: " + operaciones);
             }
-
-            i++;
         }
 
-        // Agregando la transición del estado de aceptación al estado de acept
+        // Recorriendo el Stack para identificar las operaciones.
 
-        // Verificando la popeada de la expresión postfix invertida.
-        // while (!expresion_postfix.isEmpty()) {
-        // // System.out.println("Valor de la expresión postfix invertida: " +
-        // // expresion_postfix.pop());
+        while (!expresion_postfix.isEmpty()) {
+            // System.out.println("Valor de la expresión postfix invertida: " +
+            // expresion_postfix.get(i)).
+            elemento1 = expresion_postfix.pop();
+            System.out.println(elemento1);
 
-        // // Sacando el primer estado de la pila de estados.
-
-        // // Identificando los caracteres de la expresión postfix invertida.
-        // switch (expresion_postfix.peek()) {
-        // case "|":
-        // System.out.println("Operación OR " + expresion_postfix.peek());
-
-        // // String estado1 = String.valueOf(expresion_postfix.pop());
-        // // String estado2 = String.valueOf(expresion_postfix.pop());
-
-        // // System.out.println("Estado 1: " + estado1 + "Estado 2 " + estado2);
-
-        // break;
-        // case "*":
-        // System.out.println("Operación KLEENE " + expresion_postfix.peek());
-        // break;
-        // case ".": // Concatenación
-        // System.out.println("Operación CONCATENACION " + expresion_postfix.peek());
-        // break;
-        // case "+":
-        // System.out.println("Operación CERRADURA POSITIVA " +
-        // expresion_postfix.peek());
-        // break;
-        // default:
-        // System.out.println("Caracter: " + expresion_postfix.peek());
-        // break;
-        // }
-
-        // }
-
-        // Recorriendo la expresión regular.
-
-        // for (int i = 0; i < postfix.length(); i++) {
-        // // Pusheando los caracteres de la expresion regular en el arraylist.
-        // expresion_orig.add(String.valueOf(postfix.charAt(i)));
-
-        // /*
-        // * Si el caracter es diferente de | o * o +, se agrega a la pila.
-        // */
-
-        // switch (postfix.charAt(i)) { // Quitando el or. Esto se pushea al stack de
-        // operaciones.
-        // case '|':
-        // operaciones.push(String.valueOf(postfix.charAt(i)));
-        // break;
-        // case '*': // Quitando el kleene. Esto se pushea al stack de operaciones.
-        // operaciones.push(String.valueOf(postfix.charAt(i)));
-        // break;
-        // case '+': // Quitando la cerradura positiva. Esto se pushea al stack de
-        // operaciones
-        // operaciones.push(String.valueOf(postfix.charAt(i)));
-        // break;
-        // default: // Agregando el caracter de la expresión a la pila de la expresión
-        // regular
-        // alfabeto.push(String.valueOf(postfix.charAt(i)));
-        // break;
-        // }
-        // }
-
-        // // System.out.println("Expresión regular: " + alfabeto);
-
-        // // Recorriendo la pila de la expresión regular.
-        // for (int x = 0; x < alfabeto.size(); x++) {
-        // // System.out.println("Caracter: " + pila.get(x));
-        // // Pusheando los estados de la expresión regular a un arraylist, iniciando en
-        // 0.
-        // estados.add(x);
-        // }
-
-        // System.out.println("Estados: " + estados);
-
-        // Pushear toda la expresión con las operaciones y analizar con pop las
-        // expresiones. Puede ser útil tener en el stack la expresión ya analizada para
-        // poder ir juntando las
-        // operaciones.
-
-        // System.out.println("Expresion regular dentro de un stack: " + expresion);
-        // System.out.println("Pila: " + alfabeto);
-        // System.out.println("Operaciones: " + operaciones);
-        // System.out.println("Estados: " + estados);
-        // System.out.println("");
-
-        // // Llenar el ArrayList de transiciones.
-        // while (pila.size() > 0) {
-        // System.out.println("Simbolo: " + pila.pop());
-        // System.out.println("Estado: " + estados.pop());
-        // System.out.println("");
-        // // System.out.println("Estado de aceptación: " + estados_aceptacion.get(e));
-        // // transicion.Transicion(estados.get(e), estados_aceptacion.get(e), simbolo);
-        // }
-
+        }
         return postfix;
+    }
+
+    // Definiendo el método para la creación de estados individuales.
+    public static String OperacionDefault(int inicio, String simbolo) {
+        Transiciones transicion = new Transiciones(); // Instanciando la clase de
+                                                      // transiciones.
+
+        AFN afn = new AFN(); // Instanciando la clase de AFN.
+
+        int fin = inicio + 1; // Creando el estado de aceptación.
+        // Creando la transición.
+        String operacion = transicion.Transicion(inicio, fin, simbolo);
+
+        String resultado = afn.construccion_AFN(operacion); // Construyendo el AFN.
+
+        // System.out.println("Resultado en la clase de Thompson y en el método de
+        // OperacionDefault: " + resultado);
+        return resultado;
     }
 
     public static String OR(int inicio, int fin, String simbolo) {
@@ -236,5 +157,26 @@ public class Thompson {
 
         return ""; // Return vacío por el momento.
 
+    }
+
+    public static String Concatenacion(int inicio, int fin, String simbolo1, String simbolo2) {
+        Transiciones transicion = new Transiciones(); // Instanciando la clase de
+                                                      // transiciones.
+        // Creando el estado de inicio.
+
+        return "";
+    }
+
+    // Operación de Kleene. Esta operación recibe el inicio y la expresión.
+    public static String opKleene(int inicio, String expresion, String simbolo) {
+
+        Transiciones trans = new Transiciones(); // Instanciando la clase de transiciones.
+
+        System.out.println("Recepción: ");
+        System.out.println("Expresión: " + expresion);
+        System.out.println("Simbolo: " + simbolo);
+
+        // Armando el barco de la expresión.
+        return expresion;
     }
 }

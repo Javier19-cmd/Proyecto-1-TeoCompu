@@ -11,9 +11,9 @@ public class Transiciones {
         this.a = a;
         this.simbolo = c;
 
-        System.out.println("de: " + de + " a: " + a + " simbolo: " + c);
+        // System.out.println("de: " + de + " a: " + a + " simbolo: " + c);
 
-        return this.de + "," + this.a + "," + this.simbolo;
+        return "(" + this.de + "," + this.simbolo + "," + this.a + ")";
 
     } // Constructor de la clase Transicion. Esto servirá para almacenar las
       // transiciones de los estados.

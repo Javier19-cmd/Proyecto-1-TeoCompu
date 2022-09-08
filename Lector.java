@@ -16,13 +16,14 @@ public class Lector {
 
         thompson.post(post_value); // Mando a evaluar la expresión regular.
 
-        String s = "";
-        System.out.println("Introduzca la cadena para construir el AFD: ");
-        s = teclado.nextLine(); // lee la cadena para construir el AFD.
-        String post_value2 = postfix.evaluar(s); // pasar a postfix la expresión regular
+        // String s = "";
+        // System.out.println("Introduzca la cadena para construir el AFD: ");
+        // s = teclado.nextLine(); // lee la cadena para construir el AFD.
+        // String post_value2 = postfix.evaluar(s); // pasar a postfix la expresión
+        // regular
 
-        // Instanciando la clase AFDs para crear el AFD.
-        afde.AFDe(post_value2);
+        // // Instanciando la clase AFDs para crear el AFD.
+        // afde.AFDe(post_value2);
 
     }
 }

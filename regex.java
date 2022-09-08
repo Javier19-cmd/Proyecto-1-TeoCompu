@@ -19,6 +19,22 @@ public class regex {
                     postfix += pila.pop();
                 }
                 pila.push(String.valueOf(c));
+            } else if (c == '*') {
+                while (!pila.isEmpty() && pila.peek().charAt(0) != '(') {
+                    postfix += pila.pop();
+                }
+                pila.push(String.valueOf(c));
+            } else if (c == '.') {
+                while (!pila.isEmpty() && pila.peek().charAt(0) != '(' && pila.peek().charAt(0) != '|') {
+                    postfix += pila.pop();
+                }
+                pila.push(String.valueOf(c));
+
+            } else if (c == '+') {
+                while (!pila.isEmpty() && pila.peek().charAt(0) != '(' && pila.peek().charAt(0) != '|') {
+                    postfix += pila.pop();
+                }
+                pila.push(String.valueOf(c));
             } else {
                 postfix += c;
             }
