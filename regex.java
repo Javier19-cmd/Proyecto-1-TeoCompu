@@ -2,7 +2,7 @@ import java.util.Stack;
 
 public class regex {
     static String evaluar(String infix) {
-        String postfix = "";
+        String postfix = ""; // Variable para guardar la expresión regular en posfijo.
         Stack<String> pila = new Stack<String>();
         for (int i = 0; i < infix.length(); i++) { // Recorriendo la expresión regular para quitarle los paréntesis y
                                                    // pasarlo todo a posfijo.

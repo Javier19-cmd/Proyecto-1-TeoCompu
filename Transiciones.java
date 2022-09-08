@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+
 public class Transiciones {
 
+    // Variables globales de la clase Transiciones.
     int de, a; // de es el estado de inicio y a es el estado de fin.
-    char simbolo; // simbolo de la transicion.
+    String simbolo; // simbolo de la transicion.
 
-    public String Transicion(int de, int a, char c) {
+    public String Transicion(int de, int a, String c) {
         this.de = de;
         this.a = a;
         this.simbolo = c;

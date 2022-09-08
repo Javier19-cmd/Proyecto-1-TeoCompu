@@ -11,4 +11,8 @@ public class AFN {
 
     int estado_inicial, estado_final; // Estados inicial y final del AFN.
 
+    public String construccion_AFN(int de, int a, char c) {
+        return "";
+    }
+
 }
