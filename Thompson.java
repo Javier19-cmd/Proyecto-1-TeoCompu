@@ -91,39 +91,49 @@ public class Thompson {
         }
 
         // System.out.println("Alfabeto: " + alfabeto);
-
-        // Recorriendo el ArrayList temporal hacia atrás.
-        for (int i = temporal.size() - 1; i >= 0; i--) {
-            // System.out.println("Valor de la expresión postfix invertida: " +
-            // temporal.get(i));
-
-            // Identificando si el elemento es un operador.
-            if (temporal.get(i).equals("*") || temporal.get(i).equals(".") || temporal.get(i).equals("|")) {
-                System.out.println("Operador: " + temporal.get(i));
-
-                // Insertando el operador al Stack de operaciones.
-                // operaciones.push(temporal.get(i));
-
-                // System.out.println("Operaciones: " + operaciones);
-
-                // Identificando si el elemento es un operando.
-            } else {
-                System.out.println("Operando: " + temporal.get(i));
-
-                // Insertando el operando al Stack de operaciones.
-                // operaciones.push(temporal.get(i));
-
-                // System.out.println("Operaciones: " + operaciones);
-            }
-        }
+        
 
         // Recorriendo el Stack para identificar las operaciones.
 
         while (!expresion_postfix.isEmpty()) {
+
             // System.out.println("Valor de la expresión postfix invertida: " +
             // expresion_postfix.get(i)).
-            elemento1 = expresion_postfix.pop();
-            System.out.println(elemento1);
+
+            // Recorriendo el ArrayList temporal hacia atrás.
+            for (int i = temporal.size() - 1; i >= 0; i--) {
+                // System.out.println("Valor de la expresión postfix invertida: " +
+                // temporal.get(i));
+    
+                // Identificando si el elemento es un operador.
+                if (temporal.get(i).equals("*")) {
+                    System.out.println("Operador: " + expresion_postfix.pop());
+    
+                    // Insertando el operador al Stack de operaciones.
+                    // operaciones.push(temporal.get(i));
+    
+                    // System.out.println("Operaciones: " + operaciones);
+    
+                    // Identificando si el elemento es un operando.
+                } else if (temporal.get(i).equals(".")){
+                
+                    System.out.println("Operador: " + expresion_postfix.pop());
+                
+                }else if( temporal.get(i).equals("|")) {
+                
+                    System.out.println("Operador: " + expresion_postfix.pop());
+                    
+                
+                }else {
+                    System.out.println("Operando: " + expresion_postfix.pop());
+
+    
+                    // Insertando el operando al Stack de operaciones.
+                    // operaciones.push(temporal.get(i));
+    
+                    // System.out.println("Operaciones: " + operaciones);
+                }
+            }
 
         }
         return postfix;
