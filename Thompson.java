@@ -23,6 +23,8 @@ public class Thompson {
         // Definiendo el estado inicial del AFN.
         int estado_inicial = 0;
 
+        int estado_final = 0;
+
         // Definiendo el stack para los estados de aceptación.
         Stack<Integer> estados_aceptacion = new Stack<Integer>();
 
@@ -43,7 +45,7 @@ public class Thompson {
 
         postfix = strb.reverse().toString(); // Invierto la expresión regular.
 
-        String recorrido = "";
+        String operacion = "";
 
         // Variable para sacar primer elemento a operar.
         String elemento1 = "";
@@ -91,7 +93,6 @@ public class Thompson {
         }
 
         // System.out.println("Alfabeto: " + alfabeto);
-        
 
         // Recorriendo el Stack para identificar las operaciones.
 
@@ -104,37 +105,42 @@ public class Thompson {
             for (int i = temporal.size() - 1; i >= 0; i--) {
                 // System.out.println("Valor de la expresión postfix invertida: " +
                 // temporal.get(i));
-    
+
                 // Identificando si el elemento es un operador.
                 if (temporal.get(i).equals("*")) {
                     System.out.println("Operador: " + expresion_postfix.pop());
-    
+
                     // Insertando el operador al Stack de operaciones.
                     // operaciones.push(temporal.get(i));
-    
-                    // System.out.println("Operaciones: " + operaciones);
-    
-                    // Identificando si el elemento es un operando.
-                } else if (temporal.get(i).equals(".")){
-                
-                    System.out.println("Operador: " + expresion_postfix.pop());
-                
-                }else if( temporal.get(i).equals("|")) {
-                
-                    System.out.println("Operador: " + expresion_postfix.pop());
-                    
-                
-                }else {
-                    System.out.println("Operando: " + expresion_postfix.pop());
 
-    
-                    // Insertando el operando al Stack de operaciones.
-                    // operaciones.push(temporal.get(i));
-    
                     // System.out.println("Operaciones: " + operaciones);
+
+                    // Identificando si el elemento es un operando.
+                } else if (temporal.get(i).equals(".")) {
+
+                    System.out.println("Operador: " + expresion_postfix.pop());
+
+                } else if (temporal.get(i).equals("|")) {
+
+                    // Sacando el primer elemento a operar.
+                    elemento1 = expresion_postfix.pop();
+                    elemento2 = expresion_postfix.pop();
+
+                    // Sacando el operador.
+                    operacion = expresion_postfix.pop();
+
+                    System.out.println("Operando: " + elemento1);
+
+                    System.out.println("Operando: " + elemento2);
+
+                    System.out.println("Operador: " + operacion);
+
+                    estado_final = estado_inicial + 1;
+
+                    // Enviando los elementos a operar.
+                    OR(estado_inicial, estado_final, simbolo);
                 }
             }
-
         }
         return postfix;
     }
