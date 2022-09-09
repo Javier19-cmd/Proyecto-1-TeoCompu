@@ -2,7 +2,16 @@ import java.util.*;
 
 public class Thompson {
 
-    static String post(String postfix) {
+    // Definiendo el símbolo para las transiciones.
+    private String simbolo = "&";
+
+    // Definiendo el estado inicial del AFN.
+    private int estado_inicial = 0;
+
+    // Definiendo el estado final del AFN.
+    private int estado_final = 0;
+
+    public void post(String postfix) {
 
         // System.out.println("Valor postfix: " + postfix);
         // Defininiendo arraylist para la expresión original.
@@ -16,14 +25,6 @@ public class Thompson {
 
         // Definiendo una pila para las operaciones de la expresión.
         Stack<String> operaciones = new Stack<String>();
-
-        // Definiendo el símbolo para las transiciones.
-        String simbolo = "&";
-
-        // Definiendo el estado inicial del AFN.
-        int estado_inicial = 0;
-
-        int estado_final = 0;
 
         // Definiendo el stack para los estados de aceptación.
         Stack<Integer> estados_aceptacion = new Stack<Integer>();
@@ -136,63 +137,14 @@ public class Thompson {
                     System.out.println("Operador: " + operacion);
 
                     estado_final = estado_inicial + 1;
-
-                    // Enviando los elementos a operar.
-                    OR(estado_inicial, estado_final, simbolo);
                 }
             }
         }
-        return postfix;
     }
 
-    // Definiendo el método para la creación de estados individuales.
-    public static String OperacionDefault(int inicio, String simbolo) {
-        Transiciones transicion = new Transiciones(); // Instanciando la clase de
-                                                      // transiciones.
+    // Método para hacer la operación de concatenación.
+    private void concatenacion(String elemento1, String elemento2) {
+        // TODO Auto-generated method stub
 
-        AFN afn = new AFN(); // Instanciando la clase de AFN.
-
-        int fin = inicio + 1; // Creando el estado de aceptación.
-        // Creando la transición.
-        String operacion = transicion.Transicion(inicio, fin, simbolo);
-
-        String resultado = afn.construccion_AFN(operacion); // Construyendo el AFN.
-
-        // System.out.println("Resultado en la clase de Thompson y en el método de
-        // OperacionDefault: " + resultado);
-        return resultado;
-    }
-
-    public static String OR(int inicio, int fin, String simbolo) {
-
-        // Instanciando la clase de transiciones.
-        Transiciones transicion = new Transiciones();
-
-        // Creando el estado de inicio.
-        transicion.Transicion(inicio, fin, simbolo);
-
-        return ""; // Return vacío por el momento.
-
-    }
-
-    public static String Concatenacion(int inicio, int fin, String simbolo1, String simbolo2) {
-        Transiciones transicion = new Transiciones(); // Instanciando la clase de
-                                                      // transiciones.
-        // Creando el estado de inicio.
-
-        return "";
-    }
-
-    // Operación de Kleene. Esta operación recibe el inicio y la expresión.
-    public static String opKleene(int inicio, String expresion, String simbolo) {
-
-        Transiciones trans = new Transiciones(); // Instanciando la clase de transiciones.
-
-        System.out.println("Recepción: ");
-        System.out.println("Expresión: " + expresion);
-        System.out.println("Simbolo: " + simbolo);
-
-        // Armando el barco de la expresión.
-        return expresion;
     }
 }

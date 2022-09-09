@@ -1,49 +1,112 @@
-import java.util.Stack;
+/*
+ * Referencia de como convertir una expresión regular a postfix:
+ * https://gist.github.com/gmenard/6161825
+ */
+
+import java.util.*; // Importando todas las librerías para evitar problemas.
 
 public class regex {
-    static String evaluar(String infix) {
-        String postfix = ""; // Variable para guardar la expresión regular en posfijo.
-        Stack<String> pila = new Stack<String>();
-        for (int i = 0; i < infix.length(); i++) { // Recorriendo la expresión regular para quitarle los paréntesis y
-                                                   // pasarlo todo a posfijo.
-            char c = infix.charAt(i);
-            if (c == '(') {
-                pila.push(String.valueOf(c));
-            } else if (c == ')') {
-                while (!pila.isEmpty() && pila.peek().charAt(0) != '(') {
-                    postfix += pila.pop();
-                }
-                pila.pop();
-            } else if (c == '|') {
-                while (!pila.isEmpty() && pila.peek().charAt(0) != '(') {
-                    postfix += pila.pop();
-                }
-                pila.push(String.valueOf(c));
-            } else if (c == '*') {
-                while (!pila.isEmpty() && pila.peek().charAt(0) != '(') {
-                    postfix += pila.pop();
-                }
-                pila.push(String.valueOf(c));
-            } else if (c == '.') {
-                while (!pila.isEmpty() && pila.peek().charAt(0) != '(' && pila.peek().charAt(0) != '|') {
-                    postfix += pila.pop();
-                }
-                pila.push(String.valueOf(c));
 
-            } else if (c == '+') {
-                while (!pila.isEmpty() && pila.peek().charAt(0) != '(' && pila.peek().charAt(0) != '|') {
-                    postfix += pila.pop();
+    /** Operators precedence map. */
+    private static final Map<Character, Integer> precedenceMap;
+    static {
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        map.put('(', 1);
+        map.put('|', 2);
+        map.put('.', 3); // explicit concatenation operator
+        map.put('?', 4);
+        map.put('*', 4);
+        map.put('+', 4);
+        precedenceMap = Collections.unmodifiableMap(map);
+    };
+
+    /**
+     * Get character precedence.
+     * 
+     * @param c character
+     * @return corresponding precedence
+     */
+    private static Integer getPrecedence(Character c) {
+        Integer precedence = precedenceMap.get(c);
+        return precedence == null ? 6 : precedence;
+    }
+
+    /**
+     * Transform regular expression by inserting a '.' as explicit concatenation
+     * operator.
+     */
+    private static String formatRegEx(String regex) {
+        String res = new String();
+        List<Character> allOperators = Arrays.asList('|', '?', '+', '*', '^');
+        List<Character> binaryOperators = Arrays.asList('^', '|');
+
+        for (int i = 0; i < regex.length(); i++) {
+            Character c1 = regex.charAt(i);
+
+            if (i + 1 < regex.length()) {
+                Character c2 = regex.charAt(i + 1);
+
+                res += c1;
+
+                if (!c1.equals('(') && !c2.equals(')') && !allOperators.contains(c2) && !binaryOperators.contains(c1)) {
+                    res += '.';
                 }
-                pila.push(String.valueOf(c));
-            } else {
-                postfix += c;
             }
         }
-        while (!pila.isEmpty()) {
-            postfix += pila.pop();
+        res += regex.charAt(regex.length() - 1);
+
+        return res;
+    }
+
+    /**
+     * Convert regular expression from infix to postfix notation using
+     * Shunting-yard algorithm.
+     * 
+     * @param regex infix notation
+     * @return postfix notation
+     */
+    public static String evaluar(String regex) {
+        String postfix = new String();
+
+        Stack<Character> stack = new Stack<Character>();
+
+        String formattedRegEx = formatRegEx(regex);
+
+        for (Character c : formattedRegEx.toCharArray()) {
+            switch (c) {
+                case '(':
+                    stack.push(c);
+                    break;
+
+                case ')':
+                    while (!stack.peek().equals('(')) {
+                        postfix += stack.pop();
+                    }
+                    stack.pop();
+                    break;
+
+                default:
+                    while (stack.size() > 0) {
+                        Character peekedChar = stack.peek();
+
+                        Integer peekedCharPrecedence = getPrecedence(peekedChar);
+                        Integer currentCharPrecedence = getPrecedence(c);
+
+                        if (peekedCharPrecedence >= currentCharPrecedence) {
+                            postfix += stack.pop();
+                        } else {
+                            break;
+                        }
+                    }
+                    stack.push(c);
+                    break;
+            }
+
         }
 
-        System.out.println("Expresión regular postfix: " + postfix);
+        while (stack.size() > 0)
+            postfix += stack.pop();
+
         return postfix;
     }
 }
