@@ -40,7 +40,7 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     }
 
     public String toString() { // Método para imprimir el estado.
-        return "Estado: " + this.id; // Se retorna el id del estado.
+        return "Estado: " + this.id; // Se retorna el id del estado como string.
     }
 
     public int getId() { // Método para obtener el id del estado.
