@@ -1,15 +1,16 @@
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Thompson {
 
     // Definiendo el símbolo para las transiciones.
-    private String simbolo = "&";
+    public String simbolo = "&";
 
     // Definiendo la variable que va a llevar la contabilidad de los estados.
     public static int estados = 0;
 
     // Definiendo un Arraylist para las transiciones que se hicieron en el AFN.
-    private ArrayList<Transiciones> transiciones = new ArrayList<Transiciones>();
+    private List<Transiciones> transiciones = new CopyOnWriteArrayList<Transiciones>();
 
     // Definiendo Stack para la expresión postfix invertida.
     private Stack<String> expresion_postfix = new Stack<String>();
@@ -27,7 +28,7 @@ public class Thompson {
     private Stack<Estado> estados_aceptacion = new Stack<Estado>();
 
     // Definiendo una pila para los estados de la expresión.
-    private Stack<Integer> estadoss = new Stack<Integer>();
+    private Stack<Transiciones> estadoss = new Stack<Transiciones>();
 
     // Definiendo un Arraylist temporal para la expresión invertida.
     ArrayList<String> temporal = new ArrayList<String>();
@@ -170,7 +171,12 @@ public class Thompson {
             }
         }
 
-        // Imprimiendo lista de transiciones.
+        // Imprimiendo las transiciones.
+        for (int i = 0; i < transiciones.size(); i++) {
+            System.out.println(transiciones.get(i).vis());
+        }
+
+        System.out.println();
 
     }
 
@@ -263,11 +269,42 @@ public class Thompson {
 
     // Método para hacer la operación de concatenación.
     private void concatenacion(Estado elemento1, Estado elemento2, Estado final2) {
+
+        // El elemento 1 es el estado final del primer automata.
+
+        // El elemento 2 es el estado inicial del segundo automata.
+
+        // El final2 es el estado de "aceptación" temporal del segundo autómata.
+
         // Imprimiendo el estado de aceptación del primer automata.
         System.out.println("Estado de aceptación del primer automata: " + elemento1);
 
         // Imprimeiendo el estado inicial del segundo automata.
         System.out.println("Estado inicial del segundo automata: " + elemento2);
+
+        // Obteniendo la transición del estado inicial del segundo automata.
+        for (Transiciones transicion : transiciones) {
+
+            if (transicion.getDe().equals(elemento2)) { // Si el estado de la transición es igual al estado inicial del
+                                                        // segundo automata.
+                // System.out.println("Transición del estado inicial del segundo: " +
+                // transicion.vis());
+
+                // Obteniendo el simbolo de la transición.
+                String s = transicion.getSimbolo();
+
+                System.out.println(s);
+
+                // Eliminando la transición del segundo autómata.
+                transiciones.remove(transicion);
+
+                // Creando una transición a los siguientes estados del segundo automata.
+                Transiciones tr = new Transiciones(elemento1, transicion.getA(), s);
+
+                // Agregando la nueva transición a la lista de transiciones.
+                transiciones.add(tr);
+            }
+        }
 
         // Seteando el nuevo estado de aceptación.
         estados_aceptacion.push(final2);

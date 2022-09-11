@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Transiciones {
@@ -7,9 +8,9 @@ public class Transiciones {
     String simbolo; // simbolo de la transicion.
 
     public Transiciones(String c) {
+        this.simbolo = c;
         this.de = new Estado(Thompson.estados);
         this.a = new Estado(Thompson.estados);
-        this.simbolo = c;
 
         // Enlazando los estados para armar el AFN.
         this.de.agregarEstadoSiguiente(a);
@@ -30,6 +31,10 @@ public class Transiciones {
 
     }
 
+    public Transiciones() {
+
+    }
+
     public Estado getDe() { // Método para obtener el estado de inicio.
         return this.de;
     }
@@ -38,8 +43,27 @@ public class Transiciones {
         return this.a;
     }
 
+    public Estado setDe(Estado estado) {
+        this.de = estado;
+        return this.de;
+    }
+
+    // Método para hacer set.
+    public Estado setA(Estado estado) {
+        this.a = estado;
+        return this.a;
+    }
+
     public String getSimbolo() { // Método para obtener el símbolo de la transición.
-        return this.simbolo;
+
+        String simbolo = this.simbolo;
+
+        if (simbolo == "&") {
+            simbolo = "&";
+        }
+
+        return simbolo;
+
     }
 
     public String getDeS() {
@@ -51,26 +75,36 @@ public class Transiciones {
     }
 
     public void replaceA(Estado viejoa, Estado a) {
+
+        String[] estados;
+
         // Buscando el estado viejo en la lista de estados siguientes del estado
         // siguiente.
-        for (int i = 0; i < viejoa.getEstadoSiguiente().size(); i++) {
-            if (viejoa.getEstadoSiguiente().get(i).equals(viejoa)) {
-                System.out.println(viejoa.getEstadoSiguiente().get(i));
-                viejoa.getEstadoSiguiente().remove(i);
-                viejoa.getEstadoSiguiente().add(i, a);
-            }
-        }
+        // for (int i = 0; i < viejoa.getEstadoSiguiente().size(); i++) {
+        // if (viejoa.getEstadoSiguiente().get(i).equals(viejoa)) {
+        // // System.out.println(viejoa.getEstadoSiguiente().get(i));
+        // // Agregando el estado nuevo a la lista de estados siguientes del estado.
+        // viejoa.getEstadoSiguiente().remove(i);
+        // viejoa.getEstadoSiguiente().add(i, a); // Reemplazando el estado viejo por el
+        // nuevo.
+        // }
+        // }
+
+        System.out.println("El estado va hacia: " + a.getEstadoSiguiente().get(0));
+        System.out.println("El estado viene de: " + viejoa.getEstadoAnterior().get(0));
     }
 
     public void replaceDe(Estado viejode, Estado de) {
-        // Buscando el estado viejo en la lista de estados siguientes del estado
-        // siguiente.
+        // Buscando el estado viejo en la lista de estados anteriores del estado de.
         for (int i = 0; i < viejode.getEstadoAnterior().size(); i++) {
             if (viejode.getEstadoAnterior().get(i).equals(viejode)) {
+                System.out.println(viejode.getEstadoAnterior().get(i));
                 viejode.getEstadoAnterior().remove(i);
                 viejode.getEstadoAnterior().add(i, de);
             }
         }
+
+        System.out.println(de.getEstadoAnterior().get(0));
     }
 
     public void replaceElement(Estado de, Estado a, String simbolo) {

@@ -265,3 +265,19 @@ Identificando los caracteres: |, *, +, . y los caracteres de la expresión regul
             transiciones.add(transiciones.get(i));
             System.out.println("Transiciones: " + transiciones.get(i).vis());
         }
+
+---------------------------------------------------------
+List<Transiciones> lista = new CopyOnWriteArrayList(transiciones); // Prueba.
+    Iterator<Transiciones> iterador = lista.iterator(); // Iterador de la lista.
+
+        while (iterador.hasNext()) {
+            Transiciones transicion = iterador.next();
+            String s = transicion.getSimbolo();
+            if (transicion.getDe().equals(elemento2)) {
+                System.out.println("Transición del estado inicial del segundo: " + transicion.vis());
+                transiciones.remove(transicion);
+                Transiciones tr = new Transiciones(elemento1, transicion.getA(), s);
+                System.out.println("Transición nueva: " + tr.vis());
+                transiciones.add(tr);
+            }
+        }
