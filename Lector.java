@@ -16,6 +16,8 @@ public class Lector {
 
         thompson.post(post_value); // Mando a evaluar la expresión regular.
 
+        Estado est = new Estado(5); // Instanciando la clase Estado para crear los estados del AFN.
+
         // String s = "";
         // System.out.println("Introduzca la cadena para construir el AFD: ");
         // s = teclado.nextLine(); // lee la cadena para construir el AFD.

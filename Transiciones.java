@@ -7,8 +7,8 @@ public class Transiciones {
     String simbolo; // simbolo de la transicion.
 
     public Transiciones(String c) {
-        // this.de = de;
-        // this.a = a;
+        this.de = new Estado(Thompson.estados);
+        this.a = new Estado(Thompson.estados);
         this.simbolo = c;
 
         // Enlazando los estados para armar el AFN.
@@ -38,11 +38,48 @@ public class Transiciones {
         return this.a;
     }
 
-    public String getSimbolo() { // Método para obtener
+    public String getSimbolo() { // Método para obtener el símbolo de la transición.
         return this.simbolo;
     }
 
+    public String getDeS() {
+        return this.de.toString();
+    }
+
+    public String getAS() {
+        return this.a.toString();
+    }
+
+    public void replaceA(Estado viejoa, Estado a) {
+        // Buscando el estado viejo en la lista de estados siguientes del estado
+        // siguiente.
+        for (int i = 0; i < viejoa.getEstadoSiguiente().size(); i++) {
+            if (viejoa.getEstadoSiguiente().get(i).equals(viejoa)) {
+                System.out.println(viejoa.getEstadoSiguiente().get(i));
+                viejoa.getEstadoSiguiente().remove(i);
+                viejoa.getEstadoSiguiente().add(i, a);
+            }
+        }
+    }
+
+    public void replaceDe(Estado viejode, Estado de) {
+        // Buscando el estado viejo en la lista de estados siguientes del estado
+        // siguiente.
+        for (int i = 0; i < viejode.getEstadoAnterior().size(); i++) {
+            if (viejode.getEstadoAnterior().get(i).equals(viejode)) {
+                viejode.getEstadoAnterior().remove(i);
+                viejode.getEstadoAnterior().add(i, de);
+            }
+        }
+    }
+
+    public void replaceElement(Estado de, Estado a, String simbolo) {
+        this.de = de;
+        this.a = a;
+        this.simbolo = simbolo;
+    }
+
     public String vis() { // Método para poder ver las transiciones.
-        return this.de.getId() + " -> " + this.a.getId() + " [label=\"" + this.simbolo + "\"]";
+        return this.de.toString() + " -- " + this.simbolo + " --> " + this.a.toString();
     }
 }

@@ -218,3 +218,50 @@ Identificando los caracteres: |, *, +, . y los caracteres de la expresión regul
                     System.out.println("Expresión resultante: " + expresion_postfix);
                     break;
             }
+
+----------------------------------------------------------------------
+  // Juntando los estados de aceptación de la parte de arriba con el estado
+        // inicial de la parte de abajo.
+
+        /*
+         * Stack de estados iniciales:
+         * Último estado inicial. Pertenece al último AFN temporal.
+         * 
+         * 
+         * Stack de estados finales:
+         * Último estado final. Pertenece al último AFN temporal.
+         * 
+         * Crear un nuevo estado.
+         * Propiedades:
+         * 1. Es el estado inicial del AFN de la derecha.
+         * 2. Es el estado final del AFN de la izquierda.
+         * 3. Conexión con las transiciones del AFN de la izquierda y derecha.
+         */
+
+        elemento1.getId();
+        elemento2.getId();
+
+        elemento1.setInicio(true);
+
+        Estado nuevo = new Estado(elemento1.getId());
+
+        System.out.println("Final del elemento 1: " + elemento1.getInicio());
+        System.out.println("Inicial del elemento 2: " + elemento2.getInicio());
+
+        System.out.println("El nuevo estado es: " + nuevo.getId());
+
+        // Buscar el estado final del AFN de la izquierda en el ArrayList de
+        // transiciones.
+
+        transiciones.get(elemento1.getId());
+
+        // Obteniendo los índices de las transiciones que se van a modificar.
+        int indice1 = elemento1.getId();
+        int indice2 = elemento2.getId();
+
+        // Imprimiendo lista de transiciones.
+        for (int i = 0; i < transiciones.size(); i++) {
+            transiciones.get(i).replaceA(elemento1, elemento2);
+            transiciones.add(transiciones.get(i));
+            System.out.println("Transiciones: " + transiciones.get(i).vis());
+        }

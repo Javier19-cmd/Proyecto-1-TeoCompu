@@ -12,7 +12,7 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
         this.id = id; // Se le asigna el id al estado.
         this.estado_anterior = new ArrayList<Estado>(); // Se inicializa la lista de estados anteriores.
         this.estado_siguiente = new ArrayList<Estado>(); // Se inicializa la lista de estados siguientes.
-
+        Thompson.estados++; // Se incrementa el contador de estados.
     }
 
     public Estado(int id, List<Estado> estado_anterior, List<Estado> estado_siguiente) { // Constructor de la clase
@@ -40,11 +40,43 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     }
 
     public String toString() { // Método para imprimir el estado.
-        return "Estado: " + this.id; // Se retorna el id del estado como string.
+        return "" + this.id; // Se retorna el id del estado como string.
     }
 
     public int getId() { // Método para obtener el id del estado.
         return this.id; // Se retorna el id del estado.
+    }
+
+    // Método para eliminar un estado.
+    public void eliminarEstado(Estado estado) { // Método para eliminar un estado.
+        this.estado_anterior.remove(estado); // Se elimina el estado de la lista de estados anteriores.
+        this.estado_siguiente.remove(estado); // Se elimina el estado de la lista de estados siguientes.
+        System.out.println("Estado eliminado: " + estado.toString());
+    }
+
+    // Método para reemplazar estados.
+    public void reemplazarEstados(Estado estado) {
+        this.estado_anterior.replaceAll(operator -> operator == estado ? this : operator);
+    }
+
+    public String De() {
+        // Imprimiendo los estados anteriores.
+        String anterior = ""; // Variable que guarda los estados anteriores.
+        for (Estado estado : this.estado_anterior) { // Recorriendo la lista de estados anteriores.
+            anterior += estado.toString() + " "; // Se agrega el estado a la variable anterior.
+        }
+
+        return anterior; // Se retorna la variable anterior.
+    }
+
+    public String A() {
+        // Imprimiendo los estados siguientes.
+        String siguiente = ""; // Variable que guarda los estados siguientes.
+        for (Estado estado : this.estado_siguiente) { // Recorriendo la lista de estados siguientes.
+            siguiente += estado.toString() + " "; // Se agrega el estado a la variable siguiente.
+        }
+
+        return siguiente; // Se retorna la variable siguiente.
     }
 
     public void setInicio(boolean inicio) { // Método para asignar el estado inicial.
@@ -61,5 +93,9 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
 
     public boolean getFinal() { // Método para obtener el estado final.
         return this.fin; // Se retorna el estado final.
+    }
+
+    public String getIds() {
+        return this.id + " ";
     }
 }
