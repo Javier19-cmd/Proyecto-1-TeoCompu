@@ -435,23 +435,6 @@ public class Thompson {
         }
     }
 
-    public Stack<Estado> getEstadoInicial() { // Método para obtener el estado inicial.
-        return this.estados_iniciales;
-    }
-
-    public Stack<Estado> getEstadoAceptacion() { // Método para obtener el estado de aceptación.
-        return this.estados_aceptacion;
-    }
-
-    public String getTransiciones() { // Método para obtener las transiciones.
-
-        return this.transiciones.toString();
-    }
-
-    public Stack<Estado> getEstados() { // Método para obtener los estados.
-        return this.estadoss;
-    }
-
     // Método para escribir un archivo de texto con el autómata.
     public void escribirArchivo() {
 
@@ -495,7 +478,7 @@ public class Thompson {
             bw.newLine();
 
             // Escribiendo las transiciones.
-            bw.write("Transiciones: " + getTransiciones() + "");
+            bw.write("Transiciones: " + transiciones.toString() + "");
 
             bw.newLine();
 
