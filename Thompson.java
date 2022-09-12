@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -9,7 +12,7 @@ public class Thompson {
     // Definiendo la variable que va a llevar la contabilidad de los estados.
     public static int estados = 0;
 
-    // Definiendo un Arraylist para las transiciones que se hicieron en el AFN.
+    // Definiendo una lista para las transiciones que se hicieron en el AFN.
     private List<Transiciones> transiciones = new CopyOnWriteArrayList<Transiciones>();
 
     // Definiendo Stack para la expresión postfix invertida.
@@ -27,15 +30,30 @@ public class Thompson {
     // Definiendo el stack para los estados de aceptación.
     private Stack<Estado> estados_aceptacion = new Stack<Estado>();
 
+    // Definiendo otro stack para tener una copia de los estados de aceptación.
+    private Stack<Estado> estados_aceptacion2 = new Stack<Estado>();
+
     // Definiendo una pila para los estados de la expresión.
-    private Stack<Transiciones> estadoss = new Stack<Transiciones>();
+    private Stack<Estado> estadoss = new Stack<Estado>();
+
+    private String operacion = "";
+
+    // Variable para sacar primer elemento a operar.
+    private String elemento1 = "";
+
+    private String recorrido = ""; // Variable para recorrer la expresión regular.
 
     // Definiendo un Arraylist temporal para la expresión invertida.
     ArrayList<String> temporal = new ArrayList<String>();
 
-    public void post(String postfix) {
+    private String expresion_postfixs = ""; // Variable para la expresión regular.
 
-        // System.out.println("Valor postfix: " + postfix);
+    public void post(String expresion_postfixs) {
+
+        // Guardando la expresión postfix en una variable de la clase.
+        this.expresion_postfixs = expresion_postfixs;
+
+        System.out.println("Expreión en variable local: " + expresion_postfixs);
 
         // Arreglo para determinar la precedencia de operaciones.
         String[][] precedencia = { { "*", "+", ".", "|" }, { "100", "80", "60", "40" } };
@@ -44,19 +62,9 @@ public class Thompson {
         // ArrayList<Transiciones> transiciones = new ArrayList<Transiciones>();
 
         // Invirtiendo la expresión regular.
-        StringBuilder strb = new StringBuilder(postfix);
+        StringBuilder strb = new StringBuilder(expresion_postfixs);
 
-        postfix = strb.reverse().toString(); // Invierto la expresión regular.
-
-        String operacion = "";
-
-        // Variable para sacar primer elemento a operar.
-        String elemento1 = "";
-
-        // Variable para sacar segundo elemento a operar.
-        String elemento2 = "";
-
-        String recorrido = "";
+        expresion_postfixs = strb.reverse().toString(); // Invierto la expresión regular.
 
         // System.out.println("Expresión regular invertida: " + postfix);
 
@@ -69,17 +77,19 @@ public class Thompson {
         }
 
         // Insertando la expresión postfix invertida al Stack.
-        for (int x = 0; x < postfix.length(); x++) {
-            expresion_postfix.push(String.valueOf(postfix.charAt(x))); // Insertando la expresión postfix invertida al
-                                                                       // Stack.
+        for (int x = 0; x < expresion_postfixs.length(); x++) {
+            expresion_postfix.push(String.valueOf(expresion_postfixs.charAt(x))); // Insertando la expresión postfix
+                                                                                  // invertida al
+            // Stack.
         }
 
         System.out.println("Expresión regular postfix invertida en el Stack: " + expresion_postfix);
 
         // Insertando la expresión postfix invertida al ArrayList temporal.
-        for (int x = 0; x < postfix.length(); x++) {
-            temporal.add(String.valueOf(postfix.charAt(x))); // Insertando la expresión postfix invertida al ArrayList
-                                                             // temporal.
+        for (int x = 0; x < expresion_postfixs.length(); x++) {
+            temporal.add(String.valueOf(expresion_postfixs.charAt(x))); // Insertando la expresión postfix invertida al
+                                                                        // ArrayList
+            // temporal.
         }
 
         System.out.println("Expresión regular postfix en el ArrayList temporal: " + temporal.toString());
@@ -173,10 +183,8 @@ public class Thompson {
 
         // Imprimiendo las transiciones.
         for (int i = 0; i < transiciones.size(); i++) {
-            System.out.println(transiciones.get(i).vis());
+            System.out.println(transiciones.get(i).toString());
         }
-
-        System.out.println();
 
     }
 
@@ -197,6 +205,7 @@ public class Thompson {
         // Agregando los estados al sus Stacks correspondientes.
         estados_iniciales.push(inicio);
         estados_aceptacion.push(fin);
+        estados_aceptacion2.push(fin); // Guardando el estado de aceptación en un Stack diferente.
     }
 
     // Se reciben los estado inicial y de aceptación, para así ya armar el
@@ -234,6 +243,7 @@ public class Thompson {
         // Agregando los nuevos estados al Stack de estados iniciales y de aceptación.
         estados_iniciales.push(nuevo_inicio);
         estados_aceptacion.push(nuevo_fin);
+        estados_aceptacion2.push(nuevo_fin); // Guardando el estado de aceptación en un Stack diferente.
 
     }
 
@@ -265,6 +275,7 @@ public class Thompson {
         // Agregando los nuevos estados al Stack de estados iniciales y de aceptación.
         estados_iniciales.push(nuevo_inicio);
         estados_aceptacion.push(nuevo_fin);
+        estados_aceptacion2.push(nuevo_fin); // Guardando el estado de aceptación en un Stack diferente.
     }
 
     // Método para hacer la operación de concatenación.
@@ -308,6 +319,99 @@ public class Thompson {
 
         // Seteando el nuevo estado de aceptación.
         estados_aceptacion.push(final2);
+    }
+
+    public void guardandoEstados() { // Método para guardar los estados del autómata.
+
+        for (int i = 0; i < transiciones.size(); i++) {
+            if (!estadoss.contains(transiciones.get(i).getDe())) {
+                estadoss.push(transiciones.get(i).getDe());
+
+                // System.out.println("Estado: " + transiciones.get(i).getDe());
+            }
+            if (!estadoss.contains(transiciones.get(i).getA())) {
+                estadoss.push(transiciones.get(i).getA());
+
+                // System.out.println("Estado: " + transiciones.get(i).getDe());
+            }
+        }
+    }
+
+    public Stack<Estado> getEstadoInicial() { // Método para obtener el estado inicial.
+        return this.estados_iniciales;
+    }
+
+    public Stack<Estado> getEstadoAceptacion() { // Método para obtener el estado de aceptación.
+        return this.estados_aceptacion;
+    }
+
+    public String getTransiciones() { // Método para obtener las transiciones.
+
+        return this.transiciones.toString();
+    }
+
+    public Stack<Estado> getEstados() { // Método para obtener los estados.
+        return this.estadoss;
+    }
+
+    // Método para escribir un archivo de texto con el autómata.
+    public void escribirArchivo() {
+
+        try {
+            // Creando el archivo con codificado UTF-8.
+            File archivo = new File("Automata.txt");
+
+            // Creando el archivo si no existe.
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+
+            // Creando el escritor.
+            FileWriter escritor = new FileWriter(archivo);
+
+            BufferedWriter bw = new BufferedWriter(escritor);
+
+            System.out.println("Expresión regular en el método escribirArchivo: " + expresion_postfixs + "");
+
+            // escritor.write("Expresión regular: " + expresion_postfixs);
+
+            // Escribiendo los estados iniciales.
+            bw.write("Estado inicial: " + estados_iniciales + "");
+
+            bw.newLine();
+
+            // Escribiendo el estado de aceptación oficial.
+            bw.write("Estado de aceptación oficial: " + estados_aceptacion + "");
+
+            bw.newLine();
+
+            // Escribiendo el estado de aceptación temporal.
+            bw.write("Estado de aceptación temporal: " + estados_aceptacion2 + "");
+            bw.newLine();
+
+            guardandoEstados(); // Guardando los estados del AFN.
+
+            // Escribiendo los estados computados.
+            bw.write("Estados: " + estadoss + "");
+
+            bw.newLine();
+
+            // Escribiendo las transiciones.
+            bw.write("Transiciones: " + getTransiciones() + "");
+
+            bw.newLine();
+
+            // Escribiendo los símbolos.
+            bw.write("Símbolos: " + alfabeto + "");
+            bw.newLine();
+
+            // Cerrando el escritor.
+            bw.close();
+
+            // Escribiendo en el archivo.
+        } catch (Exception e) {
+            System.out.println("Error al escribir el archivo.");
+        }
     }
 
 }

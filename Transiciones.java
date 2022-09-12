@@ -113,7 +113,7 @@ public class Transiciones {
         this.simbolo = simbolo;
     }
 
-    public String vis() { // Método para poder ver las transiciones.
+    public String toString() { // Método para poder ver las transiciones.
         return this.de.toString() + " -- " + this.simbolo + " --> " + this.a.toString();
     }
 }

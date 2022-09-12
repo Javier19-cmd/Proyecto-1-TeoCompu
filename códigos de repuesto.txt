@@ -1,0 +1,275 @@
+----------------------------------------------------------------------------------------
+switch (expresion_postfix.peek()) {
+                            case "|":
+                                System.out.println("Operación OR");
+                                break;
+                            case "*":
+                                System.out.println("Operación KLEENE");
+                                break;
+                            case "+":
+                                System.out.println("Operación CERRADURA POSITIVA");
+                                break;
+                            default:
+                                // Obteniendo dos estados de la pila de estados para la operación OR.
+                                String estado1 = expresion_postfix.pop();
+                                String estado2 = expresion_postfix.pop();
+
+                                System.out.println("Estados: " + estado1 + " " + estado2);
+
+                                // Creando las transiciones.
+
+                                // Enviando los estados a la clase de transiciones.
+                                transicion.Transicion(estado_inicial, 2, simbolo);
+                        }
+--------------------------------------------------------------------------------------------------
+if (expresion_postfix.get(i + 1).equals(alfabeto)) {
+                        // Creando un estado.
+                        System.out.println("Estado 1: " + expresion_postfix.get(i + 1));
+                    } else {
+                        // Buscando el estado en la pila de estados.
+                        estados.push(estados.search(expresion_postfix.get(i + 1)));
+                    }
+
+                    if (expresion_postfix.get(i + 2).equals(alfabeto)) {
+                        // Creando un estado.
+                        System.out.println("El estado es: " + estado_inicial);
+                    } else {
+                        // Buscando el estado en la pila de estados.
+                        estados.push(estados.search(expresion_postfix.get(i + 1)));
+                    }
+------------------------------------------------------------------------------------------------
+        // Agregando la transición del estado de aceptación al estado de acept
+
+        // Verificando la popeada de la expresión postfix invertida.
+        // while (!expresion_postfix.isEmpty()) {
+        // // System.out.println("Valor de la expresión postfix invertida: " +
+        // // expresion_postfix.pop());
+
+        // // Sacando el primer estado de la pila de estados.
+
+        // // Identificando los caracteres de la expresión postfix invertida.
+        // switch (expresion_postfix.peek()) {
+        // case "|":
+        // System.out.println("Operación OR " + expresion_postfix.peek());
+
+        // // String estado1 = String.valueOf(expresion_postfix.pop());
+        // // String estado2 = String.valueOf(expresion_postfix.pop());
+
+        // // System.out.println("Estado 1: " + estado1 + "Estado 2 " + estado2);
+
+        // break;
+        // case "*":
+        // System.out.println("Operación KLEENE " + expresion_postfix.peek());
+        // break;
+        // case ".": // Concatenación
+        // System.out.println("Operación CONCATENACION " + expresion_postfix.peek());
+        // break;
+        // case "+":
+        // System.out.println("Operación CERRADURA POSITIVA " +
+        // expresion_postfix.peek());
+        // break;
+        // default:
+        // System.out.println("Caracter: " + expresion_postfix.peek());
+        // break;
+        // }
+
+        // }
+
+        // Recorriendo la expresión regular.
+
+        // for (int i = 0; i < postfix.length(); i++) {
+        // // Pusheando los caracteres de la expresion regular en el arraylist.
+        // expresion_orig.add(String.valueOf(postfix.charAt(i)));
+
+        // /*
+        // * Si el caracter es diferente de | o * o +, se agrega a la pila.
+        // */
+
+        // switch (postfix.charAt(i)) { // Quitando el or. Esto se pushea al stack de
+        // operaciones.
+        // case '|':
+        // operaciones.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // case '*': // Quitando el kleene. Esto se pushea al stack de operaciones.
+        // operaciones.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // case '+': // Quitando la cerradura positiva. Esto se pushea al stack de
+        // operaciones
+        // operaciones.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // default: // Agregando el caracter de la expresión a la pila de la expresión
+        // regular
+        // alfabeto.push(String.valueOf(postfix.charAt(i)));
+        // break;
+        // }
+        // }
+
+        // // System.out.println("Expresión regular: " + alfabeto);
+
+        // // Recorriendo la pila de la expresión regular.
+        // for (int x = 0; x < alfabeto.size(); x++) {
+        // // System.out.println("Caracter: " + pila.get(x));
+        // // Pusheando los estados de la expresión regular a un arraylist, iniciando en
+        // 0.
+        // estados.add(x);
+        // }
+
+        // System.out.println("Estados: " + estados);
+
+        // Pushear toda la expresión con las operaciones y analizar con pop las
+        // expresiones. Puede ser útil tener en el stack la expresión ya analizada para
+        // poder ir juntando las
+        // operaciones.
+
+        // System.out.println("Expresion regular dentro de un stack: " + expresion);
+        // System.out.println("Pila: " + alfabeto);
+        // System.out.println("Operaciones: " + operaciones);
+        // System.out.println("Estados: " + estados);
+        // System.out.println("");
+
+        // // Llenar el ArrayList de transiciones.
+        // while (pila.size() > 0) {
+        // System.out.println("Simbolo: " + pila.pop());
+        // System.out.println("Estado: " + estados.pop());
+        // System.out.println("");
+        // // System.out.println("Estado de aceptación: " + estados_aceptacion.get(e));
+        // // transicion.Transicion(estados.get(e), estados_aceptacion.get(e), simbolo);
+        // }
+
+------------------------------------------------------------------------------------------
+
+Identificando los caracteres: |, *, +, . y los caracteres de la expresión regular.
+
+            // Identificando los caracteres de la expresión postfix invertida.
+            switch (expresion_postfix.get(i)) {
+                case "|":
+                    // Sacando los estados de la derecha e izquierda de la operación OR.
+                    System.out.println("Operación OR " + expresion_postfix.get(i));
+
+                    // // Sacando el primer estado de la pila de estados.
+                    // String estado1 = String.valueOf(expresion_postfix.get(i + 1));
+                    // String estado2 = String.valueOf(expresion_postfix.get(i + 2));
+
+                    // String estado1 = expresion_postfix.pop();
+                    // String estado2 = expresion_postfix.pop();
+
+                    // System.out.println("Estado 1: " + estado1);
+                    // System.out.println("Estado 2: " + estado2);
+
+                    // Enviando los estados al método or.
+                    // OR(estado1, estado2, simbolo);
+
+                    break;
+                case ".":
+
+                    System.out.println("Operación CONCATENACION " + expresion_postfix.get(i));
+                    // Extrayendo los estados de la derecha e izquierda de la operación
+                    // CONCATENACION.
+                    // elemento1 = String.valueOf(expresion_postfix.get(i - 1));
+                    // elemento2 = String.valueOf(expresion_postfix.get(i + 1));
+
+                    // System.out.println("Estado 1: " + estado3);
+                    // System.out.println("Estado 2: " + estado4);
+
+                    elemento1 = expresion_postfix.pop();
+                    elemento2 = expresion_postfix.pop();
+
+                    System.out.println("Elemento 1: " + elemento1);
+                    System.out.println("Elemento 2: " + elemento2);
+
+                    // Enviando los estados al método concatenación.
+                    // Concatenacion(estado_inicial, fin, estado3, estado4);
+                    break;
+                case "*":
+
+                    // Sacando elemento a operar.
+                    elemento1 = expresion_postfix.pop();
+
+                    System.out.println("Elemento a operar: " + elemento1);
+
+                    String operador = expresion_postfix.pop(); // Sacando el operador.
+
+                    System.out.println("Operación KLEENE " + operador);
+
+                    // Enviando el estado inicial y el símbolo al método OperacionKleene.
+                    opKleene(estado_inicial, elemento1, simbolo);
+                    break;
+                case "+":
+                    System.out.println("Operación POSITIVA " + expresion_postfix.get(i));
+                    break;
+                default:
+                    System.out.println("Elemento " + expresion_postfix.get(i));
+
+                    // Sacando el elemento a operar.
+                    elemento1 = expresion_postfix.pop();
+
+                    String res = OperacionDefault(estado_inicial, elemento1); // Enviando el estado
+                                                                              // inicial y el símbolo al
+                                                                              // método OperacionDefault.
+                    expresion_resultante.push(res); // Insertando el resultado de la operación default al Stack.
+                    System.out.println("Expresión resultante: " + expresion_postfix);
+                    break;
+            }
+
+----------------------------------------------------------------------
+  // Juntando los estados de aceptación de la parte de arriba con el estado
+        // inicial de la parte de abajo.
+
+        /*
+         * Stack de estados iniciales:
+         * Último estado inicial. Pertenece al último AFN temporal.
+         * 
+         * 
+         * Stack de estados finales:
+         * Último estado final. Pertenece al último AFN temporal.
+         * 
+         * Crear un nuevo estado.
+         * Propiedades:
+         * 1. Es el estado inicial del AFN de la derecha.
+         * 2. Es el estado final del AFN de la izquierda.
+         * 3. Conexión con las transiciones del AFN de la izquierda y derecha.
+         */
+
+        elemento1.getId();
+        elemento2.getId();
+
+        elemento1.setInicio(true);
+
+        Estado nuevo = new Estado(elemento1.getId());
+
+        System.out.println("Final del elemento 1: " + elemento1.getInicio());
+        System.out.println("Inicial del elemento 2: " + elemento2.getInicio());
+
+        System.out.println("El nuevo estado es: " + nuevo.getId());
+
+        // Buscar el estado final del AFN de la izquierda en el ArrayList de
+        // transiciones.
+
+        transiciones.get(elemento1.getId());
+
+        // Obteniendo los índices de las transiciones que se van a modificar.
+        int indice1 = elemento1.getId();
+        int indice2 = elemento2.getId();
+
+        // Imprimiendo lista de transiciones.
+        for (int i = 0; i < transiciones.size(); i++) {
+            transiciones.get(i).replaceA(elemento1, elemento2);
+            transiciones.add(transiciones.get(i));
+            System.out.println("Transiciones: " + transiciones.get(i).vis());
+        }
+
+---------------------------------------------------------
+List<Transiciones> lista = new CopyOnWriteArrayList(transiciones); // Prueba.
+    Iterator<Transiciones> iterador = lista.iterator(); // Iterador de la lista.
+
+        while (iterador.hasNext()) {
+            Transiciones transicion = iterador.next();
+            String s = transicion.getSimbolo();
+            if (transicion.getDe().equals(elemento2)) {
+                System.out.println("Transición del estado inicial del segundo: " + transicion.vis());
+                transiciones.remove(transicion);
+                Transiciones tr = new Transiciones(elemento1, transicion.getA(), s);
+                System.out.println("Transición nueva: " + tr.vis());
+                transiciones.add(tr);
+            }
+        }
