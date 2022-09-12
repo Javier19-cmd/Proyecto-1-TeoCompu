@@ -125,7 +125,8 @@ public class Thompson {
                 recorrido = temporal.get(i);
 
                 switch (recorrido) {
-                    case "*":
+                    case "*": // Operación para el Kleene.
+
                         System.out.println("Operación CERRADURA DE KLEENE.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
@@ -137,7 +138,9 @@ public class Thompson {
                         // Se manda a hacer la expresión en su método.
                         cerraduraKleene(estado1, estado2);
                         break;
-                    case "+":
+
+                    case "+": // Operación para la cerradura positiva.
+
                         System.out.println("Operación CERRADURA POSITIVA.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
@@ -149,9 +152,26 @@ public class Thompson {
                         System.out.println("Estado final del autómata: " + fina);
 
                         cerraduraPositiva(inic, fina);
+                        break;
+
+                    case "?": // Operación para cero o una instancia de.
+
+                        System.out.println("Operación CERO O UNA INSTANCIA DE.");
+                        operacion = expresion_postfix.pop(); // Sacando la operación del stack.
+                        operaciones.push(operacion);
+
+                        Estado inicia = estados_iniciales.pop(); // Estado inicial del autómata.
+                        Estado finali = estados_aceptacion.pop(); // Estado final del autómata.
+
+                        System.out.println("Estado inicial del autómata: " + inicia);
+                        System.out.println("Estado final del autómata: " + finali);
+
+                        ceroUnaInstancia(inicia, finali);
 
                         break;
-                    case ".":
+
+                    case ".": // Operación para la cerradura positiva.
+
                         System.out.println("Operación CONCATENACIÓN.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
@@ -167,7 +187,9 @@ public class Thompson {
 
                         concatenacion(fin, inicioo, final_2);
                         break;
-                    case "|":
+
+                    case "|": // Operación para el OR.
+
                         System.out.println("Operación UNIÓN.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion); // Guardando la operación en el stack de operaciones.
@@ -185,7 +207,9 @@ public class Thompson {
                         // Se manda a hacer la expresión en su método.
                         union(inicio_arriba, aceptacion_arriba, inicio_abajo, aceptacion_abajo);
                         break;
-                    default:
+
+                    default: // Operación unitaria.
+
                         System.out.println("Operando: " + recorrido);
                         elemento1 = expresion_postfix.pop();
                         defaultop(elemento1);
@@ -261,7 +285,7 @@ public class Thompson {
 
     }
 
-    private void cerraduraPositiva(Estado uno, Estado dos) {
+    private void cerraduraPositiva(Estado uno, Estado dos) { // Método para hacer la cerradura positiva.
         // Creando dos estados nuevos. Uno inicial y otro final.
         Estado nuevo_inicio = new Estado(estados);
         Estado nuevo_fin = new Estado(estados);
@@ -288,6 +312,37 @@ public class Thompson {
         estados_iniciales.push(nuevo_inicio);
         estados_aceptacion.push(nuevo_fin);
         estados_aceptacion2.push(nuevo_fin); // Guardando el estado de aceptación en un Stack diferente.
+    }
+
+    private void ceroUnaInstancia(Estado uno, Estado dos) { // Método para hcer el método de cero o una instancia.
+
+        // Creando dos estados nuevos. Uno inicial y otro final.
+        Estado nuevo_inicio = new Estado(estados);
+        Estado nuevo_fin = new Estado(estados);
+
+        // Creando las nuevas transiciones para el automata.
+        // Nuevo estado inicial. Se conecta el nuevo estado inicial con el estado
+        // inicial viejo.
+        Transiciones transicion1 = new Transiciones(nuevo_inicio, uno, simbolo);
+
+        // Nuevo estado final. Se conecta el viejo estado de acetpación con el nuevo
+        // estado de aceptación.
+        Transiciones transicion2 = new Transiciones(dos, nuevo_fin, simbolo);
+
+        // Transición del nuevo estado inicial al nuevo estado de aceptación del
+        // autómata.
+        Transiciones transicion3 = new Transiciones(nuevo_inicio, nuevo_fin, simbolo);
+
+        // Agregando las nuevas transiciones.
+        transiciones.add(transicion1);
+        transiciones.add(transicion2);
+        transiciones.add(transicion3);
+
+        // Agregando los nuevos estados al Stack de estados iniciales y de aceptación.
+        estados_iniciales.push(nuevo_inicio);
+        estados_aceptacion.push(nuevo_fin);
+        estados_aceptacion2.push(nuevo_fin); // Guardando el estado de aceptación en un Stack diferente.
+
     }
 
     // Método para hacer la operación de unión.
