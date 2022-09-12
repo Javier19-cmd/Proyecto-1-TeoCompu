@@ -452,7 +452,8 @@ public class Thompson {
 
             BufferedWriter bw = new BufferedWriter(escritor);
 
-            System.out.println("Expresión regular en el método escribirArchivo: " + expresion_postfixs + "");
+            // System.out.println("Expresión regular en el método escribirArchivo: " +
+            // expresion_postfixs + "");
 
             // escritor.write("Expresión regular: " + expresion_postfixs);
 
