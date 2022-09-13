@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Lector {
@@ -6,6 +7,8 @@ public class Lector {
         regex postfix = new regex(); // Instanciando la clase regex para pasar a postfix la expresión regular.
         Thompson thompson = new Thompson(); // Instanciando la clase Thompson para crear el AFN.
         AFDs afde = new AFDs(); // Instanciando la clase AFDe para crear el AFD.
+        AFDConverter afdConverter = new AFDConverter(); // Instanciando la clase AFDConverter para convertir el AFD a un
+                                                        // AFD equivalente.
 
         String r = "";
 
@@ -18,14 +21,17 @@ public class Lector {
 
         thompson.escribirArchivo(); // Escribir el archivo de salida.
 
-        // String s = "";
-        // System.out.println("Introduzca la cadena para construir el AFD: ");
-        // s = teclado.nextLine(); // lee la cadena para construir el AFD.
-        // String post_value2 = postfix.evaluar(s); // pasar a postfix la expresión
-        // regular
+        // Haciendo el getter de la lista de transiciones.
+        List<Transiciones> tr = thompson.getTransiciones();
 
-        // // Instanciando la clase AFDs para crear el AFD.
-        // afde.AFDe(post_value2);
+        System.out.println("Transiciones: " + tr);
+
+        Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
+
+        System.out.println("Estado inicial: " + inicial);
+
+        // Creando el AFD.
+        afdConverter.Proceso(tr, inicial);
 
     }
 }

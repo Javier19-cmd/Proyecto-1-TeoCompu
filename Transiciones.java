@@ -56,13 +56,7 @@ public class Transiciones {
 
     public String getSimbolo() { // Método para obtener el símbolo de la transición.
 
-        String simbolo = this.simbolo;
-
-        if (simbolo == "&") {
-            simbolo = "&";
-        }
-
-        return simbolo;
+        return this.simbolo;
 
     }
 

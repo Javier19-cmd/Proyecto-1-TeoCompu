@@ -69,12 +69,12 @@ public class Thompson {
         // System.out.println("Expresión regular invertida: " + postfix);
 
         // Imprimiendo la matriz de precedencia.
-        for (int i = 0; i < precedencia.length; i++) {
-            for (int j = 0; j < precedencia[i].length; j++) {
-                System.out.print(precedencia[i][j] + " ");
-            }
-            System.out.println();
-        }
+        // for (int i = 0; i < precedencia.length; i++) {
+        // for (int j = 0; j < precedencia[i].length; j++) {
+        // System.out.print(precedencia[i][j] + " ");
+        // }
+        // System.out.println();
+        // }
 
         // Insertando la expresión postfix invertida al Stack.
         for (int x = 0; x < expresion_postfixs.length(); x++) {
@@ -219,10 +219,10 @@ public class Thompson {
             }
         }
 
-        // Imprimiendo las transiciones.
-        for (int i = 0; i < transiciones.size(); i++) {
-            System.out.println(transiciones.get(i).toString());
-        }
+        // // Imprimiendo las transiciones.
+        // for (int i = 0; i < transiciones.size(); i++) {
+        // System.out.println(transiciones.get(i).toString());
+        // }
 
     }
 
@@ -435,6 +435,17 @@ public class Thompson {
         }
     }
 
+    // Haciendo un getter de la lista de transiciones.
+    public List<Transiciones> getTransiciones() {
+
+        return transiciones;
+    }
+
+    // Haciendo un getter para el estado inicial.
+    public Estado getEstadoInicial() {
+        return estados_iniciales.peek();
+    }
+
     // Método para escribir un archivo de texto con el autómata.
     public void escribirArchivo() {
 
@@ -459,7 +470,6 @@ public class Thompson {
 
             // Escribiendo los estados iniciales.
             bw.write("Estado inicial: " + estados_iniciales + "");
-
             bw.newLine();
 
             // Escribiendo el estado de aceptación oficial.
@@ -486,6 +496,10 @@ public class Thompson {
             // Escribiendo los símbolos.
             bw.write("Símbolos: " + alfabeto + "");
             bw.newLine();
+
+            // // Escribiendo la expresión regular.
+            // bw.write("Expresión regular: " + expresion_postfixs + "");
+            // bw.newLine();
 
             // Cerrando el escritor.
             bw.close();
