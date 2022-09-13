@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,8 +31,21 @@ public class Lector {
 
         System.out.println("Estado inicial: " + inicial);
 
+        // Haciendo el getter de la lista de estados iniciales.
+        List<Estado> estadosIniciales = thompson.getEstados_iniciales();
+
+        // Haciendo el getter de la lista de estados finales.
+        List<Estado> estadosFinales = thompson.getEstados_aceptacion();
+
+        System.out.println("Estados inicial: " + estadosIniciales);
+
+        System.out.println("Estados finales: " + estadosFinales);
+
+        // Haciendo getter de los símbolos del alfabeto.
+        ArrayList<String> alfabeto = thompson.getAlfabeto();
+
         // Creando el AFD.
-        afdConverter.Proceso(tr, inicial);
+        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto);
 
     }
 }

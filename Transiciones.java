@@ -107,6 +107,21 @@ public class Transiciones {
         this.simbolo = simbolo;
     }
 
+    // Método para obtener el símbolo en una transición.
+    public String getSimboloTransicion() {
+        return this.simbolo;
+    }
+
+    // Método para obtener la transición anterior.
+    public Transiciones getTransicionAnterior() {
+        return this;
+    }
+
+    // Método para obtener la transición siguiente.
+    public Transiciones getTransicionSiguiente() {
+        return this;
+    }
+
     public String toString() { // Método para poder ver las transiciones.
         return this.de.toString() + " -- " + this.simbolo + " --> " + this.a.toString();
     }

@@ -8,6 +8,10 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     private boolean inicio; // Variable que indica si el estado es de aceptación o no.
     private boolean fin; // Variable que indica si el estado es de aceptación o no.
 
+    public Estado() {
+
+    }
+
     public Estado(int id) { // Constructor de la clase Estado.
         this.id = id; // Se le asigna el id al estado.
         this.estado_anterior = new ArrayList<Estado>(); // Se inicializa la lista de estados anteriores.

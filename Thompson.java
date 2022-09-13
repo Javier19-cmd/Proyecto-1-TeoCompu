@@ -24,7 +24,7 @@ public class Thompson {
     // Definiendo una pila para las operaciones de la expresión.
     private Stack<String> operaciones = new Stack<String>();
 
-    // Defininiendo arraylist para la expresión original.
+    // Definiendo un stack para el estado inicial final.
     private Stack<Estado> estados_iniciales = new Stack<Estado>();
 
     // Definiendo el stack para los estados de aceptación.
@@ -435,12 +435,6 @@ public class Thompson {
         }
     }
 
-    // Haciendo un getter de la lista de transiciones.
-    public List<Transiciones> getTransiciones() {
-
-        return transiciones;
-    }
-
     // Haciendo un getter para el estado inicial.
     public Estado getEstadoInicial() {
         return estados_iniciales.peek();
@@ -508,6 +502,27 @@ public class Thompson {
         } catch (Exception e) {
             System.out.println("Error al escribir el archivo.");
         }
+    }
+
+    // Haciendo un getter de la lista de transiciones.
+    public List<Transiciones> getTransiciones() {
+
+        return transiciones;
+    }
+
+    // Haciendo un getter para el Stack de estados iniciales.
+    public Stack<Estado> getEstados_iniciales() {
+        return estados_iniciales;
+    }
+
+    // Haciendo un getter para el Stack de estados de aceptación.
+    public Stack<Estado> getEstados_aceptacion() {
+        return estados_aceptacion2;
+    }
+
+    // Haciendo un getter para los símbolos.
+    public ArrayList<String> getAlfabeto() {
+        return alfabeto;
     }
 
 }
