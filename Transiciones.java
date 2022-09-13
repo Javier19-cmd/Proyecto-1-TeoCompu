@@ -125,4 +125,16 @@ public class Transiciones {
     public String toString() { // Método para poder ver las transiciones.
         return this.de.toString() + " -- " + this.simbolo + " --> " + this.a.toString();
     }
+
+    // Método para obtener las transiciones de un estado.
+    public ArrayList<Transiciones> getTransicionesEstado(Estado estado) {
+        ArrayList<Transiciones> transiciones = new ArrayList<Transiciones>();
+        for (int i = 0; i < Thompson.transiciones.size(); i++) {
+            if (Thompson.transiciones.get(i).getDe().equals(estado)) {
+                transiciones.add(Thompson.transiciones.get(i));
+            }
+        }
+        return transiciones;
+    }
+
 }

@@ -13,7 +13,7 @@ public class Thompson {
     public static int estados = 0;
 
     // Definiendo una lista para las transiciones que se hicieron en el AFN.
-    private List<Transiciones> transiciones = new CopyOnWriteArrayList<Transiciones>();
+    public static List<Transiciones> transiciones = new CopyOnWriteArrayList<Transiciones>();
 
     // Definiendo Stack para la expresión postfix invertida.
     private Stack<String> expresion_postfix = new Stack<String>();
@@ -523,6 +523,11 @@ public class Thompson {
     // Haciendo un getter para los símbolos.
     public ArrayList<String> getAlfabeto() {
         return alfabeto;
+    }
+
+    // Haciendo un getter para el Stack de estados.
+    public Stack<Estado> getEstadoss() {
+        return estadoss;
     }
 
 }

@@ -102,4 +102,5 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     public String getIds() {
         return this.id + " ";
     }
+
 }

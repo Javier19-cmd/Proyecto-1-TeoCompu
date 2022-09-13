@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Lector {
     public static void main(String[] args) {
@@ -44,8 +45,11 @@ public class Lector {
         // Haciendo getter de los símbolos del alfabeto.
         ArrayList<String> alfabeto = thompson.getAlfabeto();
 
+        // Haciendo getter de los estados.
+        Stack<Estado> estados = thompson.getEstadoss();
+
         // Creando el AFD.
-        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto);
+        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados);
 
     }
 }
