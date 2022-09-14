@@ -48,8 +48,13 @@ public class Lector {
         // Haciendo getter de los estados.
         Stack<Estado> estados = thompson.getEstadoss();
 
+        // Haciendo el getter del estado de aceptación.
+        Estado aceptacion = thompson.getEstadoAceptacion();
+
+        System.out.println("Estado de aceptación: " + aceptacion);
+
         // Creando el AFD.
-        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados);
+        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados, aceptacion);
 
     }
 }

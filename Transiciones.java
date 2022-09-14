@@ -137,4 +137,9 @@ public class Transiciones {
         return transiciones;
     }
 
+    // Método para obtener el estado final.
+    public Estado getEstadoFinal() {
+        return this.a;
+    }
+
 }

@@ -3,9 +3,14 @@ import java.util.*; // Importando todas las librerías para evitar problemas.
 public class Estado { // Clase estado, esta se va a encargar de guardar los estados del AFN.
     private List<Estado> estado_anterior; // Lista que guarda los estados anteriores.
     private List<Estado> estado_siguiente; // Lista que guarda los estados siguientes.
-    private int id; // Identificador del estado.
+    private int idAFN; // Identificador del estado.
 
-    private boolean inicio; // Variable que indica si el estado es de aceptación o no.
+    // Creando variables para los estados del AFD.
+    private int idAFD; // Identificador del estado del AFD.
+    private List<Estado> estado_anteriorAFD; // Lista que guarda los estados anteriores del AFD.
+    private List<Estado> estado_siguienteAFD; // Lista que guarda los estados siguientes del AFD.
+
+    private boolean inicio; // Variable que indica si el estado es de inicio o no.
     private boolean fin; // Variable que indica si el estado es de aceptación o no.
 
     public Estado() {
@@ -13,15 +18,26 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     }
 
     public Estado(int id) { // Constructor de la clase Estado.
-        this.id = id; // Se le asigna el id al estado.
+        this.idAFN = id; // Se le asigna el id al estado.
         this.estado_anterior = new ArrayList<Estado>(); // Se inicializa la lista de estados anteriores.
         this.estado_siguiente = new ArrayList<Estado>(); // Se inicializa la lista de estados siguientes.
         Thompson.estados++; // Se incrementa el contador de estados.
     }
 
+    public Estado AFDE(int id) { // Método que se encarga de crear los estados del AFD que se va a generar del
+        // AFN.
+
+        this.idAFD = id; // Se le asigna el id al estado.
+        this.estado_anterior = new ArrayList<Estado>(); // Se inicializa la lista de estados anteriores.
+        this.estado_siguiente = new ArrayList<Estado>(); // Se inicializa la lista de estados siguientes.
+        AFDConverter.contadorEstados++;
+
+        return this;
+    }
+
     public Estado(int id, List<Estado> estado_anterior, List<Estado> estado_siguiente) { // Constructor de la clase
                                                                                          // Estado.
-        this.id = id; // Se le asigna el id al estado.
+        this.idAFN = id; // Se le asigna el id al estado.
         this.estado_anterior = estado_anterior; // Se inicializa la lista de estados anteriores.
         this.estado_siguiente = estado_siguiente; // Se inicializa la lista de estados siguientes.
 
@@ -44,11 +60,11 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     }
 
     public String toString() { // Método para imprimir el estado.
-        return "" + this.id; // Se retorna el id del estado como string.
+        return "" + this.idAFN; // Se retorna el id del estado como string.
     }
 
     public int getId() { // Método para obtener el id del estado.
-        return this.id; // Se retorna el id del estado.
+        return this.idAFN; // Se retorna el id del estado.
     }
 
     // Método para eliminar un estado.
@@ -63,27 +79,12 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
         this.estado_anterior.replaceAll(operator -> operator == estado ? this : operator);
     }
 
-    public String De() {
-        // Imprimiendo los estados anteriores.
-        String anterior = ""; // Variable que guarda los estados anteriores.
-        for (Estado estado : this.estado_anterior) { // Recorriendo la lista de estados anteriores.
-            anterior += estado.toString() + " "; // Se agrega el estado a la variable anterior.
-        }
-
-        return anterior; // Se retorna la variable anterior.
+    // Getter del estado inicial del AFD.
+    public int getIdAFD() {
+        return this.idAFD;
     }
 
-    public String A() {
-        // Imprimiendo los estados siguientes.
-        String siguiente = ""; // Variable que guarda los estados siguientes.
-        for (Estado estado : this.estado_siguiente) { // Recorriendo la lista de estados siguientes.
-            siguiente += estado.toString() + " "; // Se agrega el estado a la variable siguiente.
-        }
-
-        return siguiente; // Se retorna la variable siguiente.
-    }
-
-    public void setInicio(boolean inicio) { // Método para asignar el estado inicial.
+    public void setInicio(boolean inicio) { // Método para asignar el estadoinicial.
         this.inicio = inicio; // Se asigna el estado inicial.
     }
 
@@ -99,8 +100,8 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
         return this.fin; // Se retorna el estado final.
     }
 
-    public String getIds() {
-        return this.id + " ";
-    }
+    // public String getIds() {
+    // return this.id + " ";
+    // }
 
 }

@@ -224,6 +224,8 @@ public class Thompson {
         // System.out.println(transiciones.get(i).toString());
         // }
 
+        setEstadoInicial_y_Final();
+
     }
 
     // Método para hacer la operación default, que es crear un estado para un
@@ -440,6 +442,27 @@ public class Thompson {
         return estados_iniciales.peek();
     }
 
+    // Haciendo un método para settear formalmente el estado inicial y final.
+    public void setEstadoInicial_y_Final() {
+        // Seteando el estado inicial.
+        Estado inicial = estados_iniciales.pop();
+        inicial.setInicio(true);
+        // Pusheado el estado inicial al Stack de estados.
+        estados_iniciales.push(inicial);
+
+        // Seteando el estado final.
+        Estado fin = estados_aceptacion.pop();
+        fin.setFinal(true);
+
+        // Pusheado el estado final al Stack de estados.
+        estados_aceptacion.push(fin);
+
+        if (alfabeto.contains("&")) { // Si el alfabeto contiene el simbolo de lambda.
+            // Eliminando el simbolo de lambda del alfabeto.
+            alfabeto.remove("&");
+        }
+    }
+
     // Método para escribir un archivo de texto con el autómata.
     public void escribirArchivo() {
 
@@ -508,6 +531,12 @@ public class Thompson {
     public List<Transiciones> getTransiciones() {
 
         return transiciones;
+    }
+
+    // Método para obtener el estado de aceptación.
+    public Estado getEstadoAceptacion() {
+
+        return estados_aceptacion.pop();
     }
 
     // Haciendo un getter para el Stack de estados iniciales.
