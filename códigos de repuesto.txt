@@ -325,3 +325,239 @@ for (int i = 0; i < transiciones.size(); i++) {
             // Impriendo la cerradura del estado inicial.
             // System.out.println("Cerradura del estado inicial: " + cerraduraInicial);
         }
+--------------------------------------------------------------------------------------------------------------------------------
+
+If para verificar si el estado ya está en la lista temporal:
+
+if (!estadosAFD.contains(cerraduraResult)) {
+                    listaTemporal.add(cerraduraResult);
+                } else {
+                    System.out.println("Ya existe el estado");
+                }
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+   // // Calculando el movimiento de los estados alcanzados.
+        // for (int i = 0; i < alfabetoAFD.size(); i++) {
+        // estadosAlcanzados = mover(cerraduraResult, alfabetoAFD.get(i));
+        // // Calculando la cerradura de cada estado alcanzado.
+        // for (int j = 0; j < estadosAlcanzados.size(); j++) {
+        // cerraduraResult = cerradura(estadosAlcanzados.get(j));
+        // // Imprimiendo la cerradura de cada estado alcanzado.
+        // System.out.println("Cerradura de cada estado alcanzado: " +
+        // cerraduraResult.toString());
+        // }
+
+        // System.out.println();
+        // }
+
+        // Si con el primer e-closure se llegó a un estado final, se agrega a la lista
+        // de estados de aceptación.
+        // for (Estado accept : estadosFinales) {
+        // if (cerraduraInicial.contains(accept)) {
+        // estados_aceptacion.add(a);
+        // }
+        // }
+
+        // // Imprimiendo los estados de aceptación.
+        // System.out.println("Estados de aceptación: " +
+        // estados_aceptacion.toString());
+------------------------------------------------------------------------------------------------------------------------------------
+// Obteniendo la lista de estados del HasMap y poniéndola en true.
+        for (Map.Entry<ArrayList<Estado>, Boolean> entry : cerraduraResult.entrySet()) {
+            if (entry.getValue() == false) {
+                entry.setValue(true);
+            }
+
+            System.out.println("Primer estado del HashMap: " + entry.getKey().toString());
+        }
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+            // Mientras haya un ArrayList en el HashMap con false, se envía al move.
+            // Obteniendo cada símbolo del alfabeto.
+            for (int i = 0; i < alfabetoAFD.size(); i++) {
+
+                // Obteniendo cada ArrayList del HashMap.
+                for (Map.Entry<ArrayList<Estado>, Boolean> entry : cerraduraResult.entrySet()) {
+
+                    // Obteniendo el valor del ArrayList.
+                    ArrayList<Estado> valor = entry.getKey();
+
+                    // Obteniendo el valor booleano del ArrayList.
+                    Boolean valorBooleano = entry.getValue();
+
+                    // Si el valor booleano es false, se envía al move.
+                    if (valorBooleano == false) {
+
+                        System.out.println("Valor a enviar al move: " + valor.toString() + " con el símbolo: "
+                                + alfabetoAFD.get(i) + "");
+
+                        // Se envía el ArrayList al move.
+                        mover(valor, alfabetoAFD.get(i));
+
+                        // Guardando el resultado de mover en un ArrayList temporal.
+                        listaTemporal.add(mover(valor, alfabetoAFD.get(i)));
+
+                        // Por cada ArrayList en la lista temporal, se envía a la cerradura.
+                        for (int j = 0; j < listaTemporal.size(); j++) {
+
+                            // Por cada elemento en el ArrayList, se envía a la cerradura.
+                            for (int k = 0; k < listaTemporal.get(j).size(); k++) {
+                                cerradura(listaTemporal.get(j).get(k));
+
+                                // Guardando el resultado de la cerradura en el HashMap.
+                                cerraduraResult.put(cerradura(listaTemporal.get(j).get(k)), false);
+                            }
+                        }
+
+                    } // Al terminar el for, se cambia el valor booleano del ArrayList a true.
+                    else {
+                        cerraduraResult.put(valor, true);
+                    }
+
+                }
+
+                // // Imprimiendo el HasMap.
+                // System.out.println("HashMap: " + cerraduraResult.toString());
+
+            }
+
+---------------------------------------------------------------------------------------------------------
+estadoInicial = it.next();
+
+            System.out.println("Estado inicial del AFD: " + estadoInicial.toString());
+
+            // Una vez se movió el estado, se cambia el valor de la llave a true.
+            cerraduraResult.put(estadoInicial, true);
+
+            // Obteniendo el alfabeto del AFD.
+            for (int i = 0; i < alfabetoAFD.size(); i++) {
+                System.out.println("Símbolo del AFD: " + alfabetoAFD.get(i));
+
+                // Obteniendo el conjunto de estados alcanzados por medio de mover.
+                ArrayList<Estado> conjuntoEstados = mover(estadoInicial, alfabetoAFD.get(i));
+
+                System.out.println("Conjunto de estados alcanzados por mover: " + conjuntoEstados.toString());
+
+                // Calculando la cerradura de cada estado del conjunto de estados.
+                for (int j = 0; j < conjuntoEstados.size(); j++) {
+                    ArrayList<Estado> cerraduraEstados = cerradura(conjuntoEstados.get(j));
+                    System.out.println(
+                            "Cerradura de cada estado del conjunto de estados: " + cerraduraEstados.toString());
+                }
+
+                // Si el conjunto de estados no está en el HashMap, entonces se agrega.
+                if (!cerraduraResult.containsKey(conjuntoEstados)) {
+                    cerraduraResult.put(conjuntoEstados, false);
+                }
+            }
+
+            // Imprimiendo el HashMap.
+            System.out.println("HashMap: " + cerraduraResult.toString());
+-------------------------------------------------------------------------------------------------
+// Imprimiendo el resultado de move.
+                System.out.println("Resultado de move: " + resultado.toString());
+
+                // Recorriendo el resultado de move.
+                for (int i = 0; i < resultado.size(); i++) {
+
+                    // Obteniendo el estado.
+                    Estado estado = resultado.get(i);
+
+                    // Imprimiendo el estado.
+                    System.out.println("Estado: " + estado.toString());
+
+                    // Obteniendo la cerradura del estado.
+                    ArrayList<Estado> cerraduraEstado = cerradura(estado);
+
+                    // Imprimiendo la cerradura del estado.
+                    System.out.println("Cerradura del estado: " + cerraduraEstado.toString());
+
+                    // Si el HashMap de estados alcanzados no contiene la cerradura del estado,
+                    // entonces
+                    // se agrega.
+                    if (!cerraduraResult.containsKey(cerraduraEstado)) {
+
+                        // Agregando la cerradura del estado al HashMap de estados alcanzados.
+                        cerraduraResult.put(cerraduraEstado, false);
+
+                        // Imprimiendo el HashMap de estados alcanzados.
+                        System.out.println("Estados alcanzados: " + cerraduraResult.toString());
+
+                    }
+
+                }
+--------------------------------------------------------------------------------------------------------
+// Imprimiendo el HashMap de estados alcanzados.
+        // System.out.println("Estados alcanzados: " + cerraduraResult.toString());
+        // Recorriendo el HashMap de estados alcanzados.
+        for (Map.Entry<List<Estado>, Boolean> entry : cerraduraResult.entrySet()) {
+
+            // Obteniendo el valor de la llave.
+            List<Estado> llave = entry.getKey();
+
+            // Obteniendo el valor del valor.
+            Boolean valor = entry.getValue();
+
+            // Imprimiendo el valor de la llave.
+            System.out.println("Llave: " + llave.toString());
+
+            // Imprimiendo el valor del valor.
+            System.out.println("Valor: " + valor.toString());
+
+            // Si el valor es false, entonces se procesa el estado.
+            if (valor == false) {
+
+                // Se obtiene el conjunto de estados alcanzados en el AFN por medio del primer
+                // símbolo del alfabeto partir del estado inicial del AFD.
+
+                for (int i = 0; i < alfabetoAFD.size(); i++) {
+                    System.out.println("Símbolo del AFD: " + alfabetoAFD.get(i));
+                    ArrayList<Estado> resultado = mover(llave, alfabetoAFD.get(i));
+
+                    // Imprimiendo el resultado de mover.
+                    System.out.println("Resultado de mover: " + resultado.toString());
+
+                    // Se obtiene la cerradura de cada uno de los estados del conjunto de estados
+                    // alcanzados.
+                    // Recorriendo el resultado de move.
+                    for (int j = 0; j < resultado.size(); j++) {
+
+                        // Obteniendo el estado.
+                        Estado estado = resultado.get(j);
+
+                        // Imprimiendo el estado.
+                        System.out.println("Estado: " + estado.toString());
+
+                        // Obteniendo la cerradura del estado.
+                        ArrayList<Estado> cerraduraEstado = cerradura(estado);
+
+                        // Imprimiendo la cerradura del estado.
+                        System.out.println("Cerradura del estado: " + cerraduraEstado.toString());
+
+                        // Si el HashMap de estados alcanzados no contiene la cerradura del estado,
+                        // entonces
+                        // se agrega.
+                        if (!cerraduraResult.containsKey(cerraduraEstado)) {
+
+                            // Agregando la cerradura del estado al HashMap de estados alcanzados.
+                            cerraduraResult.put(cerraduraEstado, false);
+
+                            // Imprimiendo el HashMap de estados alcanzados.
+                            System.out.println("Estados alcanzados: " + cerraduraResult.toString());
+
+                        }
+
+                    }
+                }
+
+            }
+
+            // Cambiando el valor de la llave a true.
+            cerraduraResult.put(llave, true);
+
+            // Imprimiendo el HashMap de estados alcanzados.
+            System.out.println("Estados alcanzados luego de procesar el primer estado: " + cerraduraResult.toString());
+
+        }
