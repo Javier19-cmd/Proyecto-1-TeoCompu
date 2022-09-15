@@ -35,7 +35,7 @@ public class AFDConverter {
     // Constructor del AFDConverter
 
     public AFDConverter() {
-        afd = new Estado();
+
     }
 
     // Método para empezar a procesar los datos.
@@ -120,7 +120,7 @@ public class AFDConverter {
     }
 
     // Creando método para calcular la cerradura de un estado.
-    private ArrayList<Estado> cerradura(Estado estado) {
+    public ArrayList<Estado> cerradura(Estado estado) {
 
         System.out.println();
         System.out.println("Estado al cual se le aplicará la cerradura: " + estado.toString());

@@ -463,6 +463,38 @@ public class Thompson {
         }
     }
 
+    // Haciendo un getter de la lista de transiciones.
+    public List<Transiciones> getTransiciones() {
+
+        return transiciones;
+    }
+
+    // Método para obtener el estado de aceptación.
+    public Estado getEstadoAceptacion() {
+
+        return estados_aceptacion.pop();
+    }
+
+    // Haciendo un getter para el Stack de estados iniciales.
+    public Stack<Estado> getEstados_iniciales() {
+        return estados_iniciales;
+    }
+
+    // Haciendo un getter para el Stack de estados de aceptación.
+    public Stack<Estado> getEstados_aceptacion() {
+        return estados_aceptacion2;
+    }
+
+    // Haciendo un getter para los símbolos.
+    public ArrayList<String> getAlfabeto() {
+        return alfabeto;
+    }
+
+    // Haciendo un getter para el Stack de estados.
+    public Stack<Estado> getEstadoss() {
+        return estadoss;
+    }
+
     // Método para escribir un archivo de texto con el autómata.
     public void escribirArchivo() {
 
@@ -527,36 +559,80 @@ public class Thompson {
         }
     }
 
-    // Haciendo un getter de la lista de transiciones.
-    public List<Transiciones> getTransiciones() {
+    // Método para poder simular el autómata cuando ya esté armado.
+    public void simulation(Estado aceptacion) {
+        // Variables y demás a utilizar.
+        long startTime = System.nanoTime(); // Tomando el tiempo de inicio.
 
-        return transiciones;
-    }
+        ArrayList<Estado> estadoTempral = new ArrayList<Estado>(); // ArrayList para guardar la expresión temporal.
 
-    // Método para obtener el estado de aceptación.
-    public Estado getEstadoAceptacion() {
+        ArrayList<Estado> estadoAct = new ArrayList<Estado>(); // ArrayList para guardar el estado actual.
 
-        return estados_aceptacion.pop();
-    }
+        estadoAct.add(estados_iniciales.peek()); // Agregando el estado inicial al ArrayList.
 
-    // Haciendo un getter para el Stack de estados iniciales.
-    public Stack<Estado> getEstados_iniciales() {
-        return estados_iniciales;
-    }
+        System.out.println("Estado de aceptación: " + estados_aceptacion + "");
 
-    // Haciendo un getter para el Stack de estados de aceptación.
-    public Stack<Estado> getEstados_aceptacion() {
-        return estados_aceptacion2;
-    }
+        // Instanciando la clase de AFDConverter para calcular el eClosure.
+        AFDConverter afd = new AFDConverter();
 
-    // Haciendo un getter para los símbolos.
-    public ArrayList<String> getAlfabeto() {
-        return alfabeto;
-    }
+        System.out.println("Ahora se procede a simular el autómata.");
 
-    // Haciendo un getter para el Stack de estados.
-    public Stack<Estado> getEstadoss() {
-        return estadoss;
+        System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
+
+        // Creando el objeto de la clase Scanner.
+        Scanner sc = new Scanner(System.in);
+        String s = ""; // String para guardar la cadena a simular.
+
+        // Pidiendo al usuario que ingrese la cadena a simular.
+        System.out.println("Ingrese la cadena a simular: ");
+        s = sc.nextLine(); // Guardando la cadena a simular.
+
+        for (int a = 0; a < s.length(); a++) { // Recorriendo la cadena a simular.
+            if (!alfabeto.contains(s.charAt(a) + "")) { // Verificando que todos y cada uno de los símbolos de la cadena
+                                                        // pertenezcan al alfabeto.
+                System.out.println("La cadena no pertenece al lenguaje.");
+                return;
+            }
+
+            for (int b = 0; b < estadoAct.size(); b++) { // Recorriendo el ArrayList de estados actuales.
+                // String caracterActual = s.charAt(a) + ""; // Guardando el caracter actual.
+                Estado estadpAct = estadoAct.get(b); // Guardando el estado actual.
+
+                for (int c = 0; c < transiciones.size(); c++) { // Recorriendo el ArrayList de transiciones.
+                    Transiciones transicionActual = transiciones.get(c);
+
+                    if (transicionActual.getDe().equals(estadpAct)) { // Si la transición tiene como
+                                                                      // estado
+                                                                      // de origen el estado actual y
+                                                                      // el
+                                                                      // símbolo es el caracter actual.
+                        Estado estadotemporal = transicionActual.getA(); // Guardando el estado temporal.
+                        estadoTempral = afd.cerradura(estadotemporal); // Calculando el eClosure del estado temporal
+                                                                       // para el
+                                                                       // caracter actual.
+                        // Agregando el estado temporal al ArrayList de estados actuales.
+                        estadoAct.add(estadoTempral.get(0));
+
+                    }
+                }
+            }
+        }
+
+        long endTime = System.nanoTime(); // Tomando el tiempo de finalización.
+
+        double duration = (endTime - startTime) / (1e6); // Duración de la simulación.
+
+        // Verificando que el estadoActual no contenga el estado de aceptación.
+        if (estadoAct.contains(aceptacion)) {
+            System.out.println("La cadena pertenece al lenguaje.");
+
+        } else {
+            System.out.println("La cadena no pertenece al lenguaje.");
+
+        }
+
+        System.out.println("Duración de la simulación: " + duration + " milisegundos.");
+
     }
 
 }
