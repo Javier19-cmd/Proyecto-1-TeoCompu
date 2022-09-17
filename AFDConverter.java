@@ -55,9 +55,6 @@ public class AFDConverter {
         // Guardando el estado inicial del AFD.
         estadosAFD.add(a);
 
-        Queue<ArrayList<Estado>> cola = new LinkedList<ArrayList<Estado>>(); // Creando cola para guardar los estados
-                                                                             // del AFD.
-
         cerraduraResult.push(cerradura(inicial)); // Guardando la cerradura del estado inicial. Esto será el
                                                   // estado inicial del AFD. El ArrayList se declara como false,
                                                   // dado que aún no se ha analizado.
@@ -90,53 +87,43 @@ public class AFDConverter {
             // Matriz para el resultado del move.
             ArrayList<ArrayList<Estado>> move = new ArrayList<ArrayList<Estado>>();
 
-            System.out.println("Estado: " + estado.toString());
+            ArrayList<ArrayList<Estado>> cerradura = new ArrayList<ArrayList<Estado>>();
+
+            // System.out.println("Estado: " + estado.toString());
 
             // Se aplican los métodos move y e-closure al estado con cada uno de los
             // símbolos del alfabeto.
-            for (int i = 0; i < alfabetoAFD.size(); i++) {
+            for (int i = 0; i < alfabetoAFD.size(); i++) { // Aquí se calcula el move de cada estado.
 
                 // Se obtiene el resultado de move.
                 move.add(mover(estado, alfabetoAFD.get(i)));
 
-                // Se imprime el resultado de move.
                 System.out.println("Move: " + move.toString());
 
-                // Se obtiene el resultado de e-closure de cada estado de move.
-                // Recorriendo el ArrayList de move para obtener los estados de move y aplicar
-                // e-closure.
+                // Se obtiene el resultado de e-closure.
                 for (int j = 0; j < move.size(); j++) {
 
-                    System.out.println("Move: " + move.get(j).toString());
+                    cerradura.add(cerradura(move.get(j)));
 
-                    // Se obtiene el resultado de e-closure.
-                    cerradura(move.get(j));
+                    System.out.println("Cerradura: " + cerradura.toString());
 
-                    System.out.println("eClosure: " + cerradura(move.get(j)));
+                    // Verificando si el estado ya existe en los estados totales.
+                    if (!totalStates.contains(cerradura.get(j))) {
+                        // Si el estado no existe, se agrega a la lista de estados totales.
+                        totalStates.push(cerradura.get(j));
 
-                    // Agregando el resultado de e-closure al HashMap. Si el estado ya existe en el
-                    // HashMap, no se agrega.
-                    if (totalStates.contains(cerradura(move.get(j)))) {
-
-                    } else {
-                        cerraduraResult.push(cerradura(move.get(j)));
-                        totalStates.push(cerradura(move.get(j)));
+                        cerraduraResult.push(cerradura.get(j)); // Pusheando el resultado para ser analizado nuevamente.
                     }
-
                 }
 
             }
 
         }
         // Imprimiendo totalStates.
-        System.out.println("TotalStates: " + totalStates.toString());
-
-        // e-closure del estado inicial.
-        // Move del resultado de e-closure del estado inicial.
-        // e-closure del resultado de move del estado inicial.
-        // El e-closure se tiene que guardar en el HashMap como false.
-        // No tienen que haber estados repetidos en el HashMap.
-        // Se repite el proceso hasta que no haya más estados en false.
+        System.out.println(totalStates.toString());
+        for (int i = 0; i < totalStates.size(); i++) {
+            System.out.println("Total States: " + totalStates.get(i).toString());
+        }
 
     }
 
@@ -145,14 +132,6 @@ public class AFDConverter {
 
         // Se crea una lista para guardar las transiciones del estado actual.
         ArrayList<Estado> resultado = new ArrayList<Estado>();
-
-        // System.out.println();
-        // System.out.println("Estado al cual se le aplicará la cerradura: " +
-        // estado.toString());
-        // System.out.println();
-
-        Queue<ArrayList<Estado>> cola2 = new LinkedList<ArrayList<Estado>>(); // Creando cola para guardar los estados
-                                                                              // del AFD.
 
         // Creando una pila para guardar los estados que se van a procesar.
         Stack<Estado> pila = new Stack<Estado>();
@@ -165,92 +144,78 @@ public class AFDConverter {
             resultado.add(estado.get(i));
         }
 
-        Estado s = new Estado(); // Creando instancia de la clase Estado.
+        // System.out.println("Pila: " + pila.toString());
 
-        // Se obtienen las transiciones que se realizan desde el estado actual.
-        // tr.getTransicionesEstado(estadoActual);
-
-        // System.out.println("Transiciones del estado actual: " +
-        // tr.getTransicionesEstado(estadoActual));
-
-        // Agrergando el estado actual a la pila de estados.
-        // pila.push(estadoActual);
+        Estado t = new Estado(); // Creando instancia de la clase Estado.
 
         // Se recorre la pila de estados.
         while (!pila.isEmpty()) {
 
-            s = pila.pop(); // Sacando un estado de la pila.
-            // System.out.println("Estado: " + s);
+            t = pila.pop(); // Sacando un estado de la pila.
 
             // Recorriendo la lista de transiciones del estado actual.
-            for (Transiciones ts : tr.getTransicionesEstado(s)) {
+            for (Transiciones ts : tr.getTransicionesEstado(t)) {
+                // System.out.println("Transición: " + ts.getDe() + " " + ts.getSimbolo() + " "
+                // + ts.getA());
                 if (ts.getSimbolo().equals("&") && !resultado.contains(ts.getA())) {
-                    resultado.add(ts.getA()); /// Validando que el estado no se haya agregado anteriormente.
-                    pila.push(ts.getA()); // Agregando el estado a la pila.
+
+                    // System.out.println("Estado: " + ts.getA());
+                    pila.push(ts.getA());
+                    resultado.add(ts.getA());
+
                 }
 
             }
 
         }
-
-        // resultado.add(estadoActual); // Se agrega el estado actual a la lista de
-        // resultados.
-
-        // mover(resultado, alfabetoAFD); // Se calcula el movimiento con el estado
-        // actual.
-
-        // Se envía la lista de resultados al método mover.
-
-        // System.out.println("Resultado de la cerradura: " + resultado.toString());
-
-        // // Calculando el movimiento con los estados de la lista de resultados.
-        // for (String simbolo : alfabetoAFD) {
-        // ArrayList<Estado> resultado_move = new ArrayList<Estado>();
-        // resultado_move = mover(resultado, simbolo);
-        // // System.out.println("Mover con " + simbolo + ": " +
-        // // resultado_move.toString());
-        // if (!resultado_move.isEmpty()) {
-        // cola2.add(resultado_move);
-        // }
-        // }
 
         return resultado;
 
     }
 
     // Creando método para calcular el movimiento de un estado.
-    private ArrayList<Estado> mover(List<Estado> estados, String simbolo) {
-        System.out.println("-----------------------------------------------");
+    private ArrayList<Estado> mover(ArrayList<Estado> estados, String simbolo) {
 
-        System.out.println("Símbolo con el que se va a mover: " + simbolo);
-
-        // Creando una lista para guardar los resultados del movimiento.
+        // Se crea una lista para guardar las transiciones del estado actual.
         ArrayList<Estado> resultado = new ArrayList<Estado>();
 
-        // Creando una lista para guardar las transiciones del estado actual.
-        ArrayList<Transiciones> transiciones = new ArrayList<Transiciones>();
+        // Creando una pila para guardar los estados que se van a procesar.
+        Stack<Estado> pila = new Stack<Estado>();
 
-        Transiciones ts = new Transiciones();
+        Transiciones tr = new Transiciones();
 
-        // Recorriendo la lista de estados.
-        for (Estado estado : estados) {
-            // System.out.println("Estado move: " + estado);
-
-            for (Transiciones t : ts.getTransicionesEstado(estado)) {
-                if (t.getSimbolo().equals(simbolo)) {
-                    // System.out.println("Transición: " + t);
-                    // System.out.println("Símbolo: " + t.getSimbolo());
-                    resultado.add(t.getA());
-                }
-            }
+        // Guardando el contenido de la lista de estados en la pila.
+        for (int i = 0; i < estados.size(); i++) {
+            pila.push(estados.get(i));
+            // resultado.add(estados.get(i));
         }
 
-        // Recorriendo la lista de resultados y mandando a llamar el método cerradura.
-        // for (Estado estado : resultado) {
-        // cerraduraResult = cerradura(estado);
-        // }
+        // System.out.println("Pila: " + pila.toString());
 
-        System.out.println("Resultado del movimiento: " + resultado.toString() + " con el símbolo " + simbolo);
+        Estado t = new Estado(); // Creando instancia de la clase Estado.
+
+        // Se recorre la pila de estados.
+        while (!pila.isEmpty()) {
+
+            t = pila.pop(); // Sacando un estado de la pila.
+
+            // Se obtienen las transiciones del estado actual.
+            for (Transiciones ts : tr.getTransicionesEstado(t)) {
+
+                // System.out.println("Transición: " + ts.getDe() + " " + ts.getSimbolo() + " "
+                // + ts.getA());
+
+                if (ts.getSimbolo().equals(simbolo) && !resultado.contains(ts.getA())) {
+
+                    // System.out.println("Estado: " + ts.getA());
+                    pila.push(ts.getA());
+                    resultado.add(ts.getA());
+
+                }
+
+            }
+
+        }
 
         return resultado;
     }
