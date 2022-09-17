@@ -100,27 +100,30 @@ public class AFDConverter {
 
                 System.out.println("Move: " + move.toString());
 
-                // Se obtiene el resultado de e-closure.
                 for (int j = 0; j < move.size(); j++) {
 
                     cerradura.add(cerradura(move.get(j)));
 
                     System.out.println("Cerradura: " + cerradura.toString());
 
-                    // Verificando si el estado ya existe en los estados totales.
+                    // Se verifica que el estado no esté en la lista de estados totales.
                     if (!totalStates.contains(cerradura.get(j))) {
-                        // Si el estado no existe, se agrega a la lista de estados totales.
+
+                        // Se agrega el estado a la lista de estados totales.
                         totalStates.push(cerradura.get(j));
 
-                        cerraduraResult.push(cerradura.get(j)); // Pusheando el resultado para ser analizado nuevamente.
+                        // Se agrega el estado a la lista de estados a procesar.
+                        cerraduraResult.push(cerradura.get(j));
+
                     }
+
                 }
 
             }
 
         }
         // Imprimiendo totalStates.
-        System.out.println(totalStates.toString());
+        // System.out.println(totalStates.toString());
         for (int i = 0; i < totalStates.size(); i++) {
             System.out.println("Total States: " + totalStates.get(i).toString());
         }
