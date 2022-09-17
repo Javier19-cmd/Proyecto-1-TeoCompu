@@ -561,3 +561,26 @@ estadoInicial = it.next();
             System.out.println("Estados alcanzados luego de procesar el primer estado: " + cerraduraResult.toString());
 
         }
+----------------------------------------------------------------------------------------------------------------
+
+ // Se obtiene el resultado de e-closure.
+                            cerradura(move.get(j).get(k));
+
+                            // Esto devuelve idealmente un ArrayList de ArrayLists, dado que hace el move y
+                            // el e-closure con cada símbolo del alfabeto.
+
+                            System.out.println("eClosure: " + cerradura(move.get(j).get(k)));
+
+                            // Haciendo una lista de ArrayLists para guardar los resultados de e-closure por
+                            // cada símbolo del alfabeto.
+                            eClosure_List.addAll(cerradura(move.get(j).get(k)));
+
+                            // Si hay un estado repetido, entonces no se agrega.
+                            if (listaTemporal.contains(cerradura(move.get(j).get(k)))) {
+                                System.out.println("Estado repetido");
+                            } else {
+                                // Se agrega el estado a la lista temporal.
+                                listaTemporal.add(cerradura(move.get(j).get(k)));
+                            }
+
+                            // listaTemporal.add(cerradura(move.get(j).get(k)));

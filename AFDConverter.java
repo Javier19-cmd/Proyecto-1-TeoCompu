@@ -14,8 +14,9 @@ public class AFDConverter {
     // Creando stack para el resultado de la cerradura.
     private Stack<Estado> cerradura = new Stack<Estado>();
 
-    // Creando una lista para guardar los resultados de la cerradura.
-    private HashMap<List<Estado>, Boolean> cerraduraResult = new HashMap<List<Estado>, Boolean>();
+    // Creando listas para guardar los resultados de la cerradura.
+    private Stack<ArrayList<Estado>> cerraduraResult = new Stack<ArrayList<Estado>>();
+    private Stack<ArrayList<Estado>> totalStates = new Stack<ArrayList<Estado>>();
 
     // Creando una lista para guardar los estados del AFD.
     private ArrayList<Estado> estadosAFD = new ArrayList<Estado>();
@@ -32,9 +33,6 @@ public class AFDConverter {
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
 
-    List<List<Estado>> move = new ArrayList<List<Estado>>(); // Matriz para el resultado del move.
-
-    List<Estado> eClosure = new ArrayList<Estado>();
     // Matriz para el resultado de eClosure.
 
     List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
@@ -46,7 +44,7 @@ public class AFDConverter {
     }
 
     // Método para empezar a procesar los datos.
-    public void Proceso(List<Transiciones> transiciones, Estado inicial, List<Estado> estadosFinales,
+    public void Proceso(List<Transiciones> transiciones, ArrayList<Estado> inicial, List<Estado> estadosFinales,
             ArrayList<String> alfabeto, Stack<Estado> estados, Estado aceptacion) {
 
         // Creando estado inicial del AFD.
@@ -60,9 +58,10 @@ public class AFDConverter {
         Queue<ArrayList<Estado>> cola = new LinkedList<ArrayList<Estado>>(); // Creando cola para guardar los estados
                                                                              // del AFD.
 
-        cerraduraResult.put(cerradura(inicial), false); // Guardando la cerradura del estado inicial. Esto será el
-                                                        // estado inicial del AFD. El ArrayList se declara como false,
-                                                        // dado que aún no se ha analizado.
+        cerraduraResult.push(cerradura(inicial)); // Guardando la cerradura del estado inicial. Esto será el
+                                                  // estado inicial del AFD. El ArrayList se declara como false,
+                                                  // dado que aún no se ha analizado.
+        totalStates.push(cerradura(inicial));
 
         // Imprimiendo la cerradura del estado inicial.
         System.out.println("Cerradura del estado inicial: " + cerraduraResult.toString());
@@ -78,84 +77,59 @@ public class AFDConverter {
             System.out.println("Símbolo del AFD: " + alfabetoAFD.get(i));
         }
 
-        // Imprimiendo el HashMap.
-        System.out.println("Hashmap: " + cerraduraResult.toString());
+        // Imprimiendo el Stack.
+        System.out.println("Stack: " + cerraduraResult.toString());
 
-        // Mientras haya estados en false, se recorre el HashMap.
-        Iterator<Entry<List<Estado>, Boolean>> it = cerraduraResult.entrySet().iterator();
+        while (!cerraduraResult.isEmpty()) {
 
-        while (it.hasNext()) {
+            // System.out.println("Estatos totales: " + totalStates.toString());
 
-            Map.Entry<List<Estado>, Boolean> pair = (Map.Entry<List<Estado>, Boolean>) it.next(); // Se obtiene el
-                                                                                                  // siguiente elemento.
+            // Se obtiene el estado que se va a procesar.
+            ArrayList<Estado> estado = cerraduraResult.pop();
 
-            if (pair.getValue() == false) {
-                System.out.println("Estado: " + pair.getKey() + " = " + pair.getValue());
+            // Matriz para el resultado del move.
+            ArrayList<ArrayList<Estado>> move = new ArrayList<ArrayList<Estado>>();
 
-                // Se obtiene el estado que se va a procesar.
-                ArrayList<Estado> estado = (ArrayList<Estado>) pair.getKey();
+            System.out.println("Estado: " + estado.toString());
 
-                System.out.println("Estado: " + estado.toString());
+            // Se aplican los métodos move y e-closure al estado con cada uno de los
+            // símbolos del alfabeto.
+            for (int i = 0; i < alfabetoAFD.size(); i++) {
 
-                // Se aplican los métodos move y e-closure al estado con cada uno de los
-                // símbolos del alfabeto.
-                for (int i = 0; i < alfabetoAFD.size(); i++) {
+                // Se obtiene el resultado de move.
+                move.add(mover(estado, alfabetoAFD.get(i)));
 
-                    // Se obtiene el resultado de move.
-                    move.add(mover(estado, alfabetoAFD.get(i)));
+                // Se imprime el resultado de move.
+                System.out.println("Move: " + move.toString());
 
-                    // Se imprime el resultado de move.
-                    System.out.println("Move: " + move.toString());
+                // Se obtiene el resultado de e-closure de cada estado de move.
+                // Recorriendo el ArrayList de move para obtener los estados de move y aplicar
+                // e-closure.
+                for (int j = 0; j < move.size(); j++) {
 
-                    // Se obtiene el resultado de e-closure de cada estado de move.
-                    // Recorriendo el ArrayList de move para obtener los estados de move y aplicar
-                    // e-closure.
-                    for (int j = 0; j < move.size(); j++) {
+                    System.out.println("Move: " + move.get(j).toString());
 
-                        for (int k = 0; k < move.get(j).size(); k++) {
-                            // Se obtiene el resultado de e-closure.
-                            cerradura(move.get(j).get(k));
+                    // Se obtiene el resultado de e-closure.
+                    cerradura(move.get(j));
 
-                            // Esto devuelve idealmente un ArrayList de ArrayLists, dado que hace el move y
-                            // el e-closure con cada símbolo del alfabeto.
+                    System.out.println("eClosure: " + cerradura(move.get(j)));
 
-                            System.out.println("eClosure: " + cerradura(move.get(j).get(k)));
+                    // Agregando el resultado de e-closure al HashMap. Si el estado ya existe en el
+                    // HashMap, no se agrega.
+                    if (totalStates.contains(cerradura(move.get(j)))) {
 
-                            // Si hay un estado repetido, entonces no se agrega.
-                            if (listaTemporal.contains(cerradura(move.get(j).get(k)))) {
-                                System.out.println("Estado repetido");
-                            } else {
-                                listaTemporal.add(cerradura(move.get(j).get(k)));
-                            }
-
-                            // listaTemporal.add(cerradura(move.get(j).get(k)));
-
-                        }
+                    } else {
+                        cerraduraResult.push(cerradura(move.get(j)));
+                        totalStates.push(cerradura(move.get(j)));
                     }
 
                 }
 
-                System.out.println("ArrayList del eClosure: " + eClosure.toString());
-
-                System.out.println("Lista temporal: " + listaTemporal.toString());
-
-                // Insertando el cada ArrayList
-
-                // Se guarda el resultado de e-closure en el HashMap.
-                // cerraduraResult.put(eClosure, false);
-
-                // Se imprime el HashMap.
-                System.out.println("Hashmap: " + cerraduraResult.toString());
-
             }
 
-            // Se cambia el valor del estado a true.
-            pair.setValue(true);
-
         }
-
-        // Imprimiendo el HashMap.
-        System.out.println("Hashmap: " + cerraduraResult.toString());
+        // Imprimiendo totalStates.
+        System.out.println("TotalStates: " + totalStates.toString());
 
         // e-closure del estado inicial.
         // Move del resultado de e-closure del estado inicial.
@@ -167,11 +141,15 @@ public class AFDConverter {
     }
 
     // Creando método para calcular la cerradura de un estado.
-    public ArrayList<Estado> cerradura(Estado estado) {
+    public ArrayList<Estado> cerradura(ArrayList<Estado> estado) {
 
-        System.out.println();
-        System.out.println("Estado al cual se le aplicará la cerradura: " + estado.toString());
-        System.out.println();
+        // Se crea una lista para guardar las transiciones del estado actual.
+        ArrayList<Estado> resultado = new ArrayList<Estado>();
+
+        // System.out.println();
+        // System.out.println("Estado al cual se le aplicará la cerradura: " +
+        // estado.toString());
+        // System.out.println();
 
         Queue<ArrayList<Estado>> cola2 = new LinkedList<ArrayList<Estado>>(); // Creando cola para guardar los estados
                                                                               // del AFD.
@@ -181,21 +159,22 @@ public class AFDConverter {
 
         Transiciones tr = new Transiciones();
 
-        // Guardando localmente el estado que se va a procesar.
-        Estado estadoActual = estado;
+        // Guardando el contenido de la lista de estados en la pila.
+        for (int i = 0; i < estado.size(); i++) {
+            pila.push(estado.get(i));
+            resultado.add(estado.get(i));
+        }
 
         Estado s = new Estado(); // Creando instancia de la clase Estado.
 
         // Se obtienen las transiciones que se realizan desde el estado actual.
-        tr.getTransicionesEstado(estadoActual);
+        // tr.getTransicionesEstado(estadoActual);
 
-        System.out.println("Transiciones del estado actual: " + tr.getTransicionesEstado(estadoActual));
-
-        // Se crea una lista para guardar las transiciones del estado actual.
-        ArrayList<Estado> resultado = new ArrayList<Estado>();
+        // System.out.println("Transiciones del estado actual: " +
+        // tr.getTransicionesEstado(estadoActual));
 
         // Agrergando el estado actual a la pila de estados.
-        pila.push(estadoActual);
+        // pila.push(estadoActual);
 
         // Se recorre la pila de estados.
         while (!pila.isEmpty()) {
@@ -214,14 +193,15 @@ public class AFDConverter {
 
         }
 
-        resultado.add(estadoActual); // Se agrega el estado actual a la lista de resultados.
+        // resultado.add(estadoActual); // Se agrega el estado actual a la lista de
+        // resultados.
 
         // mover(resultado, alfabetoAFD); // Se calcula el movimiento con el estado
         // actual.
 
         // Se envía la lista de resultados al método mover.
 
-        System.out.println("Resultado de la cerradura: " + resultado.toString());
+        // System.out.println("Resultado de la cerradura: " + resultado.toString());
 
         // // Calculando el movimiento con los estados de la lista de resultados.
         // for (String simbolo : alfabetoAFD) {

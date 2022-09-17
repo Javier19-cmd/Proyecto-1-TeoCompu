@@ -16,7 +16,7 @@ public class Lector {
         System.out.println("Introduzca la expresión regular: ");
         r = teclado.nextLine(); // lee la expresión regular
         String post_value = postfix.evaluar(r); // pasar a postfix la expresión regular
-        System.out.println("Valor postfix: " + post_value);
+        // System.out.println("Valor postfix: " + post_value);
 
         thompson.post(post_value); // Mando a evaluar la expresión regular.
 
@@ -25,11 +25,15 @@ public class Lector {
         // Haciendo el getter de la lista de transiciones.
         List<Transiciones> tr = thompson.getTransiciones();
 
-        System.out.println("Transiciones: " + tr);
+        // System.out.println("Transiciones: " + tr);
 
         Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
 
-        System.out.println("Estado inicial: " + inicial);
+        // Agregando el estado inicial a un ArrayList.
+        ArrayList<Estado> estadoss_inicialess = new ArrayList<Estado>();
+        estadoss_inicialess.add(inicial); // Agregando el estado inicial a la lista de estados iniciales.
+
+        // System.out.println("Estado inicial: " + inicial);
 
         // Haciendo el getter de la lista de estados iniciales.
         List<Estado> estadosIniciales = thompson.getEstados_iniciales();
@@ -37,9 +41,9 @@ public class Lector {
         // Haciendo el getter de la lista de estados finales.
         List<Estado> estadosFinales = thompson.getEstados_aceptacion();
 
-        System.out.println("Estados inicial: " + estadosIniciales);
+        // System.out.println("Estados inicial: " + estadosIniciales);
 
-        System.out.println("Estados finales: " + estadosFinales);
+        // System.out.println("Estados finales: " + estadosFinales);
 
         // Haciendo getter de los símbolos del alfabeto.
         ArrayList<String> alfabeto = thompson.getAlfabeto();
@@ -53,7 +57,7 @@ public class Lector {
         // System.out.println("Estado de aceptación: " + aceptacion);
 
         // Creando el AFD.
-        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados,
+        afdConverter.Proceso(tr, estadoss_inicialess, estadosFinales, alfabeto, estados,
                 aceptacion);
 
         // Simulando el AFN construído.

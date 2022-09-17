@@ -53,7 +53,7 @@ public class Thompson {
         // Guardando la expresión postfix en una variable de la clase.
         this.expresion_postfixs = expresion_postfixs;
 
-        System.out.println("Expreión en variable local: " + expresion_postfixs);
+        // System.out.println("Expreión en variable local: " + expresion_postfixs);
 
         // Arreglo para determinar la precedencia de operaciones.
         String[][] precedencia = { { "*", "+", ".", "|" }, { "100", "80", "60", "40" } };
@@ -83,7 +83,8 @@ public class Thompson {
             // Stack.
         }
 
-        System.out.println("Expresión regular postfix invertida en el Stack: " + expresion_postfix);
+        // System.out.println("Expresión regular postfix invertida en el Stack: " +
+        // expresion_postfix);
 
         // Insertando la expresión postfix invertida al ArrayList temporal.
         for (int x = 0; x < expresion_postfixs.length(); x++) {
@@ -92,7 +93,8 @@ public class Thompson {
             // temporal.
         }
 
-        System.out.println("Expresión regular postfix en el ArrayList temporal: " + temporal.toString());
+        // System.out.println("Expresión regular postfix en el ArrayList temporal: " +
+        // temporal.toString());
 
         // Identificando el alfabeto de la expresión regular.
         for (int i = 0; i < expresion_postfix.size(); i++) {
@@ -127,7 +129,7 @@ public class Thompson {
                 switch (recorrido) {
                     case "*": // Operación para el Kleene.
 
-                        System.out.println("Operación CERRADURA DE KLEENE.");
+                        // System.out.println("Operación CERRADURA DE KLEENE.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
                         // Se optiene el estado inicial y de aceptación de la expresión que se tenga
@@ -141,30 +143,30 @@ public class Thompson {
 
                     case "+": // Operación para la cerradura positiva.
 
-                        System.out.println("Operación CERRADURA POSITIVA.");
+                        // System.out.println("Operación CERRADURA POSITIVA.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
 
                         Estado inic = estados_iniciales.pop(); // Estado inicial del autómata.
                         Estado fina = estados_aceptacion.pop(); // Estado final del autómata.
 
-                        System.out.println("Estado inicial del autómata: " + inic);
-                        System.out.println("Estado final del autómata: " + fina);
+                        // System.out.println("Estado inicial del autómata: " + inic);
+                        // System.out.println("Estado final del autómata: " + fina);
 
                         cerraduraPositiva(inic, fina);
                         break;
 
                     case "?": // Operación para cero o una instancia de.
 
-                        System.out.println("Operación CERO O UNA INSTANCIA DE.");
+                        // System.out.println("Operación CERO O UNA INSTANCIA DE.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
 
                         Estado inicia = estados_iniciales.pop(); // Estado inicial del autómata.
                         Estado finali = estados_aceptacion.pop(); // Estado final del autómata.
 
-                        System.out.println("Estado inicial del autómata: " + inicia);
-                        System.out.println("Estado final del autómata: " + finali);
+                        // System.out.println("Estado inicial del autómata: " + inicia);
+                        // System.out.println("Estado final del autómata: " + finali);
 
                         ceroUnaInstancia(inicia, finali);
 
@@ -172,7 +174,7 @@ public class Thompson {
 
                     case ".": // Operación para la cerradura positiva.
 
-                        System.out.println("Operación CONCATENACIÓN.");
+                        // System.out.println("Operación CONCATENACIÓN.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion);
 
@@ -180,17 +182,17 @@ public class Thompson {
                         Estado fin = estados_aceptacion.pop(); // Estado final del autómata izquierdo.
                         Estado inicioo = estados_iniciales.pop(); // Estado inicial del autómata derecho.
 
-                        System.out.println("Estado final del autómata izquierdo: " + fin);
-                        System.out.println("Estado inicial del autómata derecho: " + inicioo);
-                        System.out.println("Estado final del autómata derecho: " + final_2);
-                        System.out.println();
+                        // System.out.println("Estado final del autómata izquierdo: " + fin);
+                        // System.out.println("Estado inicial del autómata derecho: " + inicioo);
+                        // System.out.println("Estado final del autómata derecho: " + final_2);
+                        // System.out.println();
 
                         concatenacion(fin, inicioo, final_2);
                         break;
 
                     case "|": // Operación para el OR.
 
-                        System.out.println("Operación UNIÓN.");
+                        // System.out.println("Operación UNIÓN.");
                         operacion = expresion_postfix.pop(); // Sacando la operación del stack.
                         operaciones.push(operacion); // Guardando la operación en el stack de operaciones.
 
@@ -210,7 +212,7 @@ public class Thompson {
 
                     default: // Operación unitaria.
 
-                        System.out.println("Operando: " + recorrido);
+                        // System.out.println("Operando: " + recorrido);
                         elemento1 = expresion_postfix.pop();
                         defaultop(elemento1);
                         break;
@@ -387,11 +389,11 @@ public class Thompson {
 
         // El final2 es el estado de "aceptación" temporal del segundo autómata.
 
-        // Imprimiendo el estado de aceptación del primer automata.
-        System.out.println("Estado de aceptación del primer automata: " + elemento1);
+        // // Imprimiendo el estado de aceptación del primer automata.
+        // System.out.println("Estado de aceptación del primer automata: " + elemento1);
 
-        // Imprimeiendo el estado inicial del segundo automata.
-        System.out.println("Estado inicial del segundo automata: " + elemento2);
+        // // Imprimeiendo el estado inicial del segundo automata.
+        // System.out.println("Estado inicial del segundo automata: " + elemento2);
 
         // Obteniendo la transición del estado inicial del segundo automata.
         for (Transiciones transicion : transiciones) {
@@ -559,80 +561,93 @@ public class Thompson {
         }
     }
 
-    // Método para poder simular el autómata cuando ya esté armado.
-    public void simulation(Estado aceptacion) {
-        // Variables y demás a utilizar.
-        long startTime = System.nanoTime(); // Tomando el tiempo de inicio.
-
-        ArrayList<Estado> estadoTempral = new ArrayList<Estado>(); // ArrayList para guardar la expresión temporal.
-
-        ArrayList<Estado> estadoAct = new ArrayList<Estado>(); // ArrayList para guardar el estado actual.
-
-        estadoAct.add(estados_iniciales.peek()); // Agregando el estado inicial al ArrayList.
-
-        System.out.println("Estado de aceptación: " + estados_aceptacion + "");
-
-        // Instanciando la clase de AFDConverter para calcular el eClosure.
-        AFDConverter afd = new AFDConverter();
-
-        System.out.println("Ahora se procede a simular el autómata.");
-
-        System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
-
-        // Creando el objeto de la clase Scanner.
-        Scanner sc = new Scanner(System.in);
-        String s = ""; // String para guardar la cadena a simular.
-
-        // Pidiendo al usuario que ingrese la cadena a simular.
-        System.out.println("Ingrese la cadena a simular: ");
-        s = sc.nextLine(); // Guardando la cadena a simular.
-
-        for (int a = 0; a < s.length(); a++) { // Recorriendo la cadena a simular.
-            if (!alfabeto.contains(s.charAt(a) + "")) { // Verificando que todos y cada uno de los símbolos de la cadena
-                                                        // pertenezcan al alfabeto.
-                System.out.println("La cadena no pertenece al lenguaje.");
-                return;
-            }
-
-            for (int b = 0; b < estadoAct.size(); b++) { // Recorriendo el ArrayList de estados actuales.
-                // String caracterActual = s.charAt(a) + ""; // Guardando el caracter actual.
-                Estado estadpAct = estadoAct.get(b); // Guardando el estado actual.
-
-                for (int c = 0; c < transiciones.size(); c++) { // Recorriendo el ArrayList de transiciones.
-                    Transiciones transicionActual = transiciones.get(c);
-
-                    if (transicionActual.getDe().equals(estadpAct)) { // Si la transición tiene como
-                                                                      // estado
-                                                                      // de origen el estado actual y
-                                                                      // el
-                                                                      // símbolo es el caracter actual.
-                        Estado estadotemporal = transicionActual.getA(); // Guardando el estado temporal.
-                        estadoTempral = afd.cerradura(estadotemporal); // Calculando el eClosure del estado temporal
-                                                                       // para el
-                                                                       // caracter actual.
-                        // Agregando el estado temporal al ArrayList de estados actuales.
-                        estadoAct.add(estadoTempral.get(0));
-
-                    }
-                }
-            }
-        }
-
-        long endTime = System.nanoTime(); // Tomando el tiempo de finalización.
-
-        double duration = (endTime - startTime) / (1e6); // Duración de la simulación.
-
-        // Verificando que el estadoActual no contenga el estado de aceptación.
-        if (estadoAct.contains(aceptacion)) {
-            System.out.println("La cadena pertenece al lenguaje.");
-
-        } else {
-            System.out.println("La cadena no pertenece al lenguaje.");
-
-        }
-
-        System.out.println("Duración de la simulación: " + duration + " milisegundos.");
-
-    }
+    /*
+     * // Método para poder simular el autómata cuando ya esté armado.
+     * public void simulation(Estado aceptacion) {
+     * // Variables y demás a utilizar.
+     * long startTime = System.nanoTime(); // Tomando el tiempo de inicio.
+     * 
+     * ArrayList<Estado> estadoTempral = new ArrayList<Estado>(); // ArrayList para
+     * guardar la expresión temporal.
+     * 
+     * ArrayList<Estado> estadoAct = new ArrayList<Estado>(); // ArrayList para
+     * guardar el estado actual.
+     * 
+     * estadoAct.add(estados_iniciales.peek()); // Agregando el estado inicial al
+     * ArrayList.
+     * 
+     * // System.out.println("Estado de aceptación: " + estados_aceptacion + "");
+     * 
+     * // Instanciando la clase de AFDConverter para calcular el eClosure.
+     * AFDConverter afd = new AFDConverter();
+     * 
+     * System.out.println("Ahora se procede a simular el autómata.");
+     * 
+     * System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
+     * 
+     * // Creando el objeto de la clase Scanner.
+     * Scanner sc = new Scanner(System.in);
+     * String s = ""; // String para guardar la cadena a simular.
+     * 
+     * // Pidiendo al usuario que ingrese la cadena a simular.
+     * System.out.println("Ingrese la cadena a simular: ");
+     * s = sc.nextLine(); // Guardando la cadena a simular.
+     * 
+     * for (int a = 0; a < s.length(); a++) { // Recorriendo la cadena a simular.
+     * if (!alfabeto.contains(s.charAt(a) + "")) { // Verificando que todos y cada
+     * uno de los símbolos de la cadena
+     * // pertenezcan al alfabeto.
+     * System.out.println("La cadena no pertenece al lenguaje.");
+     * return;
+     * }
+     * 
+     * for (int b = 0; b < estadoAct.size(); b++) { // Recorriendo el ArrayList de
+     * estados actuales.
+     * // String caracterActual = s.charAt(a) + ""; // Guardando el caracter actual.
+     * Estado estadpAct = estadoAct.get(b); // Guardando el estado actual.
+     * 
+     * for (int c = 0; c < transiciones.size(); c++) { // Recorriendo el ArrayList
+     * de transiciones.
+     * Transiciones transicionActual = transiciones.get(c);
+     * 
+     * if (transicionActual.getDe().equals(estadpAct)) { // Si la transición tiene
+     * como
+     * // estado
+     * // de origen el estado actual y
+     * // el
+     * // símbolo es el caracter actual.
+     * Estado estadotemporal = transicionActual.getA(); // Guardando el estado
+     * temporal.
+     * estadoTempral = afd.cerradura(estadotemporal); // Calculando el eClosure del
+     * estado temporal
+     * // para el
+     * // caracter actual.
+     * // Agregando el estado temporal al ArrayList de estados actuales.
+     * estadoAct.add(estadoTempral.get(0));
+     * 
+     * }
+     * }
+     * }
+     * }
+     * 
+     * long endTime = System.nanoTime(); // Tomando el tiempo de finalización.
+     * 
+     * double duration = (endTime - startTime) / (1e6); // Duración de la
+     * simulación.
+     * 
+     * // Verificando que el estadoActual no contenga el estado de aceptación.
+     * if (estadoAct.contains(aceptacion)) {
+     * System.out.println("La cadena pertenece al lenguaje.");
+     * 
+     * } else {
+     * System.out.println("La cadena no pertenece al lenguaje.");
+     * 
+     * }
+     * 
+     * System.out.println("Duración de la simulación: " + duration +
+     * " milisegundos.");
+     * 
+     * }
+     */
 
 }
