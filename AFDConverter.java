@@ -58,7 +58,8 @@ public class AFDConverter {
         cerraduraResult.push(cerradura(inicial)); // Guardando la cerradura del estado inicial. Esto será el
                                                   // estado inicial del AFD. El ArrayList se declara como false,
                                                   // dado que aún no se ha analizado.
-        totalStates.push(cerradura(inicial));
+
+        totalStates.push(cerradura(inicial)); // El resultado se agrega a los estados totales.
 
         // Imprimiendo la cerradura del estado inicial.
         System.out.println("Cerradura del estado inicial: " + cerraduraResult.toString());
@@ -91,34 +92,25 @@ public class AFDConverter {
 
             // System.out.println("Estado: " + estado.toString());
 
-            // Se aplican los métodos move y e-closure al estado con cada uno de los
-            // símbolos del alfabeto.
-            for (int i = 0; i < alfabetoAFD.size(); i++) { // Aquí se calcula el move de cada estado.
+            // Se obtiene el resultado de move.
+            move.add(mover(estado, alfabetoAFD));
 
-                // Se obtiene el resultado de move.
-                move.add(mover(estado, alfabetoAFD.get(i)));
+            System.out.println("Move: " + move.toString());
 
-                System.out.println("Move: " + move.toString());
+            for (int j = 0; j < move.size(); j++) {
 
-                for (int j = 0; j < move.size(); j++) {
+                cerradura.add(cerradura(move.get(j)));
 
-                    cerradura.add(cerradura(move.get(j)));
+                System.out.println("Cerradura: " + cerradura.toString());
 
-                    System.out.println("Cerradura: " + cerradura.toString());
+                // Se verifica si el estado ya existe en el AFD.
+                if (!totalStates.contains(cerradura.get(j))) {
 
-                    // Se verifica que el estado no esté en la lista de estados totales.
-                    if (!totalStates.contains(cerradura.get(j))) {
+                    // Se agregan los estados a los stacks de totalStates y cerraduraResult.
+                    totalStates.push(cerradura.get(j));
 
-                        // Se agrega el estado a la lista de estados totales.
-                        totalStates.push(cerradura.get(j));
-
-                        // Se agrega el estado a la lista de estados a procesar.
-                        cerraduraResult.push(cerradura.get(j));
-
-                    }
-
+                    cerraduraResult.push(cerradura.get(j));
                 }
-
             }
 
         }
@@ -177,7 +169,7 @@ public class AFDConverter {
     }
 
     // Creando método para calcular el movimiento de un estado.
-    private ArrayList<Estado> mover(ArrayList<Estado> estados, String simbolo) {
+    private ArrayList<Estado> mover(ArrayList<Estado> estados, ArrayList<String> simbolo) {
 
         // Se crea una lista para guardar las transiciones del estado actual.
         ArrayList<Estado> resultado = new ArrayList<Estado>();
@@ -208,7 +200,8 @@ public class AFDConverter {
                 // System.out.println("Transición: " + ts.getDe() + " " + ts.getSimbolo() + " "
                 // + ts.getA());
 
-                if (ts.getSimbolo().equals(simbolo) && !resultado.contains(ts.getA())) {
+                // Calculando el movimiento de los estados.
+                if (simbolo.contains(ts.getSimbolo()) && !resultado.contains(ts.getA())) {
 
                     // System.out.println("Estado: " + ts.getA());
                     pila.push(ts.getA());
