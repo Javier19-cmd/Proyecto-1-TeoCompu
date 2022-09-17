@@ -32,6 +32,13 @@ public class AFDConverter {
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
 
+    List<List<Estado>> move = new ArrayList<List<Estado>>(); // Matriz para el resultado del move.
+
+    List<Estado> eClosure = new ArrayList<Estado>();
+    // Matriz para el resultado de eClosure.
+
+    List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
+
     // Constructor del AFDConverter
 
     public AFDConverter() {
@@ -90,23 +97,56 @@ public class AFDConverter {
 
                 System.out.println("Estado: " + estado.toString());
 
-                // Se obtiene el move que se hace desde cada estado del ArrayList con cada
-                // símbolo del alfabeto.
+                // Se aplican los métodos move y e-closure al estado con cada uno de los
+                // símbolos del alfabeto.
                 for (int i = 0; i < alfabetoAFD.size(); i++) {
-                    System.out.println("Símbolo: " + alfabetoAFD.get(i));
-                    ArrayList<Estado> move = mover(estado, alfabetoAFD.get(i));
+
+                    // Se obtiene el resultado de move.
+                    move.add(mover(estado, alfabetoAFD.get(i)));
+
+                    // Se imprime el resultado de move.
                     System.out.println("Move: " + move.toString());
 
-                    // Por cada elemento del move, se obtiene la cerradura.
+                    // Se obtiene el resultado de e-closure de cada estado de move.
+                    // Recorriendo el ArrayList de move para obtener los estados de move y aplicar
+                    // e-closure.
                     for (int j = 0; j < move.size(); j++) {
-                        System.out.println("Estado: " + move.get(j).toString());
-                        ArrayList<Estado> cerradura = cerradura(move.get(j));
-                        System.out.println("Cerradura: " + cerradura.toString());
 
-                        // Se guarda el resultado de la cerradura en el HashMap.
-                        cerraduraResult.put(cerradura, false);
+                        for (int k = 0; k < move.get(j).size(); k++) {
+                            // Se obtiene el resultado de e-closure.
+                            cerradura(move.get(j).get(k));
+
+                            // Esto devuelve idealmente un ArrayList de ArrayLists, dado que hace el move y
+                            // el e-closure con cada símbolo del alfabeto.
+
+                            System.out.println("eClosure: " + cerradura(move.get(j).get(k)));
+
+                            // Si hay un estado repetido, entonces no se agrega.
+                            if (listaTemporal.contains(cerradura(move.get(j).get(k)))) {
+                                System.out.println("Estado repetido");
+                            } else {
+                                listaTemporal.add(cerradura(move.get(j).get(k)));
+                            }
+
+                            // listaTemporal.add(cerradura(move.get(j).get(k)));
+
+                        }
                     }
+
                 }
+
+                System.out.println("ArrayList del eClosure: " + eClosure.toString());
+
+                System.out.println("Lista temporal: " + listaTemporal.toString());
+
+                // Insertando el cada ArrayList
+
+                // Se guarda el resultado de e-closure en el HashMap.
+                // cerraduraResult.put(eClosure, false);
+
+                // Se imprime el HashMap.
+                System.out.println("Hashmap: " + cerraduraResult.toString());
+
             }
 
             // Se cambia el valor del estado a true.
@@ -116,6 +156,13 @@ public class AFDConverter {
 
         // Imprimiendo el HashMap.
         System.out.println("Hashmap: " + cerraduraResult.toString());
+
+        // e-closure del estado inicial.
+        // Move del resultado de e-closure del estado inicial.
+        // e-closure del resultado de move del estado inicial.
+        // El e-closure se tiene que guardar en el HashMap como false.
+        // No tienen que haber estados repetidos en el HashMap.
+        // Se repite el proceso hasta que no haya más estados en false.
 
     }
 
