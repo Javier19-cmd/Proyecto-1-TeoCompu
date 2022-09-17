@@ -8,7 +8,6 @@ public class Lector {
         Scanner teclado = new Scanner(System.in);
         regex postfix = new regex(); // Instanciando la clase regex para pasar a postfix la expresión regular.
         Thompson thompson = new Thompson(); // Instanciando la clase Thompson para crear el AFN.
-        AFDs afde = new AFDs(); // Instanciando la clase AFDe para crear el AFD.
         AFDConverter afdConverter = new AFDConverter(); // Instanciando la clase AFDConverter para convertir el AFD a un
                                                         // AFD equivalente.
 
