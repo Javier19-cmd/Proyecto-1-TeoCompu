@@ -122,7 +122,7 @@ public class AFDConverter {
         // Imprimiendo totalStates.
         // System.out.println(totalStates.toString());
         for (int i = 0; i < totalStates.size(); i++) {
-            System.out.println("Total States: " + totalStates.get(i).toString());
+            System.out.println((i+1)+ " " +"Total States: " + totalStates.get(i).toString());
         }
 
     }
