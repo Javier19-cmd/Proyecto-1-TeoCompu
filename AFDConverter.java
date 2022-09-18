@@ -69,11 +69,7 @@ public class AFDConverter {
         // del estado inicial del AFD. Esto se alcanzará con eclosure(move(D,a)).
         // Donde D es el estado inicial del AFD y a es el símbolo del alfabeto.
 
-        // Guardando el alfabeto del AFD.
-        alfabetoAFD = alfabeto;
-        for (int i = 0; i < alfabetoAFD.size(); i++) {
-            System.out.println("Símbolo del AFD: " + alfabetoAFD.get(i));
-        }
+        
 
         // Imprimiendo el Stack.
         System.out.println("Stack: " + cerraduraResult.toString());
@@ -92,14 +88,23 @@ public class AFDConverter {
 
             // System.out.println("Estado: " + estado.toString());
 
-            // Se obtiene el resultado de move.
-            move.add(mover(estado, alfabetoAFD));
+            // Guardando el alfabeto del AFD.
+            alfabetoAFD = alfabeto;
+            for (int i = 0; i < alfabetoAFD.size(); i++) {
+                System.out.println("Símbolo del AFD: " + alfabetoAFD.get(i));
+                // Se obtiene el resultado de move.
+                move.add(mover(estado, alfabetoAFD.get(i)));
+            }
+
 
             System.out.println("Move: " + move.toString());
+            System.out.println("TAMAÑO MOVE: " + move.size());
 
             for (int j = 0; j < move.size(); j++) {
 
-                cerradura.add(cerradura(move.get(j)));
+                if (!cerradura.contains(cerradura(move.get(j)))) {
+                    cerradura.add(cerradura(move.get(j)));
+                }
 
                 System.out.println("Cerradura: " + cerradura.toString());
 
@@ -169,7 +174,7 @@ public class AFDConverter {
     }
 
     // Creando método para calcular el movimiento de un estado.
-    private ArrayList<Estado> mover(ArrayList<Estado> estados, ArrayList<String> simbolo) {
+    private ArrayList<Estado> mover(ArrayList<Estado> estados, String string) {
 
         // Se crea una lista para guardar las transiciones del estado actual.
         ArrayList<Estado> resultado = new ArrayList<Estado>();
@@ -201,7 +206,7 @@ public class AFDConverter {
                 // + ts.getA());
 
                 // Calculando el movimiento de los estados.
-                if (simbolo.contains(ts.getSimbolo()) && !resultado.contains(ts.getA())) {
+                if (string.contains(ts.getSimbolo()) && !resultado.contains(ts.getA())) {
 
                     // System.out.println("Estado: " + ts.getA());
                     pila.push(ts.getA());
