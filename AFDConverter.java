@@ -2,31 +2,14 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 public class AFDConverter {
-
-    // Creando la lista de cerraduras del estado inicial.
-    private ArrayList<Estado> cerraduraInicial = new ArrayList<Estado>(); // Lista de cerraduras del estado inicial.
-    private Estado afd;
-
-    // Creando una copia de la lista de estados del AFN.
-    private ArrayList<Estado> estadosAFN = new ArrayList<Estado>();
-
-    // Creando stack para el resultado de la cerradura.
-    private Stack<Estado> cerradura = new Stack<Estado>();
 
     // Creando listas para guardar los resultados de la cerradura.
     private HashSet<Estado> cerraduraResult = new HashSet<Estado>();
 
     Queue<HashSet<Estado>> totalStates = new LinkedList<HashSet<Estado>>();
-
-    // Creando una lista para guardar los estados del AFD.
-    private ArrayList<Estado> estadosAFD = new ArrayList<Estado>();
-
-    // Creando ArrayList para los estados de aceptación del ArrayList.
-    private ArrayList<Estado> estados_aceptacion = new ArrayList<Estado>();
-
-    // Creando ArrayList para el alfabeto del AFD.
-    private ArrayList<String> alfabetoAFD = new ArrayList<String>();
 
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
@@ -64,41 +47,50 @@ public class AFDConverter {
         System.out.println("Cerradura del primer estado: " + cerraduraResult.toString());
 
         totalStates.add(cerraduraResult); // Agregando la cerradura del primer estado a la lista de estados.
-
+        //System.out.println("totalState con el primer resultado: " + totalStates.toString());
+        //System.out.println("totalState con poll: " + totalStates.poll().toString());
         // Creando ArrayList temporal para guardar los resultados de los subconjuntos
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
 
         while (!totalStates.isEmpty()) {
 
+            //System.out.println("totalStates Values" + totalStates.toString());
+            //System.out.println("TAMAÑO DE totalStates: " + totalStates.size());
+
             // Trabajando con el actual subconjunto.
             HashSet<Estado> actuals = totalStates.poll();
-
-            System.out.println("Estado actual: " + actuals);
+            
+            //System.out.println("Estado actual: " + actuals);
 
             // Recorriendo el subconjunto con cada símbolo del alfabeto.
             for (String simbolo : alfabetoAFD) {
 
-                // Creando un HashSet para guardar los resultados de los estados alcanzados por
-                // medio del símbolo.
-                HashSet<Estado> alcanzados = new HashSet<Estado>();
 
-                System.out.println("Símbolo: " + simbolo);
-
+                //System.out.println("Símbolo: " + simbolo);
+                //System.out.println("MOVE" + mover(actuals, simbolo));
                 // Realizando move con el subconjunto actual y el símbolo.
                 HashSet<Estado> moveResult = mover(actuals, simbolo);
+
+                System.out.println("Recorremos los siguientes estados " + actuals + " con el siguiente simbolo " + simbolo + " el siguiente move: " + moveResult.toString());
 
                 HashSet<Estado> eClosure = new HashSet<Estado>();
 
                 for (Estado e : moveResult) { // Guardando el eClosure de cada estado alcanzado.
+                    //System.out.println("RESULTADO ALCANZADO CON e: " + e.toString());
                     eClosure.addAll(cerradura(e));
+                    
                 }
 
                 if (!temporal.contains(eClosure)) { // Si el subconjunto no está en la lista temporal, se agrega.
+                    //System.out.println("Entre al if de temporal");
                     totalStates.add(eClosure);
                     temporal.add(eClosure);
                 }
             }
+
+            System.out.println("totalStates dentro del While, comportamiento: " + totalStates.toString());
+
         }
 
     }
