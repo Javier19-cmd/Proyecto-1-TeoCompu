@@ -217,8 +217,8 @@ public class Thompson {
                         defaultop(elemento1);
                         break;
                 }
-
             }
+
         }
 
         // // Imprimiendo las transiciones.

@@ -29,10 +29,6 @@ public class Lector {
 
         Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
 
-        // Agregando el estado inicial a un ArrayList.
-        ArrayList<Estado> estadoss_inicialess = new ArrayList<Estado>();
-        estadoss_inicialess.add(inicial); // Agregando el estado inicial a la lista de estados iniciales.
-
         // System.out.println("Estado inicial: " + inicial);
 
         // Haciendo el getter de la lista de estados iniciales.
@@ -57,7 +53,7 @@ public class Lector {
         // System.out.println("Estado de aceptación: " + aceptacion);
 
         // Creando el AFD.
-        afdConverter.Proceso(tr, estadoss_inicialess, estadosFinales, alfabeto, estados,
+        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados,
                 aceptacion);
 
         // Simulando el AFN construído.

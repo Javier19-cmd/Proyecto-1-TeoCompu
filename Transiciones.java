@@ -134,6 +134,7 @@ public class Transiciones {
                 transiciones.add(Thompson.transiciones.get(i));
             }
         }
+
         return transiciones;
     }
 
