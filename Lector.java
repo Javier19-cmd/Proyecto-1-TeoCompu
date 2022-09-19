@@ -57,7 +57,7 @@ public class Lector {
                 aceptacion);
 
         // Simulando el AFN construído.
-        // thompson.simulation(aceptacion);
+        thompson.simulation(aceptacion);
 
     }
 }
