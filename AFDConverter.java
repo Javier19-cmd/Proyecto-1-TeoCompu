@@ -64,11 +64,6 @@ public class AFDConverter {
         // Imprimiendo la cerradura del estado inicial.
         System.out.println("Cerradura del estado inicial: " + cerraduraResult.toString());
 
-        // Ahora lo que se tiene que hacer es obtener el siguiente estado del AFD es
-        // obtener el conjunto de estados alcanzados en el AFN por medio de "a" partir
-        // del estado inicial del AFD. Esto se alcanzará con eclosure(move(D,a)).
-        // Donde D es el estado inicial del AFD y a es el símbolo del alfabeto.
-
         
 
         // Imprimiendo el Stack.
@@ -86,35 +81,42 @@ public class AFDConverter {
 
             ArrayList<ArrayList<Estado>> cerradura = new ArrayList<ArrayList<Estado>>();
 
+            //ArrayList<Estado> temporal = new ArrayList<Estado>();
+
             // System.out.println("Estado: " + estado.toString());
 
             // Guardando el alfabeto del AFD.
             alfabetoAFD = alfabeto;
-            for (int i = 0; i < alfabetoAFD.size(); i++) {
-                System.out.println("Símbolo del AFD: " + alfabetoAFD.get(i));
-                // Se obtiene el resultado de move.
-                move.add(mover(estado, alfabetoAFD.get(i)));
-            }
 
+            // Ahora lo que se tiene que hacer es obtener el siguiente estado del AFD es
+            // obtener el conjunto de estados alcanzados en el AFN por medio de "a" partir
+            // del estado inicial del AFD. Esto se alcanzará con eclosure(move(D,a)).
+            // Donde D es el estado inicial del AFD y a es el símbolo del alfabeto.
 
-            System.out.println("Move: " + move.toString());
-            System.out.println("TAMAÑO MOVE: " + move.size());
+            //System.out.println("Alfabeto: " + alfabetoAFD);
+            
+            for(int i = 0; i < alfabetoAFD.size(); i++){
+                // System.out.println("Caracter del alfabeto: " + alfabetoAFD.get(i)); // Debug del alfabeto.
 
-            for (int j = 0; j < move.size(); j++) {
+                for(int j = 0; j < totalStates.size(); j++){
+                    System.out.println("Estado: " + totalStates.get(j));
+                    System.out.println("Caracter del alfabeto: " + alfabetoAFD.get(i));
 
-                if (!cerradura.contains(cerradura(move.get(j)))) {
-                    cerradura.add(cerradura(move.get(j)));
-                }
+                    // Mandando a move el estado que se va a porcesar.
+                    mover(estado, alfabetoAFD.get(i));
+                    
 
-                System.out.println("Cerradura: " + cerradura.toString());
+                    System.out.println("Resultado del move: " + mover(estado, alfabetoAFD.get(i)));
 
-                // Se verifica si el estado ya existe en el AFD.
-                if (!totalStates.contains(cerradura.get(j))) {
+                    cerradura(mover(estado, alfabetoAFD.get(i))); // Haciendo eClosure del resultado de move.
 
-                    // Se agregan los estados a los stacks de totalStates y cerraduraResult.
-                    totalStates.push(cerradura.get(j));
+                    System.out.println("Resultado del eClosure: " + cerradura(mover(estado, alfabetoAFD.get(i))));
 
-                    cerraduraResult.push(cerradura.get(j));
+                    if(!totalStates.contains(cerradura(mover(estado, alfabetoAFD.get(i))))){
+                        cerraduraResult.push(cerradura(mover(estado, alfabetoAFD.get(i)))); // Pusheando el resultado de eClosure del move con cada símbolo del alfabeto.
+                        totalStates.push(cerradura(mover(estado, alfabetoAFD.get(i)))); // Pusheando el resultado a totalStates.
+                    }
+
                 }
             }
 
