@@ -650,4 +650,188 @@ public class Thompson {
      * }
      */
 
+<<<<<<< Updated upstream
+=======
+        ArrayList<Estado> estadoTempral = new ArrayList<Estado>(); // ArrayList para guardar la expresión temporal.
+
+        ArrayList<Estado> estadoAct = new ArrayList<Estado>(); // ArrayList para guardar el estado actual.
+
+        estadoAct.add(estados_iniciales.peek()); // Agregando el estado inicial al ArrayList.
+
+        // System.out.println("Estado de aceptación: " + estados_aceptacion + "");
+
+        // Instanciando la clase de AFDConverter para calcular el eClosure.
+        AFDConverter afd = new AFDConverter();
+
+        System.out.println("Ahora se procede a simular el autómata.");
+
+        System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
+
+        // Creando el objeto de la clase Scanner.
+        Scanner sc = new Scanner(System.in);
+        String s = ""; // String para guardar la cadena a simular.
+
+        // Pidiendo al usuario que ingrese la cadena a simular.
+        System.out.println("Ingrese la cadena a simular: ");
+        s = sc.nextLine(); // Guardando la cadena a simular.
+
+        // Introduciendo la cadena a un ArrayList.
+        ArrayList<String> cadena = new ArrayList<String>();
+        for (int i = 0; i < s.length(); i++) {
+            cadena.add(s.charAt(i) + "");
+        }
+
+        System.out.println("Cadena a simular: " + cadena + "");
+
+        // Obteniendo todos los estados del autómata.
+        Stack<Estado> estados = getEstadoss();
+
+        System.out.println("Estados: " + estados + "");
+
+        // Obteniendo el estado inicial del AFN.
+        Estado estadoInicial = estados_iniciales.peek();
+
+        System.out.println("Estado inicial: " + estadoInicial + "");
+
+        // Calculando el eClosure del estado inicial.
+        ArrayList<Estado> ese = eClosure(estadoInicial);
+
+        System.out.println("eClosure del estado inicial: " + ese + "");
+
+        ArrayList<ArrayList<Estado>> total = new ArrayList<ArrayList<Estado>>(); // ArrayList para guardar el total de
+                                                                                 // estados.
+
+        ArrayList<Estado> total2 = new ArrayList<Estado>(); // ArrayList para guardar el total de estados.
+
+        // Obteniendo símbolo por símbolo de la cadena.
+        for (int i = 0; i < cadena.size(); i++) {
+            String simbolo = cadena.get(i); // Obteniendo el símbolo.
+
+            // Mientras el símbolo no sea el último de la cadena.
+            if (i != cadena.size() + 1) {
+                // Imprimiendo el símbolo.
+                // System.out.println("Símbolo: " + simbolo + "");
+
+                // Calculando el move de ese estado con el símbolo.
+                total.add(eClosure(move(ese, simbolo)));
+
+                System.out.println("eClosure del move: " + total + "");
+
+                System.out.println("Move: " + total + "");
+
+                // System.out.println("eClosure: " + total2 + "");
+
+            }
+
+        }
+
+        // Si el eClosure es vacío, se rompe el ciclo.
+        if (total.contains(aceptacion)) {
+            System.out.println("La cadena no es válida.");
+
+        } else {
+            // Se dice que la cadena es válida.
+            System.out.println("La cadena es válida.");
+        }
+
+        long endTime = System.nanoTime(); // Tomando el tiempo de finalización.
+
+        double duration = (endTime - startTime) / (1e6); // Duración de la simulación.
+
+        System.out.println("Duración de la simulación: " + duration + " ms");
+    }
+
+    // Método para poder calcular el move de un estado con un símbolo.
+    public ArrayList<Estado> move(Estado estado, String simbolo) {
+        ArrayList<Estado> estados = new ArrayList<Estado>(); // ArrayList para guardar los estados.
+
+        for (int a = 0; a < transiciones.size(); a++) { // Recorriendo el ArrayList de transiciones.
+            Transiciones transicionActual = transiciones.get(a); // Guardando la transición actual
+
+            if (transicionActual.getDe().equals(estado) && transicionActual.getSimbolo().equals(simbolo)) { // Si la
+                // transición tiene como estado de origen el estado actual y el símbolo es el
+                // caracter actual.
+                estados.add(transicionActual.getA()); // Se agrega el estado destino a los estados.
+            }
+        }
+
+        return estados; // Se regresan los estados que se alcanzaron con el move.
+    }
+
+    // Método para poder calcular el move de un ArrayList de estados con un símbolo.
+    public ArrayList<Estado> move(ArrayList<Estado> estados, String simbolo) {
+        ArrayList<Estado> estadosTemp = new ArrayList<Estado>(); // ArrayList para guardar los estados temporales.
+
+        // Por cada estado en el ArrayList de estados.
+        for (int i = 0; i < estados.size(); i++) {
+            Estado estadoActual = estados.get(i); // Se guarda el estado actual.
+
+            // Se calcula el move del estado actual con el símbolo.
+            ArrayList<Estado> move = move(estadoActual, simbolo);
+
+            // Por cada estado en el ArrayList de estados alcanzados con el move.
+            for (int j = 0; j < move.size(); j++) {
+                Estado estadoActual2 = move.get(j); // Se guarda el estado actual.
+
+                // Si el estado actual no está en el ArrayList de estados temporales.
+                if (!estadosTemp.contains(estadoActual2)) {
+                    estadosTemp.add(estadoActual2); // Se agrega el estado actual al ArrayList de estados temporales.
+                }
+            }
+        }
+        return estadosTemp; // Se regresan los estados alcanzados con el move.
+    }
+
+    // Método para poder calcular el eClosure de un ArrayList de estados.
+    public ArrayList<Estado> eClosure(ArrayList<Estado> estados) {
+        ArrayList<Estado> estado = new ArrayList<Estado>(); // ArrayList para guardar el estado.
+        Stack<Estado> estadoTemp = new Stack<Estado>(); // Stack para guardar el estado temporal.
+        Stack<Estado> pila = getEstadoss(); // Obteniendo todos los estados del autómata.
+
+        // System.out.println("Estados: " + pila + "");
+
+        while (!pila.isEmpty()) { // Mientras la pila no esté vacía, se saca un estado de la pila.
+            Estado t = pila.pop();
+
+            // Por cada estado u alcanzado desde t por medio de &.
+            for (Estado u : move(t, "&")) {
+
+                // Si u no está en el estado temporal.
+                if (!estadoTemp.contains(u)) {
+                    estadoTemp.push(u); // Se agrega u al estado temporal.
+                    estado.add(u); // Se agrega u al estado.
+                }
+            }
+        }
+
+        return estado; // Se regresa el estado.
+    }
+
+    // Método para poder calcular el eClosure de un estado.
+    public ArrayList<Estado> eClosure(Estado s) {
+        ArrayList<Estado> estado = new ArrayList<Estado>(); // ArrayList para guardar el estado.
+        // Stack<Estado> estadoTemp = new Stack<Estado>(); // Stack para guardar el
+        // estado temporal.
+        Stack<Estado> pila = getEstadoss(); // Obteniendo todos los estados del autómata.
+
+        while (!pila.isEmpty()) {
+            // Mientras la pila no esté vacía, se saca un estado de la pila.
+            Estado t = pila.pop();
+
+            // Por cada estado u alcanzado desde t por medio de &.
+            for (Estado u : move(t, "&")) {
+
+                // Si u no está en el estado temporal.
+                if (estado.contains(u)) {
+                    pila.push(u); // Se agrega u al estado temporal.
+                    estado.add(u); // Se agrega u al estado.
+                }
+            }
+        }
+
+        System.out.println("eClosure: " + estado + "");
+
+        return estado;
+    }
+>>>>>>> Stashed changes
 }
