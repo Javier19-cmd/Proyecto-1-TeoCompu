@@ -14,7 +14,7 @@ public class AFDConverter {
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
 
-    Queue<HashSet<Estado>> resultado = new LinkedList<HashSet<Estado>>();
+    HashSet<HashSet<Estado>> resultado = new HashSet<HashSet<Estado>>();
 
     // Matriz para el resultado de eClosure.
 
@@ -46,66 +46,69 @@ public class AFDConverter {
         cerraduraResult = cerradura(inicial);
 
         // Imprimiendo la cerradura del primer estado.
-        //System.out.println("Cerradura del primer estado: " + cerraduraResult.toString());
+        // System.out.println("Cerradura del primer estado: " +
+        // cerraduraResult.toString());
 
         totalStates.add(cerraduraResult); // Agregando la cerradura del primer estado a la lista de estados.
-        //System.out.println("totalState con el primer resultado: " + totalStates.toString());
-        //System.out.println("totalState con poll: " + totalStates.poll().toString());
+        // System.out.println("totalState con el primer resultado: " +
+        // totalStates.toString());
+        // System.out.println("totalState con poll: " + totalStates.poll().toString());
         // Creando ArrayList temporal para guardar los resultados de los subconjuntos
         resultado.add(cerraduraResult);
-        //System.out.println("Resultado con cerraduraResult: " + resultado.toString());
+        // System.out.println("Resultado con cerraduraResult: " + resultado.toString());
 
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
-        int i =0;
+        int i = 0;
         while (!totalStates.isEmpty()) {
 
-            //System.out.println("totalStates Values" + totalStates.toString());
-            //System.out.println("TAMAÑO DE totalStates: " + totalStates.size());
+            // System.out.println("totalStates Values" + totalStates.toString());
+            // System.out.println("TAMAÑO DE totalStates: " + totalStates.size());
 
             // Trabajando con el actual subconjunto.
             HashSet<Estado> actuals = totalStates.poll();
 
-            if (!resultado.contains(totalStates.poll())) {
-                resultado.add(actuals);
-            }
-            
-            //System.out.println("Estado actual: " + actuals);
+            // System.out.println("Estado de totalStates: " + actuals);
+
+            resultado.add(actuals);
+
+            // System.out.println("Estado actual: " + actuals);
 
             // Recorriendo el subconjunto con cada símbolo del alfabeto.
             for (String simbolo : alfabetoAFD) {
 
-
-                //System.out.println("Símbolo: " + simbolo);
-                //System.out.println("MOVE" + mover(actuals, simbolo));
+                // System.out.println("Símbolo: " + simbolo);
+                // System.out.println("MOVE" + mover(actuals, simbolo));
                 // Realizando move con el subconjunto actual y el símbolo.
                 HashSet<Estado> moveResult = mover(actuals, simbolo);
 
-                //System.out.println("Recorremos los siguientes estados " + actuals + " con el siguiente simbolo " + simbolo + " el siguiente move: " + moveResult.toString());
+                // System.out.println("Recorremos los siguientes estados " + actuals + " con el
+                // siguiente simbolo " + simbolo + " el siguiente move: " +
+                // moveResult.toString());
 
                 HashSet<Estado> eClosure = new HashSet<Estado>();
 
                 for (Estado e : moveResult) { // Guardando el eClosure de cada estado alcanzado.
-                    //System.out.println("RESULTADO ALCANZADO CON e: " + e.toString());
-                    //System.out.println(cerradura(moveResult.poll()));
+                    // System.out.println("RESULTADO ALCANZADO CON e: " + e.toString());
+                    // System.out.println(cerradura(moveResult.poll()));
                     eClosure.addAll(cerradura(e));
-                    
+
                 }
 
                 if (!temporal.contains(eClosure)) { // Si el subconjunto no está en la lista temporal, se agrega.
-                    //System.out.println("Entre al if de temporal");
+                    // System.out.println("Entre al if de temporal");
                     totalStates.add(eClosure);
                     temporal.add(eClosure);
-                    
+
                 }
 
-                
             }
-            //System.out.println((i++)+ " " + "totalStates" + totalStates);
+            // System.out.println((i++) + " " + "totalStates" + totalStates);
         }
-        
-        for (int l=0; l<resultado.size(); l++){System.out.println( (l) + " AFD State" + resultado);}
-        
+
+        for (int l = 0; l < resultado.size(); l++) {
+            System.out.println("Subconjunto " + l + ": " + resultado.toArray()[l].toString());
+        }
 
     }
 
@@ -130,7 +133,7 @@ public class AFDConverter {
 
             for (Transiciones ts : tr.getTransicionesEstado(s)) {
 
-                //System.out.println("TRANSICIONES OBTENIDAS CON ts: " + ts.toString());
+                // System.out.println("TRANSICIONES OBTENIDAS CON ts: " + ts.toString());
 
                 // System.out.println("Transición: " + ts.getDe() + " " + ts.getSimbolo() + " "
                 // +
@@ -144,13 +147,11 @@ public class AFDConverter {
                     resultado.add(ts.getA());
                     resultado.add(s); // Agregando el estado que se analizó.
 
-                }
-                else if(!ts.getSimbolo().equals("&")){
-                    //System.out.println("LLEGUÉ ALV!");
-                    //System.out.println("CONJUNTO AGREGADO: " + s.toString());
+                } else if (!ts.getSimbolo().equals("&")) {
+                    // System.out.println("LLEGUÉ ALV!");
+                    // System.out.println("CONJUNTO AGREGADO: " + s.toString());
                     resultado.add(s);
-                }
-                else{
+                } else {
                     resultado.add(s);
                 }
 
