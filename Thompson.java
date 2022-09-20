@@ -561,92 +561,170 @@ public class Thompson {
         }
     }
 
-    /*
-     * // Método para poder simular el autómata cuando ya esté armado.
-     * public void simulation(Estado aceptacion) {
-     * // Variables y demás a utilizar.
-     * long startTime = System.nanoTime(); // Tomando el tiempo de inicio.
-     * 
-     * ArrayList<Estado> estadoTempral = new ArrayList<Estado>(); // ArrayList para
-     * guardar la expresión temporal.
-     * 
-     * ArrayList<Estado> estadoAct = new ArrayList<Estado>(); // ArrayList para
-     * guardar el estado actual.
-     * 
-     * estadoAct.add(estados_iniciales.peek()); // Agregando el estado inicial al
-     * ArrayList.
-     * 
-     * // System.out.println("Estado de aceptación: " + estados_aceptacion + "");
-     * 
-     * // Instanciando la clase de AFDConverter para calcular el eClosure.
-     * AFDConverter afd = new AFDConverter();
-     * 
-     * System.out.println("Ahora se procede a simular el autómata.");
-     * 
-     * System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
-     * 
-     * // Creando el objeto de la clase Scanner.
-     * Scanner sc = new Scanner(System.in);
-     * String s = ""; // String para guardar la cadena a simular.
-     * 
-     * // Pidiendo al usuario que ingrese la cadena a simular.
-     * System.out.println("Ingrese la cadena a simular: ");
-     * s = sc.nextLine(); // Guardando la cadena a simular.
-     * 
-     * for (int a = 0; a < s.length(); a++) { // Recorriendo la cadena a simular.
-     * if (!alfabeto.contains(s.charAt(a) + "")) { // Verificando que todos y cada
-     * uno de los símbolos de la cadena
-     * // pertenezcan al alfabeto.
-     * System.out.println("La cadena no pertenece al lenguaje.");
-     * return;
-     * }
-     * 
-     * for (int b = 0; b < estadoAct.size(); b++) { // Recorriendo el ArrayList de
-     * estados actuales.
-     * // String caracterActual = s.charAt(a) + ""; // Guardando el caracter actual.
-     * Estado estadpAct = estadoAct.get(b); // Guardando el estado actual.
-     * 
-     * for (int c = 0; c < transiciones.size(); c++) { // Recorriendo el ArrayList
-     * de transiciones.
-     * Transiciones transicionActual = transiciones.get(c);
-     * 
-     * if (transicionActual.getDe().equals(estadpAct)) { // Si la transición tiene
-     * como
-     * // estado
-     * // de origen el estado actual y
-     * // el
-     * // símbolo es el caracter actual.
-     * Estado estadotemporal = transicionActual.getA(); // Guardando el estado
-     * temporal.
-     * estadoTempral = afd.cerradura(estadotemporal); // Calculando el eClosure del
-     * estado temporal
-     * // para el
-     * // caracter actual.
-     * // Agregando el estado temporal al ArrayList de estados actuales.
-     * estadoAct.add(estadoTempral.get(0));
-     * 
-     * }
-     * }
-     * }
-     * }
-     * 
-     * long endTime = System.nanoTime(); // Tomando el tiempo de finalización.
-     * 
-     * double duration = (endTime - startTime) / (1e6); // Duración de la
-     * simulación.
-     * 
-     * // Verificando que el estadoActual no contenga el estado de aceptación.
-     * if (estadoAct.contains(aceptacion)) {
-     * System.out.println("La cadena pertenece al lenguaje.");
-     * 
-     * } else {
-     * System.out.println("La cadena no pertenece al lenguaje.");
-     * 
-     * }
-     * 
-     * System.out.println("Duración de la simulación: " + duration +
-     * " milisegundos.");
-     * 
-     * }
-     */
+    // Método para poder simular el autómata cuando ya esté armado.
+    public void simulation(Estado aceptacion) {
+        // Variables y demás a utilizar.
+        long startTime = System.nanoTime(); // Tomando el tiempo de inicio.
+
+        Queue<HashSet<Estado>> totalStates = new LinkedList<HashSet<Estado>>(); // Cola para guardar los estados
+                                                                                // totales.
+
+        ArrayList<String> cadena = new ArrayList<String>(); // ArrayList para guardar la cadena a evaluar.
+
+        ArrayList<Estado> estadoAct = new ArrayList<Estado>(); // ArrayList para guardar el estado actual.
+
+        estadoAct.add(estados_iniciales.peek()); // Agregando el estado inicial al ArrayList.
+
+        // System.out.println("Estado de aceptación: " + estados_aceptacion + "");
+
+        // Instanciando la clase de AFDConverter para calcular el eClosure.
+        AFDConverter afd = new AFDConverter();
+
+        System.out.println("Ahora se procede a simular el autómata.");
+
+        System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
+
+        // Creando el objeto de la clase Scanner.
+        Scanner sc = new Scanner(System.in);
+        String teclado = ""; // String para guardar la cadena a simular.
+
+        // Pidiendo al usuario que ingrese la cadena a simular.
+        System.out.println("Ingrese la cadena a simular: ");
+        teclado = sc.nextLine(); // Guardando la cadena a simular.
+
+        // Haciendo eClosure del estado inicial.
+        totalStates.add(cerradura(estadoAct.get(0)));
+
+        // System.out.println("eClosure del estado inicial: " + totalStates + "");
+
+        // System.out.println("Cadena a simular: " + cadena + "");
+
+        // Calculando el eClosure del estado inicial.
+        HashSet<HashSet<Estado>> s = new HashSet<HashSet<Estado>>();
+
+        s.add(cerradura(estadoAct.get(0))); // Agregando el eClosure del estado inicial.
+
+        // Obteniendo cada símbolo de la cadena a simular.
+
+        // System.out.println("eClosure del estado inicial: " + s + "");
+
+        // Obteniendo el primer estado del eClosure.
+        HashSet<Estado> s2 = new HashSet<Estado>();
+
+        s2 = totalStates.poll();
+
+        // Arreglo temporal para guardar el move de cada estado.
+        HashSet<Estado> temp = new HashSet<Estado>();
+
+        // Introduciendo cada símbolo de la cadena a simular en un ArrayList.
+        for (int i = 0; i < teclado.length(); i++) {
+            cadena.add(String.valueOf(teclado.charAt(i)));
+
+            // Calculando el move del resultado del eClosure, con el símbolo de la cadena.
+            // s.add(mover(totalStates.poll(), cadena.get(i)));
+
+            // Calculando el move del resultado del eClosure, con el símbolo de la cadena.
+            System.out.println("Move del estado: " + mover(s2, cadena.get(i)) + "");
+
+            temp = mover(s2, cadena.get(i)); // Guardando el move en un HashSet temporal.
+
+            // Calculando el eClosure del move.
+            for (Estado e : temp) {
+                totalStates.add(cerradura(e));
+            }
+
+        }
+
+        // Verificando si en algún estado del eClosure hay un estado de aceptación.
+        for (HashSet<Estado> e : totalStates) {
+            // System.out.println("Estado: " + e + "");
+
+            if (e.contains(aceptacion)) {
+                System.out.println("La cadena es aceptada.");
+                break;
+            } else {
+                System.out.println("La cadena no es aceptada.");
+                break;
+            }
+        }
+
+        long endTime = System.nanoTime(); // Tomando el tiempo de finalización.
+
+        double duration = (endTime - startTime) / (1e6); // Duración de la simulación.
+
+        System.out.println("Duración de la simulación: " + duration + " milisegundos.");
+
+    }
+
+    // Creando método para calcular la cerradura de un estado.
+    public HashSet<Estado> cerradura(Estado estado) {
+
+        HashSet<Estado> resultado = new HashSet<Estado>(); // Creando un HashSet para guardar los resultados y que no
+                                                           // hayan estados repetidos.
+
+        Stack<Estado> pila = new Stack<Estado>();
+
+        Estado s = estado; // Guardando localmente el estado inicial.
+
+        pila.push(estado); // Guardando el estado inicial en la pila.
+
+        while (!pila.isEmpty()) {
+
+            s = pila.pop(); // Sacando el estado a analizar.
+
+            // Obteniendo todas las transiciones que tiene el estado inicial.
+            Transiciones tr = new Transiciones();
+
+            for (Transiciones ts : tr.getTransicionesEstado(s)) {
+
+                // System.out.println("TRANSICIONES OBTENIDAS CON ts: " + ts.toString());
+
+                // System.out.println("Transición: " + ts.getDe() + " " + ts.getSimbolo() + " "
+                // +
+                // ts.getA());
+
+                // Calculando la cerradura del estado inicial.
+                if (ts.getSimbolo().equals("&") && !resultado.contains(ts.getA())) {
+
+                    // System.out.println("Estado: " + ts.getA());
+                    pila.push(ts.getA());
+                    resultado.add(ts.getA());
+                    resultado.add(s); // Agregando el estado que se analizó.
+
+                } else if (!ts.getSimbolo().equals("&")) {
+                    // System.out.println("LLEGUÉ ALV!");
+                    // System.out.println("CONJUNTO AGREGADO: " + s.toString());
+                    resultado.add(s);
+                } else {
+                    resultado.add(s);
+                }
+
+            }
+        }
+
+        return resultado; // Regresando el resultado de la cerradura.
+    }
+
+    // Creando método para calcular el movimiento de un estado.
+    private HashSet<Estado> mover(HashSet<Estado> estados, String string) {
+        HashSet<Estado> resultado = new HashSet<Estado>(); // Creando HashSet para guardar los resultados de los estados
+                                                           // alcanzados.
+        Iterator<Estado> it = estados.iterator(); // Creando iterador para recorrer los estados del HashSet.
+
+        while (it.hasNext()) {
+            for (Transiciones ts : new Transiciones().getTransicionesEstado(it.next())) { // Recorriendo las
+                                                                                          // transiciones
+                                                                                          // del estado.
+                Estado s = ts.getA(); // Obteniendo el estado al que se llega con la transición.
+                String simbolo = ts.getSimbolo(); // Obteniendo el símbolo de la transición.
+
+                if (simbolo.equals(string)) {
+                    resultado.add(s);
+                }
+            }
+        }
+
+        return resultado;
+    }
+
 }
