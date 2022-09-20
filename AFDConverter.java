@@ -52,7 +52,7 @@ public class AFDConverter {
         // Creando ArrayList temporal para guardar los resultados de los subconjuntos
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
-
+        int i =0;
         while (!totalStates.isEmpty()) {
 
             //System.out.println("totalStates Values" + totalStates.toString());
@@ -78,6 +78,7 @@ public class AFDConverter {
 
                 for (Estado e : moveResult) { // Guardando el eClosure de cada estado alcanzado.
                     //System.out.println("RESULTADO ALCANZADO CON e: " + e.toString());
+                    //System.out.println(cerradura(moveResult.poll()));
                     eClosure.addAll(cerradura(e));
                     
                 }
@@ -89,7 +90,7 @@ public class AFDConverter {
                 }
             }
 
-            System.out.println("totalStates dentro del While, comportamiento: " + totalStates.toString());
+            System.out.println((i++)+ " " + "totalStates" + totalStates.toString());
 
         }
 
@@ -116,6 +117,8 @@ public class AFDConverter {
 
             for (Transiciones ts : tr.getTransicionesEstado(s)) {
 
+                //System.out.println("TRANSICIONES OBTENIDAS CON ts: " + ts.toString());
+
                 // System.out.println("Transición: " + ts.getDe() + " " + ts.getSimbolo() + " "
                 // +
                 // ts.getA());
@@ -128,6 +131,14 @@ public class AFDConverter {
                     resultado.add(ts.getA());
                     resultado.add(s); // Agregando el estado que se analizó.
 
+                }
+                else if(!ts.getSimbolo().equals("&")){
+                    //System.out.println("LLEGUÉ ALV!");
+                    //System.out.println("CONJUNTO AGREGADO: " + s.toString());
+                    resultado.add(s);
+                }
+                else{
+                    resultado.add(s);
                 }
 
             }
