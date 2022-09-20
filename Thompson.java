@@ -637,7 +637,7 @@ public class Thompson {
 
         // Verificando si en algún estado del eClosure hay un estado de aceptación.
         for (HashSet<Estado> e : totalStates) {
-            // System.out.println("Estado: " + e + "");
+            System.out.println("Estado: " + e + "");
 
             if (e.contains(aceptacion)) {
                 System.out.println("La cadena es aceptada.");
