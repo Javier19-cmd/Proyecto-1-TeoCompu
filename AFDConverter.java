@@ -14,6 +14,8 @@ public class AFDConverter {
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
 
+    Queue<HashSet<Estado>> resultado = new LinkedList<HashSet<Estado>>();
+
     // Matriz para el resultado de eClosure.
 
     List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
@@ -44,12 +46,15 @@ public class AFDConverter {
         cerraduraResult = cerradura(inicial);
 
         // Imprimiendo la cerradura del primer estado.
-        System.out.println("Cerradura del primer estado: " + cerraduraResult.toString());
+        //System.out.println("Cerradura del primer estado: " + cerraduraResult.toString());
 
         totalStates.add(cerraduraResult); // Agregando la cerradura del primer estado a la lista de estados.
         //System.out.println("totalState con el primer resultado: " + totalStates.toString());
         //System.out.println("totalState con poll: " + totalStates.poll().toString());
         // Creando ArrayList temporal para guardar los resultados de los subconjuntos
+        resultado.add(cerraduraResult);
+        //System.out.println("Resultado con cerraduraResult: " + resultado.toString());
+
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
         int i =0;
@@ -60,6 +65,10 @@ public class AFDConverter {
 
             // Trabajando con el actual subconjunto.
             HashSet<Estado> actuals = totalStates.poll();
+
+            if (!resultado.contains(totalStates.poll())) {
+                resultado.add(actuals);
+            }
             
             //System.out.println("Estado actual: " + actuals);
 
@@ -87,12 +96,16 @@ public class AFDConverter {
                     //System.out.println("Entre al if de temporal");
                     totalStates.add(eClosure);
                     temporal.add(eClosure);
+                    
                 }
+
+                
             }
-
-            System.out.println((i++)+ " " + "totalStates" + totalStates);
-
+            //System.out.println((i++)+ " " + "totalStates" + totalStates);
         }
+        
+        for (int l=0; l<resultado.size(); l++){System.out.println( (l) + " AFD State" + resultado);}
+        
 
     }
 
