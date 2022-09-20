@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.swing.plaf.nimbus.State;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
 public class AFDConverter {
@@ -13,6 +14,8 @@ public class AFDConverter {
 
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
+
+    Stack <StatesAFD> estadosAFD = new Stack<>();
 
     HashSet<HashSet<Estado>> resultado = new HashSet<HashSet<Estado>>();
 
@@ -38,6 +41,12 @@ public class AFDConverter {
         // Obteniendo el alfabeto del AFN.
         ArrayList<String> alfabetoAFD = new ArrayList<String>();
 
+        //Creamos el estado inicial de nuestro AFD
+        StatesAFD AFD = new StatesAFD();
+        StatesAFD inicialAFD = new StatesAFD(0);
+        estadosAFD.push(inicialAFD);
+        
+
         for (int i = 0; i < alfabeto.size(); i++) {
             alfabetoAFD.add(alfabeto.get(i));
         }
@@ -59,7 +68,7 @@ public class AFDConverter {
 
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
-        int i = 0;
+        int index = 0;
         while (!totalStates.isEmpty()) {
 
             // System.out.println("totalStates Values" + totalStates.toString());
@@ -92,23 +101,39 @@ public class AFDConverter {
                     // System.out.println("RESULTADO ALCANZADO CON e: " + e.toString());
                     // System.out.println(cerradura(moveResult.poll()));
                     eClosure.addAll(cerradura(e));
-
+                    
                 }
-
+                
+                StatesAFD anterior = (StatesAFD) AFD.getEstadoAnterior().get(index); // Obteniendo el estado anterior de un cierto índice.
+                
                 if (!temporal.contains(eClosure)) { // Si el subconjunto no está en la lista temporal, se agrega.
                     // System.out.println("Entre al if de temporal");
                     totalStates.add(eClosure);
                     temporal.add(eClosure);
 
+
+                    // Instanciando la clase de AFD.
+                    
+                    StatesAFD s = new StatesAFD(temporal.indexOf(eClosure) + 1);
+                    
+                    AFD afd = new AFD(anterior, s, simbolo);
+
+                    System.out.println("Creando la primera transición: " + afd);
+
+
+                }else{ // Si ya existe el subconjunto, entonces solo se crean las transiciones que llegan hacia ese estado.
+                    
                 }
 
             }
             // System.out.println((i++) + " " + "totalStates" + totalStates);
+            index++; // Aumentando el index.
         }
 
         for (int l = 0; l < resultado.size(); l++) {
             System.out.println("Subconjunto " + l + ": " + resultado.toArray()[l].toString());
         }
+
 
     }
 
