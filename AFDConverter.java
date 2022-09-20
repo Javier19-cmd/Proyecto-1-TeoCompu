@@ -72,7 +72,7 @@ public class AFDConverter {
                 // Realizando move con el subconjunto actual y el símbolo.
                 HashSet<Estado> moveResult = mover(actuals, simbolo);
 
-                System.out.println("Recorremos los siguientes estados " + actuals + " con el siguiente simbolo " + simbolo + " el siguiente move: " + moveResult.toString());
+                //System.out.println("Recorremos los siguientes estados " + actuals + " con el siguiente simbolo " + simbolo + " el siguiente move: " + moveResult.toString());
 
                 HashSet<Estado> eClosure = new HashSet<Estado>();
 
@@ -90,7 +90,7 @@ public class AFDConverter {
                 }
             }
 
-            System.out.println((i++)+ " " + "totalStates" + totalStates.toString());
+            System.out.println((i++)+ " " + "totalStates" + totalStates);
 
         }
 
