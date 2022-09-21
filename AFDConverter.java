@@ -34,6 +34,9 @@ public class AFDConverter {
 
     ArrayList<String> alfabetoAFD = new ArrayList<String>(); // ArrayList para el alfabeto.
 
+    // Arreglo para el estado inicial del AFD.
+    HashSet<Estado> estado_inicial = new HashSet<Estado>();
+
     // Método para empezar a procesar los datos.
     public void Proceso(List<Transiciones> transiciones, Estado inicial, List<Estado> estadosFinales,
             ArrayList<String> alfabeto, Stack<Estado> estados, Estado aceptacion) {
@@ -69,6 +72,8 @@ public class AFDConverter {
         // Creando ArrayList temporal para guardar los resultados de los subconjuntos
         resultado.add(cerraduraResult);
         // System.out.println("Resultado con cerraduraResult: " + resultado.toString());
+
+        estado_inicial = cerraduraResult; // Guardando en una variable global el estado inicial del autómata.
 
         // Guardando el alfabeto en un ArrayList global.
         alfabetoAFD = alfabeto;
@@ -281,6 +286,18 @@ public class AFDConverter {
         }
 
         return resultado;
+    }
+
+    // Getters funcionales.
+
+    // Getter de los estados del AFD.
+    public ArrayList<StatesAFD> getEstados() {
+        return estadosAFD;
+    }
+
+    // Getter del alfabeto.
+    public ArrayList<String> getAlfabeto() {
+        return alfabetoAFD;
     }
 
 }
