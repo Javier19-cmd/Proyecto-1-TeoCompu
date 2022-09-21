@@ -22,17 +22,20 @@ public class AFDConverter {
 
     Stack<StatesAFD> estados_finales = new Stack<>();
 
-    HashSet<HashSet<Estado>> resultado = new HashSet<HashSet<Estado>>();
+    static HashSet<HashSet<Estado>> resultado = new HashSet<HashSet<Estado>>();
 
     // Creando lista para guardar los estados del AFD.
     static ArrayList<StatesAFD> estadosAFD = new ArrayList<StatesAFD>();
+
+    // Creando arreglo para guardar el estado inicial del AFD.
+    static HashSet<HashSet<Estado>> estado_inicial_AFD = new HashSet<HashSet<Estado>>();
 
     // Matriz para el resultado de eClosure.
 
     List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
 
     static ArrayList<AFD> resultado_trans = new ArrayList<AFD>(); // Lista para guardar el resultado de las
-                                                                        // transiciones.
+                                                                  // transiciones.
 
     private static HashSet<StatesAFD> estados_aceptacion = new HashSet<StatesAFD>(); // Hashset para guardar los estados
                                                                                      // de
@@ -77,6 +80,10 @@ public class AFDConverter {
         // System.out.println("totalState con poll: " + totalStates.poll().toString());
         // Creando ArrayList temporal para guardar los resultados de los subconjuntos
         resultado.add(cerraduraResult);
+
+        // Guardando el resultado de la cerradura inicial en otro arreglo.
+        estado_inicial_AFD.add(cerraduraResult);
+
         // System.out.println("Resultado con cerraduraResult: " + resultado.toString());
 
         // Guardando el alfabeto en un ArrayList global.
@@ -148,7 +155,7 @@ public class AFDConverter {
         // Calculando el move de cada subconjunto, con cada símbolo del alfabeto.
         for (int i = 0; i < alfabetoAFD.size(); i++) {
             for (int j = 0; j < resultado.size(); j++) {
-                //System.out.println((j)+"Resultado: " + resultado.toArray()[j]);
+                // System.out.println((j)+"Resultado: " + resultado.toArray()[j]);
 
                 // System.out.println("Tipo del resultado: " +
                 // resultado.toArray()[j].getClass());
@@ -270,7 +277,7 @@ public class AFDConverter {
     }
 
     // Creando método para calcular el movimiento de un estado.
-    private HashSet<Estado> mover(HashSet<Estado> estados, String string) {
+    private static HashSet<Estado> mover(HashSet<Estado> estados, String string) {
         HashSet<Estado> resultado = new HashSet<Estado>(); // Creando HashSet para guardar los resultados de los estados
                                                            // alcanzados.
         Iterator<Estado> it = estados.iterator(); // Creando iterador para recorrer los estados del HashSet.
@@ -293,16 +300,17 @@ public class AFDConverter {
 
     // Creando método para calcular el movimiento de un estado.
     private static HashSet<StatesAFD> mover_statesAFD(HashSet<StatesAFD> estados, String string) {
-        HashSet<StatesAFD> resultado = new HashSet<StatesAFD>(); // Creando HashSet para guardar los resultados de los estados
-                                                           // alcanzados.
+        HashSet<StatesAFD> resultado = new HashSet<StatesAFD>(); // Creando HashSet para guardar los resultados de los
+                                                                 // estados
+        // alcanzados.
         Iterator<StatesAFD> it = estados.iterator(); // Creando iterador para recorrer los estados del HashSet.
 
         while (it.hasNext()) {
             AFD tr = new AFD();
 
             for (AFD ts : tr.getTransicionesEstado(estados)) { // Recorriendo las
-                                                                                          // transiciones
-                                                                                          // del estado.
+                                                               // transiciones
+                                                               // del estado.
                 StatesAFD s = ts.getA(); // Obteniendo el estado al que se llega con la transición.
                 String simbolo = ts.getSimbolo(); // Obteniendo el símbolo de la transición.
 
@@ -341,121 +349,114 @@ public class AFDConverter {
         return estados_aceptacion;
     }
 
-    public static void MinimizacionAFD(){
-        //Creamos el conjunto de particiones P
+    public static void MinimizacionAFD() {
+        // Creamos el conjunto de particiones P
         HashSet<HashSet<StatesAFD>> P = new HashSet<HashSet<StatesAFD>>();
 
-        /*separar los estados entre los que pertenecen al conjunto de estados de aceptacion
-        * y los que no, y agregar estos grupos aun conjutno de partició P
-        * Ojo: esto significa que la particion P al principio tiene un conjunto con
-        * los estados de no acpetacion y otro grupo con los de aceptacion
-        */
+        /*
+         * separar los estados entre los que pertenecen al conjunto de estados de
+         * aceptacion
+         * y los que no, y agregar estos grupos aun conjutno de partició P
+         * Ojo: esto significa que la particion P al principio tiene un conjunto con
+         * los estados de no acpetacion y otro grupo con los de aceptacion
+         */
         HashSet<StatesAFD> estadosSinAceptacion = new HashSet<StatesAFD>();
-        for (int i = 0 ; i<getEstados().size();i++){
-            if (!getAceptacion().contains(getEstados().get(i))){
-               estadosSinAceptacion.add(getEstados(i));
+        for (int i = 0; i < getEstados().size(); i++) {
+            if (!getAceptacion().contains(getEstados().get(i))) {
+                estadosSinAceptacion.add(getEstados(i));
             }
         }
         P.add(estadosSinAceptacion);
         P.add(getAceptacion());
-        //System.out.println(particionP);
-      
-            
-        
-       
-        int key= 0;
-        HashMap<StatesAFD,HashSet<Integer>> L = new HashMap();
-        
-        for (HashSet <StatesAFD> a: P){
-           HashSet<StatesAFD> grupoG = a;
-           // System.out.println(grupoG);
-            for (StatesAFD s: grupoG){
-                HashSet <StatesAFD> statesG = new HashSet<StatesAFD>();
+        // System.out.println(particionP);
+
+        int key = 0;
+        HashMap<StatesAFD, HashSet<Integer>> L = new HashMap();
+
+        for (HashSet<StatesAFD> a : P) {
+            HashSet<StatesAFD> grupoG = a;
+            // System.out.println(grupoG);
+            for (StatesAFD s : grupoG) {
+                HashSet<StatesAFD> statesG = new HashSet<StatesAFD>();
                 statesG.add(s);
                 HashSet<Integer> Ds = new HashSet<Integer>();
-                //System.out.println(s.getTransiciones());
-                for (String alfabeto: getAlfabeto()){
-                    HashSet <StatesAFD> t = mover_statesAFD(statesG, alfabeto);
-                    
-                    for (int j = 0 ;j<P.size();j++){
-                        
-                        HashSet <StatesAFD> statesP = (HashSet<StatesAFD>) P.toArray()[j]; 
-                        if (statesP.contains(t)){
+                // System.out.println(s.getTransiciones());
+                for (String alfabeto : getAlfabeto()) {
+                    HashSet<StatesAFD> t = mover_statesAFD(statesG, alfabeto);
+
+                    for (int j = 0; j < P.size(); j++) {
+
+                        HashSet<StatesAFD> statesP = (HashSet<StatesAFD>) P.toArray()[j];
+                        if (statesP.contains(t)) {
                             Ds.add(j);
-                            
+
                         }
                         L.put(s, Ds);
-                        //System.out.println(Ds + "Ds");
-                      
+                        // System.out.println(Ds + "Ds");
+
                     }
                 }
-                
-                
-                //System.out.println(Ds+ " Ds");
-            key++;    
+
+                // System.out.println(Ds+ " Ds");
+                key++;
             }
-             
-           // System.out.println(L);
-            
-            
+
+            // System.out.println(L);
+
             /*
-            tabla2 = new HashMap();
-                    for (Estado e : grupoG) {
-                        ArrayList<Integer> alcanzados = tablaDs.get(e);
-                        if (tabla2.containsKey(alcanzados))
-                            tabla2.get(alcanzados).add(e);
-                        else {
-                            ArrayList<Estado> tmp = new ArrayList();
-                            tmp.add(e);
-                            tabla2.put(alcanzados, tmp);
-                        }
-                    }
-            */
+             * tabla2 = new HashMap();
+             * for (Estado e : grupoG) {
+             * ArrayList<Integer> alcanzados = tablaDs.get(e);
+             * if (tabla2.containsKey(alcanzados))
+             * tabla2.get(alcanzados).add(e);
+             * else {
+             * ArrayList<Estado> tmp = new ArrayList();
+             * tmp.add(e);
+             * tabla2.put(alcanzados, tmp);
+             * }
+             * }
+             */
             int i = 0;
-           
-         ArrayList Ki = new ArrayList();
-         //Iterator <StatesAFD,HashSet<Integer>> it = L.keySet().iterator();
-         for (StatesAFD estado: L.keySet()){ 
-                HashSet <Integer> estado_num = L.get(estado); 
+
+            ArrayList Ki = new ArrayList();
+            // Iterator <StatesAFD,HashSet<Integer>> it = L.keySet().iterator();
+            for (StatesAFD estado : L.keySet()) {
+                HashSet<Integer> estado_num = L.get(estado);
                 HashMap<HashSet<Integer>, HashSet<StatesAFD>> tabla2 = new HashMap();
                 for (StatesAFD e : grupoG) {
-                        HashSet<Integer> alcanzados = estado_num;
-                        if (tabla2.containsKey(alcanzados))
-                            tabla2.get(alcanzados).add(e);
-                        else {
-                            HashSet<StatesAFD> tmp = new HashSet();
-                            tmp.add(e);
-                            tabla2.put(alcanzados, tmp);
-                        }
+                    HashSet<Integer> alcanzados = estado_num;
+                    if (tabla2.containsKey(alcanzados))
+                        tabla2.get(alcanzados).add(e);
+                    else {
+                        HashSet<StatesAFD> tmp = new HashSet();
+                        tmp.add(e);
+                        tabla2.put(alcanzados, tmp);
                     }
-              
-                
-             
-             
-            i++;
-                
-            
-            System.out.println("----");
-            System.out.println(P);
-            System.out.println(Ki);
-            System.out.println(grupoG);
-            System.out.println("----");
-            if (Ki.get(0)!=grupoG){
-                P.remove(grupoG);
+                }
+
+                i++;
+
+                System.out.println("----");
+                System.out.println(P);
                 System.out.println(Ki);
-                System.out.println("ki" + Ki.get(1));
-               for (int j  =0 ;j<Ki.size();j++){
-                   P.add((HashSet<StatesAFD>) Ki.get(j));
-               }
-                
+                System.out.println(grupoG);
+                System.out.println("----");
+                if (Ki.get(0) != grupoG) {
+                    P.remove(grupoG);
+                    System.out.println(Ki);
+                    System.out.println("ki" + Ki.get(1));
+                    for (int j = 0; j < Ki.size(); j++) {
+                        P.add((HashSet<StatesAFD>) Ki.get(j));
+                    }
+
+                }
+
             }
-           
+            System.out.println(P);
         }
-         System.out.println(P);
-        }
-        
+
     }
-    
+
     // Método para escribir el archivo con extensión txt.
     public static void EscribirArchivo() {
         try {
@@ -504,5 +505,63 @@ public class AFDConverter {
         } catch (Exception e) {
             System.out.println("Error al escribir el archivo.");
         }
+    }
+
+    // Método para poder simular el AFD que se armó desde el AFN.
+    public static void Simulacion() {
+        System.out.println("Ingrese la cadena a evaluar: ");
+        Scanner sc = new Scanner(System.in);
+        String cadena = sc.nextLine();
+
+        System.out.println("La cadena es: " + cadena);
+
+        // Ingresando la cadena a un ArrayList.
+        ArrayList<String> cadena_array = new ArrayList<String>();
+
+        // Guardando el estado inicial del AFD en una variable.
+        // Conviritendo el HashSet a un arreglo.
+        StatesAFD[] estadosAFD_array = estadosAFD.toArray(new StatesAFD[estadosAFD.size()]);
+
+        // Sacando el primer elemento del arreglo.
+        StatesAFD estado_inicial = estadosAFD_array[0];
+
+        // System.out.println("Estado inicial: " + estado_inicial);
+
+        // Imprimiendo el HashSet de resultados.
+        // System.out.println("HashSet de resultados: " + resultado.toString());
+
+        HashSet<Estado> es = (HashSet<Estado>) estado_inicial_AFD.toArray()[0];
+
+        System.out.println("Primera posición del HashSet: " + es);
+
+        // Agregando cada caracter de la cadena a un ArrayList.
+        for (int i = 0; i < cadena.length(); i++) {
+            cadena_array.add(String.valueOf(cadena.charAt(i)));
+
+            // Si la cadena contiene un caracter que no está en el alfabeto, se termina la
+            // simulación.
+            if (!alfabetoAFDs.contains(String.valueOf(cadena.charAt(i)))) {
+                System.out.println("La cadena contiene un caracter que no está en el alfabeto.");
+                return;
+            }
+
+            // Calculando el move de cada estado de es con el caracter de la cadena.
+            System.out.println("Estado: " + es);
+            System.out.println("Caracter: " + cadena_array.get(i));
+            es = mover(es, cadena_array.get(i));
+
+            System.out.println("Resultado del move: " + es);
+
+        }
+
+        // Verificando que s esté en el conjunto de estados de aceptación.
+        if (estados_aceptacion.contains(es)) {
+            System.out.println("La cadena es aceptada.");
+            return;
+        } else {
+            System.out.println("La cadena no es aceptada.");
+            return;
+        }
+
     }
 }

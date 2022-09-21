@@ -62,8 +62,10 @@ public class Lector {
         // Escribiendo el archivo del AFD.
         AFDConverter.EscribirArchivo();
 
-        //Minimizando el AFD
-        AFDConverter.MinimizacionAFD();
+        // Minimizando el AFD
+        // AFDConverter.MinimizacionAFD();
+
+        AFDConverter.Simulacion(); // Simulando el AFD.
 
     }
 }

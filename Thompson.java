@@ -554,9 +554,6 @@ public class Thompson {
 
         // System.out.println("Estado de aceptación: " + estados_aceptacion + "");
 
-        // Instanciando la clase de AFDConverter para calcular el eClosure.
-        AFDConverter afd = new AFDConverter();
-
         System.out.println("Ahora se procede a simular el autómata.");
 
         System.out.println("ArrayList de estados iniciales: " + estadoAct + "");
@@ -596,6 +593,13 @@ public class Thompson {
         // Introduciendo cada símbolo de la cadena a simular en un ArrayList.
         for (int i = 0; i < teclado.length(); i++) {
             cadena.add(String.valueOf(teclado.charAt(i)));
+
+            // Verificando si el símbolo de la cadena es un símbolo del alfabeto.
+            if (!alfabeto.contains(cadena.get(i))) {
+                System.out.println("El símbolo " + cadena.get(i) + " no pertenece al alfabeto.");
+                System.out.println("La cadena no es válida.");
+                return;
+            }
 
             // Calculando el move del resultado del eClosure, con el símbolo de la cadena.
             // s.add(mover(totalStates.poll(), cadena.get(i)));
