@@ -7,6 +7,7 @@ import java.util.*;
 public class AFD {
     StatesAFD de, a;
     String simbolo;
+    
 
     public AFD() {
 
@@ -48,5 +49,7 @@ public class AFD {
         }
         return transiciones;
     }
+
+    
 
 }

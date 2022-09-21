@@ -7,7 +7,9 @@ public class StatesAFD {
     private List<StatesAFD> estado_anteriorAFD; // Lista que guarda los estados anteriores del AFD.
     private List<StatesAFD> estado_siguienteAFD; // Lista que guarda los estados siguientes del AFD.
     private int inicio; // Variable que indica si el estado es de inicio o no.
-    private int fin; // Variable que indica si el estado es de aceptación o no.
+    private StatesAFD fin; // Variable que indica si el estado es de aceptación o no.
+    private ArrayList<StatesAFD> transicionesAFD = new ArrayList(); //Transiciones del AFD
+    String simbolo; //Almacenamos el simbolo con el que se hace la transición
 
     public StatesAFD() {
 
@@ -37,6 +39,18 @@ public class StatesAFD {
         this.estado_anteriorAFD = estado_anterior; // Se inicializa la lista de estados anteriores.
         this.estado_siguienteAFD = estado_siguiente; // Se inicializa la lista de estados siguientes.
 
+    }
+
+    public String getSimbolo() {
+        return simbolo;
+    }
+
+    /**
+     * Mutador del simbolo
+     * @param simbolo simbolor string o character
+     */
+    public void setSimbolo(String simbolo) {
+        this.simbolo = simbolo;
     }
 
     public void agregarEstadoAnterior(StatesAFD estado) { // Método para agregar un estado anterior.
@@ -76,13 +90,17 @@ public class StatesAFD {
         return this.inicio; // Se retorna el estado inicial.
     }
 
-    public void setFinal(int fin) { // Método para asignar el estado final.
+    
+    public void setFinal(StatesAFD fin) { // Método para asignar el estado final.
         this.fin = fin; // Se asigna el estado final.
     }
 
-    public int getFinal() { // Método para obtener el estado final.
-        return this.fin; // Se retorna el estado final.
+    public StatesAFD getFin() {
+        return fin;
     }
 
-    
+    public ArrayList<StatesAFD> getTransiciones() {
+       
+        return transicionesAFD;
+    }
 }

@@ -317,7 +317,9 @@ public class AFDConverter {
             StatesAFD s = ts.getA(); // Obteniendo el estado al que se llega con la transición.
             String simbolo_tr = ts.getSimbolo(); // Obteniendo el símbolo de la transición.
 
-            System.out.println("Estado: " + s.toString() + " Símbolo: " + simbolo_tr);
+            System.out.println("Estado: " + s);
+
+            //System.out.println("Estado: " + s.toString() + " Símbolo: " + simbolo_tr);
 
             if (simbolo_tr.equals(simbolo)) {
                 resultado.add(s);
@@ -379,29 +381,40 @@ public class AFDConverter {
         
         for (int p=0;p<particionP.size();p++){
            ArrayList<StatesAFD> grupoG = particionP.get(p);
-           // System.out.println(grupoG);
+           System.out.println("Valores del grupoG: " + grupoG);
             for (StatesAFD s: grupoG){
+                System.out.println("Valores s: " + s);
+                HashSet<StatesAFD> estadoS = new HashSet<StatesAFD>();
+                estadoS.add(s);
                  ArrayList<Integer> Ds = new ArrayList();
                 //System.out.println(s.getTransiciones());
                 for (String alfabeto: getAlfabeto()){
-                    StatesAFD t = moves(s, alfabeto);
-                    
-                    for (int j = 0 ;j<particionP.size();j++){
-                        
-                        
-                        if (particionP.get(j).contains(t)){
-                            Ds.add(j);
-                            
-                        }
+                    System.out.println("Simbolo del alfabeto a evaluar: " + alfabeto);
+                    System.out.println("EstadosS: " + estadoS);
+                    System.out.println("Move: " + moves(estadoS, alfabeto));
+                    HashSet <StatesAFD> St = moves(estadoS, alfabeto);
+                    //System.out.println("Valores de St: " + St);
+                    for (StatesAFD a: St){
+                        StatesAFD t = a;
+                        for (int j = 0 ;j<particionP.size();j++){
+                            if (particionP.get(j).contains(t)){
+                                Ds.add(j);
+                                
+                            }
                         L.put(s, Ds);
+
+                        //System.out.println("Valores de L, después de put: " + L);
                         //System.out.println(Ds + "Ds");
-                      
+                        }
                     }
+                    
                 }
                 
                 
                 //System.out.println(Ds+ " Ds");
-            key++;    
+            key++;
+
+            System.out.println("Valores key: " + key);
             }
              
            // System.out.println(L);
@@ -421,7 +434,8 @@ public class AFDConverter {
                     }
             */
             int i = 0;
-           
+           System.out.println("Si muestra la i: " + i);
+           System.out.println("Valores de L: " + L);
          ArrayList Ki = new ArrayList();
          while (!L.isEmpty()){  
                 HashMap<ArrayList<Integer>, ArrayList<StatesAFD>> tabla2 = new HashMap();
@@ -440,7 +454,8 @@ public class AFDConverter {
              
              
             i++;
-                
+            
+            System.out.println("Valores i: " + i);
             
             System.out.println("----");
             System.out.println(particionP);
