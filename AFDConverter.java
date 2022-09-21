@@ -530,6 +530,7 @@ public class AFDConverter {
 
     // Método para poder simular el AFD que se armó desde el AFN.
     public static void Simulacion() {
+        long startTime = System.nanoTime(); // Conteo inicial de la simulación.
         System.out.println("Ingrese la cadena a evaluar: ");
         Scanner sc = new Scanner(System.in);
         String cadena = sc.nextLine();
@@ -584,6 +585,12 @@ public class AFDConverter {
 
             // Guardando el resultado del move en una variable.
             es2 = moves(AFDConverter.estado_inicial, String.valueOf(cadena.charAt(i)));
+
+            long endTime = System.nanoTime(); // Tiempo de finalización.
+            
+            double duracion = (endTime - startTime) / (1e6); // Tiempo de duración de la simulación.
+
+            System.out.println("El tiempo de duración fue: " + duracion + "ms.");
 
         }
 
