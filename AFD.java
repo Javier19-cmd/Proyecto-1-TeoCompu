@@ -8,8 +8,8 @@ public class AFD {
     StatesAFD de, a;
     String simbolo;
 
-    public AFD (){
-        
+    public AFD() {
+
     }
 
     public AFD(StatesAFD de, StatesAFD a, String simbolo) {
@@ -25,28 +25,28 @@ public class AFD {
         return this.de + "-" + this.simbolo + "->" + this.a;
     }
 
-    public StatesAFD getDe(){
+    // Transiciones de un estado.
+    public StatesAFD getDe() {
         return this.de;
     }
 
-    public StatesAFD getA(){
+    public StatesAFD getA() {
         return this.a;
     }
 
-    public String getSimbolo(){
+    public String getSimbolo() {
         return this.simbolo;
     }
 
-    public ArrayList <AFD> getTransicionesEstado(HashSet <StatesAFD> estado){
-        ArrayList <AFD> transiciones = new ArrayList<AFD>();
-        for (int i=0; i<AFDConverter.resultado_trans.size(); i++){
+    public ArrayList<AFD> getTransicionesEstado(HashSet<StatesAFD> estado) { // Método para obtener las transiciones de
+                                                                             // un estado.
+        ArrayList<AFD> transiciones = new ArrayList<AFD>();
+        for (int i = 0; i < AFDConverter.resultado_trans.size(); i++) {
             if (AFDConverter.resultado_trans.get(i).getDe().equals(estado)) {
                 transiciones.add(AFDConverter.resultado_trans.get(i));
             }
         }
         return transiciones;
     }
-
-    
 
 }

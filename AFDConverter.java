@@ -46,6 +46,10 @@ public class AFDConverter {
     // Arreglo para el estado inicial del AFD.
     static HashSet<StatesAFD> estado_inicial = new HashSet<StatesAFD>();
 
+    static HashSet<HashSet<Estado>> subconjunto_aceptacion = new HashSet<HashSet<Estado>>(); // HashSet para guardar el
+                                                                                             // subconjunto de estados
+                                                                                             // de aceptación.
+
     // Método para empezar a procesar los datos.
     public void Proceso(List<Transiciones> transiciones, Estado inicial, List<Estado> estadosFinales,
             ArrayList<String> alfabeto, Stack<Estado> estados, Estado aceptacion) {
@@ -206,6 +210,9 @@ public class AFDConverter {
 
                         estados_aceptacion.add(estadosAFD.get(list.indexOf(eClosure))); // Guardando los estados de
                                                                                         // aceptación.
+
+                        // Guardando el subconjunto que tiene el estado de aceptación.
+                        subconjunto_aceptacion.add(eClosure);
                     }
                 }
 
@@ -317,6 +324,28 @@ public class AFDConverter {
                 if (simbolo.equals(string)) {
                     resultado.add(s);
                 }
+            }
+        }
+
+        return resultado;
+    }
+
+    // Método de move para el AFD.
+    public static HashSet<StatesAFD> moves(HashSet<StatesAFD> estado, String simbolo) {
+        HashSet<StatesAFD> resultado = new HashSet<StatesAFD>(); // Creando HashSet para guardar los resultados de los
+                                                                 // estados
+        // alcanzados.
+
+        for (AFD ts : new AFD().getTransicionesEstado(estado)) { // Recorriendo las
+                                                                 // transiciones
+                                                                 // del estado.
+            StatesAFD s = ts.getA(); // Obteniendo el estado al que se llega con la transición.
+            String simbolo_tr = ts.getSimbolo(); // Obteniendo el símbolo de la transición.
+
+            System.out.println("Estado: " + s.toString() + " Símbolo: " + simbolo_tr);
+
+            if (simbolo_tr.equals(simbolo)) {
+                resultado.add(s);
             }
         }
 
@@ -534,6 +563,8 @@ public class AFDConverter {
 
         System.out.println("Primera posición del HashSet: " + es);
 
+        HashSet<StatesAFD> es2 = new HashSet<StatesAFD>(); // HashSet de estados del AFD.
+
         // Agregando cada caracter de la cadena a un ArrayList.
         for (int i = 0; i < cadena.length(); i++) {
             cadena_array.add(String.valueOf(cadena.charAt(i)));
@@ -545,22 +576,40 @@ public class AFDConverter {
                 return;
             }
 
-            // Calculando el move de cada estado de es con el caracter de la cadena.
-            System.out.println("Estado: " + es);
-            System.out.println("Caracter: " + cadena_array.get(i));
-            es = mover(es, cadena_array.get(i));
+            AFD afd = new AFD();
 
-            System.out.println("Resultado del move: " + es);
+            afd.getTransicionesEstado(AFDConverter.estado_inicial);
+
+            // System.out.println("Tipo del estado inicial: " +
+            // AFDConverter.estado_inicial.getClass());
+
+            // Calculando el move del estado.
+            // es = move(AFDConverter.estado_inicial.getClass(),
+            // String.valueOf(cadena.charAt(i)));
+
+            System.out.println(
+                    "Resultado del move: " + moves(AFDConverter.estado_inicial, String.valueOf(cadena.charAt(i))));
+
+            // Guardando el resultado del move en una variable.
+            es2 = moves(AFDConverter.estado_inicial, String.valueOf(cadena.charAt(i)));
 
         }
 
-        // Verificando que s esté en el conjunto de estados de aceptación.
-        if (estados_aceptacion.contains(es)) {
-            System.out.println("La cadena es aceptada.");
+        // System.out.println("Estados del AFD: " + estadosAFD + "");
+
+        // System.out.println("Subconjuntos del AFD: " + resultado + "");
+
+        // Buscando el estado en la lista de estados.
+        for (int i = 0; i < resultado.size(); i++) {
+
+            // Si el estado está en la lista de estados de aceptación, se acepta la cadena.
+            if (estados_aceptacion.contains(es2)) {
+                System.out.println("La cadena es aceptada.");
+            } else {
+                System.out.println("La cadena no es aceptada.");
+            }
             return;
-        } else {
-            System.out.println("La cadena no es aceptada.");
-            return;
+
         }
 
     }
