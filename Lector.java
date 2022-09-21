@@ -52,12 +52,15 @@ public class Lector {
 
         // System.out.println("Estado de aceptación: " + aceptacion);
 
+        // Simulando el AFN construído.
+        thompson.simulation(aceptacion);
+
         // Creando el AFD.
         afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados,
                 aceptacion);
 
-        // Simulando el AFN construído.
-        thompson.simulation(aceptacion);
+        // Escribiendo el archivo del AFD.
+        AFDConverter.EscribirArchivo();
 
     }
 }

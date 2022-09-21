@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -15,27 +18,30 @@ public class AFDConverter {
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
 
-    Stack<StatesAFD> estados_iniciales = new Stack<>();
+    private Stack<StatesAFD> estados_iniciales = new Stack<>();
 
     Stack<StatesAFD> estados_finales = new Stack<>();
 
     HashSet<HashSet<Estado>> resultado = new HashSet<HashSet<Estado>>();
 
     // Creando lista para guardar los estados del AFD.
-    ArrayList<StatesAFD> estadosAFD = new ArrayList<StatesAFD>();
+    static ArrayList<StatesAFD> estadosAFD = new ArrayList<StatesAFD>();
 
     // Matriz para el resultado de eClosure.
 
     List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
 
-    ArrayList<String> resultado_trans = new ArrayList<String>(); // Lista para guardar el resultado de las transiciones.
+    static ArrayList<String> resultado_trans = new ArrayList<String>(); // Lista para guardar el resultado de las
+                                                                        // transiciones.
 
-    HashSet<StatesAFD> estados_aceptacion = new HashSet<StatesAFD>(); // Hashset para guardar los estados de aceptación.
+    private static HashSet<StatesAFD> estados_aceptacion = new HashSet<StatesAFD>(); // Hashset para guardar los estados
+                                                                                     // de
+    // aceptación.
 
-    ArrayList<String> alfabetoAFD = new ArrayList<String>(); // ArrayList para el alfabeto.
+    private static ArrayList<String> alfabetoAFDs = new ArrayList<String>(); // ArrayList para el alfabeto.
 
     // Arreglo para el estado inicial del AFD.
-    HashSet<Estado> estado_inicial = new HashSet<Estado>();
+    static HashSet<StatesAFD> estado_inicial = new HashSet<StatesAFD>();
 
     // Método para empezar a procesar los datos.
     public void Proceso(List<Transiciones> transiciones, Estado inicial, List<Estado> estadosFinales,
@@ -73,10 +79,8 @@ public class AFDConverter {
         resultado.add(cerraduraResult);
         // System.out.println("Resultado con cerraduraResult: " + resultado.toString());
 
-        estado_inicial = cerraduraResult; // Guardando en una variable global el estado inicial del autómata.
-
         // Guardando el alfabeto en un ArrayList global.
-        alfabetoAFD = alfabeto;
+        alfabetoAFDs = alfabeto;
 
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
@@ -204,16 +208,15 @@ public class AFDConverter {
 
         }
 
+        // Guardando el estado inicial en estado_inicial.
+        estado_inicial.add(estadosAFD.get(0));
+
         // Área de debuggeo.
 
         // Imprimiendo cada resultado de la transición.
         for (int i = 0; i < resultado_trans.size(); i++) {
             System.out.println(resultado_trans.get(i));
         }
-
-        System.out.println("Estados de aceptación: " + estados_aceptacion.toString());
-
-        System.out.println("Alfabeto del AFD: " + alfabetoAFD);
 
     }
 
@@ -297,7 +300,66 @@ public class AFDConverter {
 
     // Getter del alfabeto.
     public ArrayList<String> getAlfabeto() {
-        return alfabetoAFD;
+        return alfabetoAFDs;
     }
 
+    // Getter del estado incial.
+    public HashSet<StatesAFD> getInicio() {
+        return estado_inicial;
+    }
+
+    // Getter de las transiciones.
+    public HashSet<StatesAFD> getAceptacion() {
+        return estados_aceptacion;
+    }
+
+    // Método para escribir el archivo con extensión txt.
+    public static void EscribirArchivo() {
+        try {
+            // Creando el archivo con codificado UTF-8.
+            File archivo = new File("automataDe.txt");
+
+            // Creando el archivo si no existe.
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+
+            // Creando el escritor.
+            FileWriter escritor = new FileWriter(archivo);
+
+            BufferedWriter bw = new BufferedWriter(escritor);
+
+            // System.out.println("Expresión regular en el método escribirArchivo: " +
+            // expresion_postfixs + "");
+
+            // escritor.write("Expresión regular: " + expresion_postfixs);
+
+            // Escribiendo el estado inicial.
+            bw.write("Estado inicial: " + estado_inicial + "");
+            bw.newLine();
+
+            // Escribiendo el alfabeto.
+            bw.write("Alfabeto: " + alfabetoAFDs + "");
+            bw.newLine();
+
+            // Escribiendo los estados de aceptación.
+            bw.write("Estados de aceptación: " + estados_aceptacion + "");
+            bw.newLine();
+
+            // Escribiendo los estados del AFD.
+            bw.write("Estados del AFD: " + estadosAFD + "");
+            bw.newLine();
+
+            // Escribiendo las transiciones.
+            bw.write("Transiciones del AFD: " + resultado_trans + "");
+            bw.newLine();
+
+            // Cerrando el escritor.
+            bw.close();
+
+            // Escribiendo en el archivo.
+        } catch (Exception e) {
+            System.out.println("Error al escribir el archivo.");
+        }
+    }
 }
