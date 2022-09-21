@@ -17,6 +17,7 @@ public class StatesAFD {
         this.idAFD = id; // Se le asigna el id al estado.
         this.estado_anteriorAFD = new ArrayList<StatesAFD>(); // Se inicializa la lista de estados anteriores.
         this.estado_siguienteAFD = new ArrayList<StatesAFD>(); // Se inicializa la lista de estados siguientes.
+        AFDConverter.contadorEstados++; // Se incrementa el contador de estados del AFD.
     }
 
     public StatesAFD AFDE(int id) { // Método que se encarga de crear los estados del AFD que se va a generar del
@@ -29,8 +30,9 @@ public class StatesAFD {
         return this;
     }
 
-    public StatesAFD(int id, List<StatesAFD> estado_anterior, List<StatesAFD> estado_siguiente) { // Constructor de la clase
-                                                                                         // Estado.
+    public StatesAFD(int id, List<StatesAFD> estado_anterior, List<StatesAFD> estado_siguiente) { // Constructor de la
+                                                                                                  // clase
+        // Estado.
         this.idAFD = id; // Se le asigna el id al estado.
         this.estado_anteriorAFD = estado_anterior; // Se inicializa la lista de estados anteriores.
         this.estado_siguienteAFD = estado_siguiente; // Se inicializa la lista de estados siguientes.

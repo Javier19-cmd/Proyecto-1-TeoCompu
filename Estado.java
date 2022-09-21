@@ -5,11 +5,6 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     private List<Estado> estado_siguiente; // Lista que guarda los estados siguientes.
     private int idAFN; // Identificador del estado.
 
-    // Creando variables para los estados del AFD.
-    private int idAFD; // Identificador del estado del AFD.
-    private List<Estado> estado_anteriorAFD; // Lista que guarda los estados anteriores del AFD.
-    private List<Estado> estado_siguienteAFD; // Lista que guarda los estados siguientes del AFD.
-
     private boolean inicio; // Variable que indica si el estado es de inicio o no.
     private boolean fin; // Variable que indica si el estado es de aceptación o no.
 
@@ -22,17 +17,6 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
         this.estado_anterior = new ArrayList<Estado>(); // Se inicializa la lista de estados anteriores.
         this.estado_siguiente = new ArrayList<Estado>(); // Se inicializa la lista de estados siguientes.
         Thompson.estados++; // Se incrementa el contador de estados.
-    }
-
-    public Estado AFDE(int id) { // Método que se encarga de crear los estados del AFD que se va a generar del
-        // AFN.
-
-        this.idAFD = id; // Se le asigna el id al estado.
-        this.estado_anterior = new ArrayList<Estado>(); // Se inicializa la lista de estados anteriores.
-        this.estado_siguiente = new ArrayList<Estado>(); // Se inicializa la lista de estados siguientes.
-        AFDConverter.contadorEstados++;
-
-        return this;
     }
 
     public Estado(int id, List<Estado> estado_anterior, List<Estado> estado_siguiente) { // Constructor de la clase
@@ -77,11 +61,6 @@ public class Estado { // Clase estado, esta se va a encargar de guardar los esta
     // Método para reemplazar estados.
     public void reemplazarEstados(Estado estado) {
         this.estado_anterior.replaceAll(operator -> operator == estado ? this : operator);
-    }
-
-    // Getter del estado inicial del AFD.
-    public int getIdAFD() {
-        return this.idAFD;
     }
 
     public void setInicio(boolean inicio) { // Método para asignar el estadoinicial.
