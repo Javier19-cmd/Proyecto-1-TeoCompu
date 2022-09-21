@@ -395,23 +395,28 @@ public class AFDConverter {
                 estadosSinAceptacion.add(getEstados(i));
             }
         }
+        System.out.println("ESTADO OBTENIDOS DEL AFD: " + getEstados());
         P.add(estadosSinAceptacion);
         P.add(getAceptacion());
         // System.out.println(particionP);
 
+        System.out.println("ESTADOS QUE SON DE ACEPTACIÓN: " + getAceptacion());
+        System.out.println("ESTADOS QUE NO SON DE ACEPTACIÓN: " + estadosSinAceptacion);
+
         int key = 0;
         HashMap<StatesAFD, HashSet<Integer>> L = new HashMap();
+
+        System.out.println("Valores de P: " + P);
 
         for (HashSet<StatesAFD> a : P) {
             HashSet<StatesAFD> grupoG = a;
             // System.out.println(grupoG);
+            System.out.println("Valores del grupo G: " + grupoG);
             for (StatesAFD s : grupoG) {
-                HashSet<StatesAFD> statesG = new HashSet<StatesAFD>();
-                statesG.add(s);
                 HashSet<Integer> Ds = new HashSet<Integer>();
                 // System.out.println(s.getTransiciones());
                 for (String alfabeto : getAlfabeto()) {
-                    HashSet<StatesAFD> t = mover_statesAFD(statesG, alfabeto);
+                    HashSet<StatesAFD> t = moves(grupoG, alfabeto);
 
                     for (int j = 0; j < P.size(); j++) {
 
@@ -447,7 +452,7 @@ public class AFDConverter {
              */
             int i = 0;
 
-            ArrayList Ki = new ArrayList();
+            //ArrayList Ki = new ArrayList();
             // Iterator <StatesAFD,HashSet<Integer>> it = L.keySet().iterator();
             for (StatesAFD estado : L.keySet()) {
                 HashSet<Integer> estado_num = L.get(estado);
@@ -467,15 +472,18 @@ public class AFDConverter {
 
                 System.out.println("----");
                 System.out.println(P);
-                System.out.println(Ki);
+                //System.out.println(Ki);
                 System.out.println(grupoG);
                 System.out.println("----");
-                if (Ki.get(0) != grupoG) {
+                
+
+                if (!grupoG.isEmpty()) {
                     P.remove(grupoG);
-                    System.out.println(Ki);
-                    System.out.println("ki" + Ki.get(1));
-                    for (int j = 0; j < Ki.size(); j++) {
-                        P.add((HashSet<StatesAFD>) Ki.get(j));
+                    //System.out.println(Ki);
+                    //System.out.println("ki" + Ki.get(1));
+                    for (int j = 0; j < P.size(); j++) {
+                        HashSet<StatesAFD> statesGrupoG = (HashSet<StatesAFD>) grupoG.toArray()[j];
+                        P.add(statesGrupoG);
                     }
 
                 }
