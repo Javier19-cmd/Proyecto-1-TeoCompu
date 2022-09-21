@@ -1,5 +1,5 @@
 /*
- * Clase de construcción para lo de subconjuntos AFD
+ * Clase de construcción para lo de subconjuntos AFD.
  */
 
 public class AFD {
@@ -16,6 +16,6 @@ public class AFD {
     } // Juntando estados del AFD.
 
     public String toString() {
-        return "De: " + this.de + " a: " + this.a + " con: " + this.simbolo;
+        return this.de + "-" + this.simbolo + "->" + this.a;
     }
 }

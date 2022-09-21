@@ -28,13 +28,11 @@ public class AFDConverter {
 
     List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
 
-    HashSet<AFD> resultado_trans = new HashSet<AFD>();
+    ArrayList<String> resultado_trans = new ArrayList<String>(); // Lista para guardar el resultado de las transiciones.
 
-    // Constructor del AFDConverter
+    HashSet<StatesAFD> estados_aceptacion = new HashSet<StatesAFD>(); // Hashset para guardar los estados de aceptación.
 
-    public AFDConverter() {
-
-    }
+    ArrayList<String> alfabetoAFD = new ArrayList<String>(); // ArrayList para el alfabeto.
 
     // Método para empezar a procesar los datos.
     public void Proceso(List<Transiciones> transiciones, Estado inicial, List<Estado> estadosFinales,
@@ -72,9 +70,12 @@ public class AFDConverter {
         resultado.add(cerraduraResult);
         // System.out.println("Resultado con cerraduraResult: " + resultado.toString());
 
+        // Guardando el alfabeto en un ArrayList global.
+        alfabetoAFD = alfabeto;
+
         // creados a continuación.
         ArrayList<HashSet<Estado>> temporal = new ArrayList<HashSet<Estado>>();
-        int index = 0;
+
         while (!totalStates.isEmpty()) {
 
             // System.out.println("totalStates Values" + totalStates.toString());
@@ -115,122 +116,99 @@ public class AFDConverter {
                     totalStates.add(eClosure);
                     temporal.add(eClosure);
 
-                    // Creando el estado para el subconjunto.
-                    StatesAFD nuevoEstado = new StatesAFD(temporal.indexOf(eClosure) + 1);
-
-                    estadosAFD.add(nuevoEstado);
-
-                    // System.out.println("Estado nuevo: " + nuevoEstado.toString());
-
-                    // Obteniendo el estado actual y el estado anterior.
-                    StatesAFD estadoAnterior = estadosAFD.get(index);
-
-                    System.out.println("Estado actual: " + nuevoEstado);
-                    System.out.println("Estado anterior: " + estadoAnterior);
-
-                    AFD afd = new AFD(estadoAnterior, nuevoEstado, simbolo);
-
-                    resultado_trans.add(afd);
-
-                    // System.out.println("Transición: " + afd.toString());
-
-                    // Instanciando la clase de AFD.
-
-                    // // Calculando estados nuevos del AFD.
-                    // StatesAFD nuevoEstado = new StatesAFD(temporal.indexOf(eClosure) + 1);
-
-                    // // Agregando el estado nuevo a la pila de estados del AFD.
-                    // estados_iniciales.push(nuevoEstado);
-
-                    // // Sacando el último estado del AFD.
-                    // StatesAFD estadoActual = estados_iniciales.pop();
-
-                    // transiciones(estadoActual, simbolo); // Calculando las transiciones del AFD.
-
-                    // Haciendo la transición del estado actual al nuevo estado.
-                    // AFD afd = new AFD(ultimoEstado, nuevoEstado, simbolo);
-
-                    // System.out.println("Transición: " + afd);
-
-                } else {
-                    // Si el subconjunto ya existe, entonces solo se crea la transición.
-                    // System.out.println("Entre al else de temporal");
-                    // System.out.println("Estado anterior: " + estadosAFD.get(index));
-                    // System.out.println("Estado actual: " +
-                    // estadosAFD.get(temporal.indexOf(eClosure)));
-                    // System.out.println("Símbolo: " + simbolo);
-
-                    AFD afd = new AFD(estadosAFD.get(index - 1), estadosAFD.get(temporal.indexOf(eClosure)), simbolo);
-
-                    resultado_trans.add(afd);
-
-                    // System.out.println("Transición: " + afd.toString());
                 }
 
             }
             // System.out.println((i++) + " " + "totalStates" + totalStates);
-            index++; // Aumentando el index.
         }
 
-        for (int l = 0; l < resultado.size(); l++) {
-            System.out.println("Subconjunto " + l + ": " + resultado.toArray()[l].toString());
+        // Por cada subconjunto del resultado, se crea un nuevo estado en el AFD.
+        for (int i = 0; i < resultado.size(); i++) {
+            // System.out.println("Subconjunto " + i + ": " +
+            // resultado.toArray()[i].toString());
+
+            // Creando el nuevo estado.
+            StatesAFD nuevoEstado = new StatesAFD(i);
+
+            // Agregando el nuevo estado a la lista de estados del AFD.
+            estadosAFD.add(nuevoEstado);
 
             // System.out.println("Estado: " + nuevoEstado);
         }
 
-        System.out.println("Estados: " + estadosAFD);
+        // Calculando el move de cada subconjunto, con cada símbolo del alfabeto.
+        for (int i = 0; i < alfabetoAFD.size(); i++) {
+            for (int j = 0; j < resultado.size(); j++) {
+                // System.out.println("Resultado: " + resultado.toArray()[j]);
 
-        // Creando iterador para recorrer las transiciones.
-        Iterator itr = resultado_trans.iterator();
+                // System.out.println("Tipo del resultado: " +
+                // resultado.toArray()[j].getClass());
 
-        while (itr.hasNext()) {
-            System.out.println(itr.next());
+                // Obteniendo el subconjunto actual.
+                HashSet<Estado> subconjuntoActual = (HashSet<Estado>) resultado.toArray()[j];
+
+                // System.out.println(
+                // "Resultado de move: " + mover(subconjuntoActual, alfabetoAFD.get(i)) + " con
+                // el símbolo "
+                // + alfabetoAFD.get(i));
+
+                // Calculando el eClosure de cada estado alcanzado.
+                HashSet<Estado> eClosure = new HashSet<Estado>();
+
+                for (Estado e : mover(subconjuntoActual, alfabetoAFD.get(i))) { // Guardando el eClosure de cada estado
+                                                                                // alcanzado.
+                    // System.out.println("RESULTADO ALCANZADO CON e: " + e.toString());
+                    // System.out.println(cerradura(moveResult.poll()));
+                    eClosure.addAll(cerradura(e));
+
+                }
+
+                // // Obteniendo el subconjunto al que se llega con el símbolo actual.
+                // int subconjuntoLlegada = ((Array<HashSet<Estado>>)
+                // resultado).indexOf(eClosure);
+
+                List<HashSet<Estado>> list = new ArrayList<HashSet<Estado>>(resultado);
+
+                // Imprimiendo a que subconjunto se llega con el símbolo actual.
+                // System.out.println(
+                // "Subconjunto: " + j + " con el símbolo " + alfabetoAFD.get(i) + " llega a: "
+                // + eClosure + " "
+                // + list.get(list.indexOf(eClosure)));
+
+                AFD afd = new AFD(estadosAFD.get(j), estadosAFD.get(list.indexOf(eClosure)),
+                        alfabetoAFD.get(i));
+
+                // System.out.println("Transición: " + afd.toString());
+
+                // Verificando si el resultado de la transición tiene un estado final.
+                for (Estado e : eClosure) {
+                    if (e.equals(aceptacion)) {
+                        // Obteniendo el estado que tenga el estado de aceptación.
+
+                        // System.out.println("Contenedor del estado de aceptación: " +
+                        // estadosAFD.get(list.indexOf(eClosure)));
+
+                        estados_aceptacion.add(estadosAFD.get(list.indexOf(eClosure))); // Guardando los estados de
+                                                                                        // aceptación.
+                    }
+                }
+
+                resultado_trans.add(afd.toString()); // Guardando la transición.
+
+            }
+
         }
 
-        // for (int i = 0; i < alfabetoAFD.size(); i++) {
-        // for (int j = 0; j < temporal.size(); j++) {
-        // System.out.println("Transición: " + alfabetoAFD.get(i) + " " +
-        // temporal.get(j).toString());
-        // System.out.println("Transición: " + alfabetoAFD.get(i) + " " +
-        // temporal.get(j).toString());
+        // Área de debuggeo.
 
-        // }
-        // }
+        // Imprimiendo cada resultado de la transición.
+        for (int i = 0; i < resultado_trans.size(); i++) {
+            System.out.println(resultado_trans.get(i));
+        }
 
-    }
+        System.out.println("Estados de aceptación: " + estados_aceptacion.toString());
 
-    // Creando método para armar las transiciones cuando se crea un nuevo estado.
-    public void transiciones(StatesAFD estadoActual, String simbolo) {
-
-        // Se crea un nuevo estado.
-        StatesAFD nuevoEstado = new StatesAFD(contadorEstados);
-
-        // Creando la transición.
-        AFD afd = new AFD(estadoActual, nuevoEstado, simbolo);
-
-        // Agregando el nuevo estado a la pila de estados finales.
-        estados_finales.push(nuevoEstado);
-
-        // Agregando el estado actual a la pila de estados iniciales.
-        estados_iniciales.push(estadoActual);
-
-        System.out.println("Transición: " + afd.toString());
-
-    }
-
-    // Creando método para armar las transiciones cuando no hay un nuevo estado.
-    public void transiciones(StatesAFD estadoActual, StatesAFD nuevoEstado, String simbolo) {
-
-        // Creando la transición.
-        AFD afd = new AFD(estadoActual, nuevoEstado, simbolo);
-
-        // Agregando el nuevo estado a la pila de estados finales.
-        estados_finales.push(nuevoEstado);
-
-        // Agregando el estado actual a la pila de estados iniciales.
-        estados_iniciales.push(estadoActual);
-
-        System.out.println("Transición: " + afd.toString());
+        System.out.println("Alfabeto del AFD: " + alfabetoAFD);
 
     }
 
