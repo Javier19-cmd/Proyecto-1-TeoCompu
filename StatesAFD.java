@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*; // Importando todas las librerías para evitar problemas.
 
 public class StatesAFD {
@@ -5,7 +6,6 @@ public class StatesAFD {
     private int idAFD; // Identificador del estado del AFD.
     private List<StatesAFD> estado_anteriorAFD; // Lista que guarda los estados anteriores del AFD.
     private List<StatesAFD> estado_siguienteAFD; // Lista que guarda los estados siguientes del AFD.
-
     private int inicio; // Variable que indica si el estado es de inicio o no.
     private int fin; // Variable que indica si el estado es de aceptación o no.
 
@@ -83,4 +83,6 @@ public class StatesAFD {
     public int getFinal() { // Método para obtener el estado final.
         return this.fin; // Se retorna el estado final.
     }
+
+    
 }
