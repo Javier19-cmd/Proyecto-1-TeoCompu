@@ -15,13 +15,20 @@ public class AFDConverter {
     // Creando variable para llevar el conteo de los estados del AFD.
     public static int contadorEstados = 0; // Contador de estados del AFD.
 
-    Stack<StatesAFD> estadosAFD = new Stack<>();
+    Stack<StatesAFD> estados_iniciales = new Stack<>();
+
+    Stack<StatesAFD> estados_finales = new Stack<>();
 
     HashSet<HashSet<Estado>> resultado = new HashSet<HashSet<Estado>>();
+
+    // Creando lista para guardar los estados del AFD.
+    ArrayList<StatesAFD> estadosAFD = new ArrayList<StatesAFD>();
 
     // Matriz para el resultado de eClosure.
 
     List<Estado> eClosure_List = new CopyOnWriteArrayList<Estado>();
+
+    HashSet<AFD> resultado_trans = new HashSet<AFD>();
 
     // Constructor del AFDConverter
 
@@ -41,10 +48,10 @@ public class AFDConverter {
         // Obteniendo el alfabeto del AFN.
         ArrayList<String> alfabetoAFD = new ArrayList<String>();
 
-        // Creamos el estado inicial de nuestro AFD
-        StatesAFD AFD = new StatesAFD();
-        StatesAFD inicialAFD = new StatesAFD(0);
-        estadosAFD.push(inicialAFD);
+        // // Creamos el estado inicial de nuestro AFD
+        // StatesAFD AFD = new StatesAFD();
+        // StatesAFD inicialAFD = new StatesAFD(0);
+        // estados_iniciales.push(inicialAFD);
 
         for (int i = 0; i < alfabeto.size(); i++) {
             alfabetoAFD.add(alfabeto.get(i));
@@ -108,29 +115,56 @@ public class AFDConverter {
                     totalStates.add(eClosure);
                     temporal.add(eClosure);
 
+                    // Creando el estado para el subconjunto.
+                    StatesAFD nuevoEstado = new StatesAFD(temporal.indexOf(eClosure) + 1);
+
+                    estadosAFD.add(nuevoEstado);
+
+                    // System.out.println("Estado nuevo: " + nuevoEstado.toString());
+
+                    // Obteniendo el estado actual y el estado anterior.
+                    StatesAFD estadoAnterior = estadosAFD.get(index);
+
+                    System.out.println("Estado actual: " + nuevoEstado);
+                    System.out.println("Estado anterior: " + estadoAnterior);
+
+                    AFD afd = new AFD(estadoAnterior, nuevoEstado, simbolo);
+
+                    resultado_trans.add(afd);
+
+                    // System.out.println("Transición: " + afd.toString());
+
                     // Instanciando la clase de AFD.
 
-                    // Calculando estados nuevos del AFD.
-                    StatesAFD nuevoEstado = new StatesAFD(contadorEstados);
+                    // // Calculando estados nuevos del AFD.
+                    // StatesAFD nuevoEstado = new StatesAFD(temporal.indexOf(eClosure) + 1);
 
-                    // Agregando el estado nuevo a la pila de estados del AFD.
-                    estadosAFD.push(nuevoEstado);
+                    // // Agregando el estado nuevo a la pila de estados del AFD.
+                    // estados_iniciales.push(nuevoEstado);
+
+                    // // Sacando el último estado del AFD.
+                    // StatesAFD estadoActual = estados_iniciales.pop();
+
+                    // transiciones(estadoActual, simbolo); // Calculando las transiciones del AFD.
 
                     // Haciendo la transición del estado actual al nuevo estado.
                     // AFD afd = new AFD(ultimoEstado, nuevoEstado, simbolo);
 
                     // System.out.println("Transición: " + afd);
 
-                } else { // Si ya existe el subconjunto, entonces solo se crean las transiciones que
-                         // llegan hacia ese estado.
+                } else {
+                    // Si el subconjunto ya existe, entonces solo se crea la transición.
+                    // System.out.println("Entre al else de temporal");
+                    // System.out.println("Estado anterior: " + estadosAFD.get(index));
+                    // System.out.println("Estado actual: " +
+                    // estadosAFD.get(temporal.indexOf(eClosure)));
+                    // System.out.println("Símbolo: " + simbolo);
 
-                    // Se obtienen los estados que ya existen en el AFD.
-                    StatesAFD estadoActual = estadosAFD.pop();
+                    AFD afd = new AFD(estadosAFD.get(index - 1), estadosAFD.get(temporal.indexOf(eClosure)), simbolo);
 
-                    // Se crea el nuevo estado.
-                    StatesAFD nuevoEstado = new StatesAFD(contadorEstados);
+                    resultado_trans.add(afd);
 
-                    // Creando
+                    // System.out.println("Transición: " + afd.toString());
                 }
 
             }
@@ -140,7 +174,63 @@ public class AFDConverter {
 
         for (int l = 0; l < resultado.size(); l++) {
             System.out.println("Subconjunto " + l + ": " + resultado.toArray()[l].toString());
+
+            // System.out.println("Estado: " + nuevoEstado);
         }
+
+        System.out.println("Estados: " + estadosAFD);
+
+        // Creando iterador para recorrer las transiciones.
+        Iterator itr = resultado_trans.iterator();
+
+        while (itr.hasNext()) {
+            System.out.println(itr.next());
+        }
+
+        // for (int i = 0; i < alfabetoAFD.size(); i++) {
+        // for (int j = 0; j < temporal.size(); j++) {
+        // System.out.println("Transición: " + alfabetoAFD.get(i) + " " +
+        // temporal.get(j).toString());
+        // System.out.println("Transición: " + alfabetoAFD.get(i) + " " +
+        // temporal.get(j).toString());
+
+        // }
+        // }
+
+    }
+
+    // Creando método para armar las transiciones cuando se crea un nuevo estado.
+    public void transiciones(StatesAFD estadoActual, String simbolo) {
+
+        // Se crea un nuevo estado.
+        StatesAFD nuevoEstado = new StatesAFD(contadorEstados);
+
+        // Creando la transición.
+        AFD afd = new AFD(estadoActual, nuevoEstado, simbolo);
+
+        // Agregando el nuevo estado a la pila de estados finales.
+        estados_finales.push(nuevoEstado);
+
+        // Agregando el estado actual a la pila de estados iniciales.
+        estados_iniciales.push(estadoActual);
+
+        System.out.println("Transición: " + afd.toString());
+
+    }
+
+    // Creando método para armar las transiciones cuando no hay un nuevo estado.
+    public void transiciones(StatesAFD estadoActual, StatesAFD nuevoEstado, String simbolo) {
+
+        // Creando la transición.
+        AFD afd = new AFD(estadoActual, nuevoEstado, simbolo);
+
+        // Agregando el nuevo estado a la pila de estados finales.
+        estados_finales.push(nuevoEstado);
+
+        // Agregando el estado actual a la pila de estados iniciales.
+        estados_iniciales.push(estadoActual);
+
+        System.out.println("Transición: " + afd.toString());
 
     }
 
