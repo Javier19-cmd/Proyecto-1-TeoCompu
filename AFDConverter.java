@@ -37,7 +37,7 @@ public class AFDConverter {
     static ArrayList<AFD> resultado_trans = new ArrayList<AFD>(); // Lista para guardar el resultado de las
                                                                   // transiciones.
 
-    private static ArrayList<StatesAFD> estados_aceptacion = new ArrayList<StatesAFD>(); // Hashset para guardar los estados
+    private static HashSet<StatesAFD> estados_aceptacion = new HashSet<StatesAFD>(); // Hashset para guardar los estados
                                                                                      // de
     // aceptación.
 
@@ -305,6 +305,24 @@ public class AFDConverter {
         return resultado;
     }
 
+    public static StatesAFD moveState(StatesAFD estado, String simbolo){
+        ArrayList<StatesAFD> alcanzados = new ArrayList();
+        for (int g=0; g<resultado_trans.size();g++){
+            StatesAFD siguiente = resultado_trans.get(g).getA();
+            System.out.println("Valores de siguiente: " + siguiente);
+            String simb = (String) resultado_trans.get(g).getSimbolo();
+            
+            if (simb.equals(simbolo)&&!alcanzados.contains(siguiente)){
+                alcanzados.add(siguiente);
+            }
+
+        }
+
+        System.out.println("Valores alcanzados: " + alcanzados);
+       
+        return alcanzados.get(0);
+    }
+
     // Método de move para el AFD.
     public static HashSet<StatesAFD> moves(HashSet<StatesAFD> estado, String simbolo) {
         HashSet<StatesAFD> resultado = new HashSet<StatesAFD>(); // Creando HashSet para guardar los resultados de los
@@ -325,6 +343,8 @@ public class AFDConverter {
                 resultado.add(s);
             }
         }
+
+        System.out.println("Valores del resultado del move: " + resultado);
 
         return resultado;
     }
@@ -351,19 +371,22 @@ public class AFDConverter {
     }
 
     // Getter de las transiciones.
-    public static ArrayList<StatesAFD> getAceptacion() {
+    public static HashSet<StatesAFD> getAceptacion() {
         return estados_aceptacion;
     }
 
+    /*
+     * Método para realizar la Minimización con el 
+     * algoritmo de Hopcroft
+     */
     public static void MinimizacionAFD() {
-        ArrayList<ArrayList<StatesAFD>> particionP = new ArrayList();
+        //Creamos el conjunto de partición P
+        HashSet<HashSet<StatesAFD>> particionP = new HashSet<HashSet<StatesAFD>>();
         
         /*separar los estados entre los que perteneen al conjunto de estados de aceptacion
-        * y los que no, y agregar estos grupos aun conjutno de partició P
-        * Ojo: esto significa que la particion P al principio tiene un conjunto con
-        * los estados de no acpetacion y otro grupo con los de aceptacion
+        * y los que no.
         */
-        ArrayList<StatesAFD> estadosSinAceptacion = new ArrayList();
+        HashSet<StatesAFD> estadosSinAceptacion = new HashSet<StatesAFD>();
         for (int i = 0 ; i<getEstados().size();i++){
             if (!getAceptacion().contains(getEstados().get(i))){
                estadosSinAceptacion.add(getEstados(i));
@@ -377,101 +400,82 @@ public class AFDConverter {
         
        
         int key= 0;
+        //Creamos el conjunto L
         HashMap<StatesAFD,ArrayList<Integer>> L = new HashMap();
         
-        for (int p=0;p<particionP.size();p++){
-           ArrayList<StatesAFD> grupoG = particionP.get(p);
-           System.out.println("Valores del grupoG: " + grupoG);
+        for (HashSet <StatesAFD> pP: particionP){
+           HashSet<StatesAFD> grupoG = pP;
+           // System.out.println(grupoG);
             for (StatesAFD s: grupoG){
-                System.out.println("Valores s: " + s);
-                HashSet<StatesAFD> estadoS = new HashSet<StatesAFD>();
-                estadoS.add(s);
                  ArrayList<Integer> Ds = new ArrayList();
                 //System.out.println(s.getTransiciones());
                 for (String alfabeto: getAlfabeto()){
-                    System.out.println("Simbolo del alfabeto a evaluar: " + alfabeto);
-                    System.out.println("EstadosS: " + estadoS);
-                    System.out.println("Move: " + moves(estadoS, alfabeto));
-                    HashSet <StatesAFD> St = moves(estadoS, alfabeto);
-                    //System.out.println("Valores de St: " + St);
-                    for (StatesAFD a: St){
-                        StatesAFD t = a;
-                        for (int j = 0 ;j<particionP.size();j++){
-                            if (particionP.get(j).contains(t)){
-                                Ds.add(j);
-                                
-                            }
-                        L.put(s, Ds);
-
-                        //System.out.println("Valores de L, después de put: " + L);
-                        //System.out.println(Ds + "Ds");
-                        }
-                    }
+                    //Se envía el estado junto con el símbolo para analizar su move
+                    StatesAFD t = moveState(s, alfabeto);
                     
+                    for (int j = 0 ;j<particionP.size();j++){
+                        
+                        
+                        if (pP.contains(t)){
+                            Ds.add(j);
+                            
+                        }
+                        L.put(s, Ds); //Sacamos Dx y se lo metemos a L
+                        //System.out.println(Ds + "Ds");
+                      
+                    }
                 }
                 
                 
                 //System.out.println(Ds+ " Ds");
-            key++;
-
-            System.out.println("Valores key: " + key);
+            key++;    
             }
-             
-           // System.out.println(L);
-            
-            
-            /*
-            tabla2 = new HashMap();
-                    for (Estado e : grupoG) {
-                        ArrayList<Integer> alcanzados = tablaDs.get(e);
-                        if (tabla2.containsKey(alcanzados))
-                            tabla2.get(alcanzados).add(e);
-                        else {
-                            ArrayList<Estado> tmp = new ArrayList();
-                            tmp.add(e);
-                            tabla2.put(alcanzados, tmp);
-                        }
-                    }
-            */
+
             int i = 0;
-           System.out.println("Si muestra la i: " + i);
-           System.out.println("Valores de L: " + L);
-         ArrayList Ki = new ArrayList();
+           //Creamos nuestro ArrayList Ki donde se almacenará el estado X de Dx
+         HashSet <StatesAFD> Ki = new HashSet<StatesAFD>();
          while (!L.isEmpty()){  
                 HashMap<ArrayList<Integer>, ArrayList<StatesAFD>> tabla2 = new HashMap();
                 for (StatesAFD e : grupoG) {
                         ArrayList<Integer> alcanzados = L.get(e);
-                        if (tabla2.containsKey(alcanzados))
+                        if (tabla2.containsKey(alcanzados)){
                             tabla2.get(alcanzados).add(e);
-                        else {
+                            Ki.add(e);
+                        }
+                        else  {
                             ArrayList<StatesAFD> tmp = new ArrayList();
                             tmp.add(e);
-                            tabla2.put(alcanzados, tmp);
+                            tabla2.put(alcanzados, tmp);                            
                         }
                     }
               
-                
+                System.out.println("Valores de la tabla 2: " + tabla2);
              
              
             i++;
             
-            System.out.println("Valores i: " + i);
+            System.out.println("Valores de i: " + i);
             
             System.out.println("----");
             System.out.println(particionP);
             System.out.println(Ki);
             System.out.println(grupoG);
             System.out.println("----");
-            if (Ki.get(0)!=grupoG){
-                particionP.remove(grupoG);
-                System.out.println(Ki);
-                System.out.println("ki" + Ki.get(1));
-               for (int j  =0 ;j<Ki.size();j++){
-                   particionP.add((ArrayList<StatesAFD>) Ki.get(j));
-               }
-                
+            
+            for(StatesAFD statesKi: Ki){
+                HashSet <StatesAFD>getStatesKi = new HashSet<StatesAFD>();
+                getStatesKi.add(statesKi);
+                if (!grupoG.contains(statesKi)){
+                    particionP.remove(grupoG);
+                    System.out.println(Ki);
+                    //System.out.println("ki " + Ki.get(1));
+                   for (int j  =0 ;j<Ki.size();j++){
+                        particionP.add(getStatesKi);
+                   }
+                    
+                }
             }
-           
+            
         }
          System.out.println(particionP);
         }
