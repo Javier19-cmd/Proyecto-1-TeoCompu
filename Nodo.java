@@ -94,11 +94,11 @@ public class Nodo {
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
-    public int getNumHijos() {
+    public int getNumHojas() {
         return h;
     }
 
-    public void setNumHijos(int h) {
+    public void setNumHojas(int h) {
         this.h += h;
     }
     
