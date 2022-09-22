@@ -1,10 +1,10 @@
 import java.util.*;
 
 public class TreeStates {
-	private int simbolo;
+	private int simbolo; //El ID o label unico del estado del arbol
 	private Set<Integer> posiciones;
 	private boolean hl;
-	private boolean finalState;
+	private boolean finalState; //Verifica si el estado es uno de aceptacion
 	
 	public TreeStates(int simbolo) {
 		this.setSimbolo(simbolo);
@@ -38,7 +38,7 @@ public class TreeStates {
 	public boolean isFinalState() {
 		return finalState;
 	}
-
+	//Si posiciones contiene la posicion INT enviada desde afuera, entonces es un estado final.
 	public void setFinalState(int posicion) {
 		if(posiciones.contains(posicion)) {
 			this.finalState = true;
