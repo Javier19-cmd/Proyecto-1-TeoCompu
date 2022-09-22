@@ -7,15 +7,15 @@ import java.util.*;
 
 public class ArbolSintactico {
 	private String regex;
-	private Nodo root;
-	private Set<Integer> nextPos[];
+	private Nodo root; //La raiz del arbol a generar
+	private Set<Integer> nextPos[]; 
 	private Hashtable<Character, Set<Integer>> pos = null;
-	private int extremos;
+	private int extremos; //Un contador de los estados del arbol, al principio se iba a usar extremos.
 	private int index;
 	 
 	@SuppressWarnings("unchecked")
 	public ArbolSintactico(String regex) {
-		 this.regex = "(" + regex + ")#";
+		 this.regex = "(" + regex + ")#"; //Aumentando la expresion REGEX añadiendo # al final.
 		 this.pos = new Hashtable<>();
 		 this.root = new Nodo('.');
 		 this.extremos = 0;
@@ -32,10 +32,12 @@ public class ArbolSintactico {
 	     }
 	}
 	// Operadores: |, ., +, *, (, )
+	//Verificando si los operadores son los declarados anteriormente. Regresa true si lo son.
 	private boolean Operadores(char charAt) {
 		return charAt == '|' || charAt == '.' || charAt == '+' || charAt == '*'
 				|| charAt == '(' || charAt == ')';
 	}
+	//Verificando si los caracteres son validos. Regresa true si lo son.
 	private boolean Caracteres(char charAt) {
 		return Character.isLetterOrDigit(charAt) || charAt == '&' || charAt == '#';
 	}
@@ -65,7 +67,7 @@ public class ArbolSintactico {
     public Set<Integer>[] getNextPos() {
         return this.nextPos;
     } 
-    
+    //Usamos la clase regex con el metodo evaluar para obtener el postfix.
     public void generateTree(){
         regex post = new regex();
         String r = "";
@@ -74,6 +76,7 @@ public class ArbolSintactico {
 		String post_value = post.evaluar(r);
         postfixToTree(post_value);
     }
+	//Creamos el arbol desde postfix usando un stack de tipo nodos
 	private void postfixToTree(String post_value) {
 		Stack<Nodo> n = new Stack<>();
         Nodo act, next, prev;
@@ -103,6 +106,7 @@ public class ArbolSintactico {
         root = n.pop();
 		
 	}
+	//Generamos los nodos izquierdo y derecho, y dependiendo del caso se hace una operacion distinta
     private void generatePrevAndNextPos(Nodo nodo) {
     	if (nodo == null) {
             return;
@@ -176,6 +180,7 @@ public class ArbolSintactico {
         	nodo.setNullable(false);
         }
     }
+	//Unimos los nodos
     private void generateUnion(Nodo nodo, boolean b) {
 		// TODO Auto-generated method stub
 		if(b){
@@ -198,6 +203,7 @@ public class ArbolSintactico {
             }
         }	
 	}
+	//Generamos followpos
 	private void generateNextPos(Nodo nodo) {
 		Set<Integer> ultpos1 = nodo.getPrevNodo().getUltPos();
         switch(nodo.getSimbolo()){
