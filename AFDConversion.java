@@ -1,13 +1,13 @@
 import java.util.*;
 
 public class AFDConversion {
-	private ArrayList<TreeStates> estados;
-	private Set<Character> alfabeto;
+	private ArrayList<TreeStates> estados; //Lista de estados
+	private Set<Character> alfabeto; //El alfabeto a usar, por ejemplo a,b
 	private Set<Integer> primPosRaiz, nextPos[];
-	private Hashtable<Character,Integer> minimizedD[];
+	private Hashtable<Character,Integer> minimizedD[]; //Hashtable de los estados a guardar y a minimizar
     private Hashtable<Character, Set<Integer>> pos;
-    private int extremos = 0;
-    private int cestados = 0;
+    private int extremos = 0; //Contador
+    private int cestados = 0; //Contador
     
     @SuppressWarnings("unchecked")
 	public AFDConversion(ArbolSintactico as, String regex) {
@@ -24,7 +24,7 @@ public class AFDConversion {
     public Set<Character> getAlfabeto(){
         return this.alfabeto;
     }
-    public Set<Integer> getEstados(int simbolo){
+    public Set<Integer> getEstados(int simbolo){ //Getter de los estados
         return estados.get(simbolo - 1).getPosiciones();
     }
     public int getExtremos(){
@@ -44,7 +44,7 @@ public class AFDConversion {
 	public boolean esFinal(int label){
         return this.estados.get(label - 1).isFinalState();
     }
-	private boolean Caracter(char simbolo){
+	private boolean Caracter(char simbolo){ //Verificar que el caracter es letra o digito o # regresa true
         return Character.isLetterOrDigit(simbolo) || simbolo == '#';
     }
 	 public void crearAFD(){
