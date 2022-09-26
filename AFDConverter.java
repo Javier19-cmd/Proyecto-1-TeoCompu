@@ -512,6 +512,43 @@ public class AFDConverter {
 
         System.out.println("Nuevas particiones: " + nuevas_particiones);
 
+        // Con las nuevas particiones, se verifica con que estado se puede llegar a cada
+        // partición.
+        // Creando un HashMap para guardar los estados alcanzados.
+        HashMap<String, ArrayList<StatesAFD>> estados_alcanzados_particiones = new HashMap<String, ArrayList<StatesAFD>>();
+
+        // Para cada partición.
+        for (ArrayList<StatesAFD> particion : nuevas_particiones) {
+            // System.out.println("Partición: " + particion);
+
+            // Creando un ArrayList para guardar los estados alcanzados.
+            ArrayList<StatesAFD> estados_alcanzadoss = new ArrayList<StatesAFD>();
+
+            // Para cada estado de la partición.
+            for (StatesAFD estado : particion) {
+                // System.out.println("Estado: " + estado);
+
+                // Para cada símbolo del alfabeto.
+                for (String simbolo : alfabetoAFDs) {
+                    // System.out.println("Símbolo: " + simbolo);
+
+                    // Obteniendo el estado alcanzado.
+                    ArrayList<StatesAFD> estado_alcanzado = moveState(estado, simbolo);
+
+                    // System.out.println("Estado alcanzado: " + estado_alcanzado);
+
+                    // Agregando el estado alcanzado al ArrayList de estados alcanzados.
+                    estados_alcanzadoss.addAll(estado_alcanzado);
+                }
+            }
+
+            // Guardando los estados alcanzados en el HashMap.
+            estados_alcanzados_particiones.put(particion.toString(), estados_alcanzadoss);
+            // System.out.println("Estados alcanzados: " + estados_alcanzados);
+        }
+
+        System.out.println(estados_alcanzados_particiones);
+
     }
 
     // Método para escribir el archivo con extensión txt.
