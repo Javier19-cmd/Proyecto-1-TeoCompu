@@ -382,7 +382,7 @@ public class AFDConverter {
      * algoritmo de Hopcroft
      */
     public static void MinimizacionAFD() {
-        // Creando un HashMap para guardar los estados que se van a dividir.
+        // Creando un ArrayList para guardar los estados que se van a dividir.
         ArrayList<ArrayList<StatesAFD>> particiones = new ArrayList<ArrayList<StatesAFD>>();
 
         // Dividiendo los estados en dos grupos.
@@ -419,7 +419,7 @@ public class AFDConverter {
         System.out.println("Particiones: " + particiones);
 
         // Ahora se procede a crear nuevas particiones.
-        // Creando un ArrayList para guardar las nuevas particiones.
+        // Creando un HashSet para guardar las nuevas particiones.
         HashSet<HashSet<StatesAFD>> nuevas_particiones = new HashSet<HashSet<StatesAFD>>();
 
         HashMap<String, ArrayList<StatesAFD>> estados_alcanzados = new HashMap<String, ArrayList<StatesAFD>>();
@@ -487,7 +487,7 @@ public class AFDConverter {
 
             // System.out.println("Grupos: " + grupos);
 
-            // Creando un ArrayList para guardar los estados que pertenecen a los grupos.
+            // Creando un HashSet para guardar los estados que pertenecen a los grupos.
             HashSet<StatesAFD> estados = new HashSet<StatesAFD>();
 
             // Para cada grupo.
@@ -549,6 +549,14 @@ public class AFDConverter {
 
         System.out.println(estados_alcanzados_particiones);
 
+    }
+
+    public static HashSet<AFD> getAFDMinimizado(HashMap<String, HashSet<StatesAFD>> estados_alcanzados){
+        HashSet <AFD> afd = new HashSet<AFD>();
+
+        
+
+        return afd;
     }
 
     // Método para escribir el archivo con extensión txt.

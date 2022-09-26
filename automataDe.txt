@@ -1,5 +1,5 @@
 Estado inicial: [0]
 Alfabeto: [a, b]
-Estados de aceptación: [2, 7, 3, 6]
+Estados de aceptación: [0, 5, 4, 1]
 Estados del AFD: [0, 1, 2, 3, 4, 5, 6, 7]
-Transiciones del AFD: [0-a->3, 1-a->4, 2-a->2, 3-a->4, 4-a->4, 5-a->3, 6-a->7, 7-a->2, 0-b->0, 1-b->0, 2-b->5, 3-b->5, 4-b->5, 5-b->6, 6-b->0, 7-b->5]
+Transiciones del AFD: [0-a->6, 1-a->4, 2-a->0, 3-a->0, 4-a->4, 5-a->1, 6-a->6, 7-a->6, 0-b->3, 1-b->3, 2-b->2, 3-b->5, 4-b->3, 5-b->2, 6-b->3, 7-b->2]
