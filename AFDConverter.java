@@ -50,6 +50,16 @@ public class AFDConverter {
                                                                                              // subconjunto de estados
                                                                                              // de aceptación.
 
+    // Guardando el estado de aceptación en un ArrayList para escribirlo en el
+    // archivo.
+    static ArrayList<StatesAFD> grupo2Archivo = new ArrayList<StatesAFD>();
+
+    // Guardando el estado inicial en un ArrayList para escribirlo en el archivo.
+    static ArrayList<StatesAFD> grupo1_inicial = new ArrayList<StatesAFD>();
+
+    // Creando HashSet para guardar las transiciones del AFD.
+    static HashSet<String> transicionesAFD = new HashSet<String>();
+
     // Método para empezar a procesar los datos.
     public void Proceso(List<Transiciones> transiciones, Estado inicial, List<Estado> estadosFinales,
             ArrayList<String> alfabeto, Stack<Estado> estados, Estado aceptacion) {
@@ -389,6 +399,8 @@ public class AFDConverter {
         ArrayList<StatesAFD> grupo1 = new ArrayList<StatesAFD>();
         ArrayList<StatesAFD> grupo2 = new ArrayList<StatesAFD>();
 
+        // Guardando el grupo1 en el grupo1_inicial.
+
         // Agregando los estados de aceptación al grupo 1.
         for (int i = 0; i < estados_aceptacion.size(); i++) {
             // Obteniendo del HashSet de estados de aceptación el estado.
@@ -417,6 +429,16 @@ public class AFDConverter {
 
         // Imprimiendo las particiones.
         System.out.println("Particiones: " + particiones);
+
+        // Agregando los estados del grupo 2 al ArrayList.
+        for (int i = 0; i < grupo2.size(); i++) {
+            grupo2Archivo.add(grupo2.get(i));
+        }
+
+        // Agregando los estados del grupo 2 al ArrayList.
+        for (int i = 0; i < grupo1.size(); i++) {
+            grupo1_inicial.add(grupo1.get(i));
+        }
 
         // Ahora se procede a crear nuevas particiones.
         // Creando un HashSet para guardar las nuevas particiones.
@@ -510,7 +532,7 @@ public class AFDConverter {
 
         }
 
-        System.out.println("Nuevas particiones: " + nuevas_particiones);
+        // System.out.println("Nuevas particiones: " + nuevas_particiones);
 
         // Con las nuevas particiones, se verifica con que estado se puede llegar a cada
         // partición.
@@ -547,14 +569,202 @@ public class AFDConverter {
             // System.out.println("Estados alcanzados: " + estados_alcanzados);
         }
 
-        System.out.println(estados_alcanzados_particiones);
+        System.out.println("Particiones: " + estados_alcanzados_particiones);
+
+        // Imprimiendo con que símbolo se puede llegar a la partición.
+        for (String particion : estados_alcanzados_particiones.keySet()) {
+            // System.out.println("Partición: " + particion);
+
+            // Obteniendo los estados alcanzados.
+            HashSet<StatesAFD> estados_alcanzados_particion = estados_alcanzados_particiones.get(particion);
+
+            // System.out.println("Estados alcanzados: " + estados_alcanzados_particion);
+
+            // Para cada estado alcanzado.
+            for (StatesAFD estado_alcanzado : estados_alcanzados_particion) {
+                // System.out.println("Estado alcanzado: " + estado_alcanzado);
+
+                // Para cada grupo.
+                for (ArrayList<StatesAFD> grupo : particiones) {
+                    // System.out.println("Grupo: " + grupo);
+
+                    // Verificando si el estado alcanzado está en el grupo.
+                    if (grupo.contains(estado_alcanzado)) {
+                        // System.out.println("Estado alcanzado: " + estado_alcanzado + " está en el
+                        // grupo: " + grupo);
+
+                        // Obteniendo el símbolo.
+                        String simbolo = getSymbol(estado_alcanzado, grupo);
+
+                        if (alfabetoAFDs.contains(simbolo)) {
+
+                            // Obteniendo el estado desde donde se va a la partición hasta donde se va a la
+                            // partición y el símbolo.
+                            ArrayList<StatesAFD> estado_desde_particion = getFromState(particion, grupo);
+
+                            // Obteniendo el estado hasta donde se va a la partición.
+                            ArrayList<StatesAFD> estado_hasta_particion = getToState(particion, grupo);
+
+                            // System.out.println("Estado desde partición: " + estado_desde_particion);
+                            // Obteniendo el símbolo hacia donde se va a la partición.
+                            String simbolos = getSymbol(estado_alcanzado, grupo);
+
+                            // Armando la transición.
+                            String transicion = estado_desde_particion + " , " + simbolos + " , "
+                                    + estado_hasta_particion;
+
+                            // System.out.println("Transición: " + transicion);
+
+                            // Agregando la transición al HashSet de transiciones.
+                            transicionesAFD.add(transicion);
+
+                        }
+
+                        // System.out.println("Símbolo: " + simbolo);
+
+                    }
+                }
+            }
+        }
 
     }
 
-    public static HashSet<AFD> getAFDMinimizado(HashMap<String, HashSet<StatesAFD>> estados_alcanzados){
-        HashSet <AFD> afd = new HashSet<AFD>();
+    // Método para escribir el AFD minimizado.
+    public static void writeAFDMinimizado() {
+        try {
+            // Creando el archivo con codificado UTF-8.
+            File archivo = new File("automataMinimizado.txt");
 
-        
+            // Creando el archivo si no existe.
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+
+            // Creando el escritor.
+            FileWriter escritor = new FileWriter(archivo);
+
+            BufferedWriter bw = new BufferedWriter(escritor);
+
+            // System.out.println("Expresión regular en el método escribirArchivo: " +
+            // expresion_postfixs + "");
+
+            // escritor.write("Expresión regular: " + expresion_postfixs);
+
+            // Escribiendo las transiciones.
+            bw.write("Transiciones:" + transicionesAFD.toString());
+            bw.newLine();
+
+            // Escribiendo el alfabeto.
+            bw.write("Alfabeto: " + alfabetoAFDs.toString());
+            bw.newLine();
+
+            // Escribiendo los estados que son de aceptación.
+            bw.write("Subconjuntos de aceptación: " + grupo2Archivo.toString());
+            bw.newLine();
+
+            // Escribiendo el estado inicial.
+            bw.write("Estado inicial: " + grupo1_inicial.toString());
+            bw.newLine();
+
+            // Cerrando el escritor.
+            bw.close();
+
+            // Escribiendo en el archivo.
+        } catch (Exception e) {
+            System.out.println("Error al escribir el archivo.");
+        }
+    }
+
+    // Método para obtener el estado hacia donde se va a la partición.
+    public static ArrayList<StatesAFD> getToState(String particion, ArrayList<StatesAFD> grupo) {
+        // System.out.println("Partición: " + particion);
+        // System.out.println("Grupo: " + grupo);
+
+        // Obteniendo el estado hacia donde se va a la partición.
+        String estado_hasta_particion = "";
+
+        ArrayList<StatesAFD> estados_hasta_particion = new ArrayList<StatesAFD>();
+
+        // Para cada estado del grupo.
+        for (StatesAFD estado_grupo : grupo) {
+            // System.out.println("Estado del grupo: " + estado_grupo);
+
+            // Obteniendo el estado hacia donde se va a la partición.
+            estado_hasta_particion = estado_grupo.toString();
+
+            estados_hasta_particion = grupo;
+        }
+
+        // System.out.println("Estado hacia donde se va a la partición: " +
+        // estado_hasta_particion);
+
+        return estados_hasta_particion;
+    }
+
+    // Método para obtener el grupo desde donde se va a la partición hasta donde se
+    // va a la partición.
+    public static ArrayList<StatesAFD> getFromState(String particion, ArrayList<StatesAFD> grupo) {
+        // System.out.println("Partición: " + particion);
+        // System.out.println("Grupo: " + grupo);
+
+        // Obteniendo el estado desde donde se va a la partición.
+        String estado_desde_particion = "";
+
+        ArrayList<StatesAFD> estados_desde_particion = new ArrayList<StatesAFD>();
+
+        // Para cada estado del grupo.
+        for (StatesAFD estado_grupo : grupo) {
+            // System.out.println("Estado del grupo: " + estado_grupo);
+
+            // Obteniendo el estado desde donde se va a la partición.
+            estado_desde_particion = estado_grupo.toString();
+
+            // Agregando el grupo desde donde se va a la partición.
+            estados_desde_particion = grupo;
+
+            // Obteniendo la partición del estado.
+            // System.out.println("Partición del estado: " + estado_grupo + " es: " +
+            // grupo);
+        }
+
+        // System.out.println("Estado desde donde se va a la partición: " +
+        // estado_desde_particion);
+
+        return estados_desde_particion;
+    }
+
+    // Método para obtener el símbolo con el que se puede llegar a un estado.
+    public static String getSymbol(StatesAFD estado_alcanzado, ArrayList<StatesAFD> grupo) {
+        // Para cada estado del grupo.
+        for (StatesAFD estado_grupo : grupo) {
+            // System.out.println("Estado del grupo: " + estado_grupo);
+
+            // Para cada símbolo del alfabeto.
+            for (String simbolo : alfabetoAFDs) {
+                // System.out.println("Símbolo: " + simbolo);
+
+                // Obteniendo el estado alcanzado.
+                HashSet<StatesAFD> estado_alcanzado2 = moveState(estado_grupo, simbolo);
+
+                // System.out.println("Estado alcanzado: " + estado_alcanzado2);
+
+                // Verificando si el estado alcanzado es el estado que se busca.
+                if (estado_alcanzado2.contains(estado_alcanzado)) {
+                    // System.out.println("Estado alcanzado: " + estado_alcanzado + " es el estado
+                    // que se busca.");
+
+                    // Retornando el símbolo.
+                    return simbolo;
+                }
+            }
+        }
+
+        // Retornando null.
+        return null;
+    }
+
+    public static HashSet<AFD> getAFDMinimizado(HashMap<String, HashSet<StatesAFD>> estados_alcanzados) {
+        HashSet<AFD> afd = new HashSet<AFD>();
 
         return afd;
     }

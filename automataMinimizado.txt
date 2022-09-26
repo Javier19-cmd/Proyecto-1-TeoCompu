@@ -1,0 +1,4 @@
+Transiciones:[[0, 1, 2, 3] , b , [0, 1, 2, 3], [0, 1, 2, 3] , a , [0, 1, 2, 3]]
+Alfabeto: [a, b]
+Subconjuntos de aceptación: [0, 1, 2, 3]
+Estado inicial: []

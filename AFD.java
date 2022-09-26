@@ -61,4 +61,11 @@ public class AFD {
         return transiciones;
     }
 
+    // Método para crear la transición entre los grupo.
+    public HashSet<StatesAFD> crearTransicion(HashSet<StatesAFD> de, HashSet<StatesAFD> a, String simbolo) {
+        // Creando el HashSet para el resultado.
+        HashSet<StatesAFD> resultado = new HashSet<StatesAFD>();
+
+        return resultado;
+    }
 }
