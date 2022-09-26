@@ -65,7 +65,7 @@ public class Lector {
         // Minimizando el AFD
         AFDConverter.MinimizacionAFD();
 
-        AFDConverter.Simulacion(); // Simulando el AFD.
+        // AFDConverter.Simulacion(); // Simulando el AFD.
 
     }
 }
