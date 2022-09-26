@@ -305,8 +305,8 @@ public class AFDConverter {
         return resultado;
     }
 
-    public static ArrayList<StatesAFD> moveState(StatesAFD estado, String simbolo) {
-        ArrayList<StatesAFD> alcanzados = new ArrayList<StatesAFD>();
+    public static HashSet<StatesAFD> moveState(StatesAFD estado, String simbolo) {
+        HashSet<StatesAFD> alcanzados = new HashSet<StatesAFD>();
 
         // Metiendo el estado a un HashSet para poder utilizar el método mover.
         HashSet<StatesAFD> estadoSet = new HashSet<StatesAFD>();
@@ -420,7 +420,7 @@ public class AFDConverter {
 
         // Ahora se procede a crear nuevas particiones.
         // Creando un ArrayList para guardar las nuevas particiones.
-        HashSet<ArrayList<StatesAFD>> nuevas_particiones = new HashSet<ArrayList<StatesAFD>>();
+        HashSet<HashSet<StatesAFD>> nuevas_particiones = new HashSet<HashSet<StatesAFD>>();
 
         HashMap<String, ArrayList<StatesAFD>> estados_alcanzados = new HashMap<String, ArrayList<StatesAFD>>();
 
@@ -442,7 +442,7 @@ public class AFDConverter {
                     // System.out.println("Símbolo: " + simbolo);
 
                     // Obteniendo el estado alcanzado.
-                    ArrayList<StatesAFD> estado_alcanzado = moveState(s, simbolo);
+                    HashSet<StatesAFD> estado_alcanzado = moveState(s, simbolo);
 
                     // System.out.println("Estado alcanzado: " + estado_alcanzado);
 
@@ -488,7 +488,7 @@ public class AFDConverter {
             // System.out.println("Grupos: " + grupos);
 
             // Creando un ArrayList para guardar los estados que pertenecen a los grupos.
-            ArrayList<StatesAFD> estados = new ArrayList<StatesAFD>();
+            HashSet<StatesAFD> estados = new HashSet<StatesAFD>();
 
             // Para cada grupo.
             for (ArrayList<StatesAFD> grupo : grupos) {
@@ -515,14 +515,14 @@ public class AFDConverter {
         // Con las nuevas particiones, se verifica con que estado se puede llegar a cada
         // partición.
         // Creando un HashMap para guardar los estados alcanzados.
-        HashMap<String, ArrayList<StatesAFD>> estados_alcanzados_particiones = new HashMap<String, ArrayList<StatesAFD>>();
+        HashMap<String, HashSet<StatesAFD>> estados_alcanzados_particiones = new HashMap<String, HashSet<StatesAFD>>();
 
         // Para cada partición.
-        for (ArrayList<StatesAFD> particion : nuevas_particiones) {
+        for (HashSet<StatesAFD> particion : nuevas_particiones) {
             // System.out.println("Partición: " + particion);
 
             // Creando un ArrayList para guardar los estados alcanzados.
-            ArrayList<StatesAFD> estados_alcanzadoss = new ArrayList<StatesAFD>();
+            HashSet<StatesAFD> estados_alcanzadoss = new HashSet<StatesAFD>();
 
             // Para cada estado de la partición.
             for (StatesAFD estado : particion) {
@@ -533,7 +533,7 @@ public class AFDConverter {
                     // System.out.println("Símbolo: " + simbolo);
 
                     // Obteniendo el estado alcanzado.
-                    ArrayList<StatesAFD> estado_alcanzado = moveState(estado, simbolo);
+                    HashSet<StatesAFD> estado_alcanzado = moveState(estado, simbolo);
 
                     // System.out.println("Estado alcanzado: " + estado_alcanzado);
 
