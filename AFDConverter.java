@@ -903,4 +903,77 @@ public class AFDConverter {
         }
 
     }
+
+    // Método para hacer la simulación del AFD minimizado.
+    public static void SimulacionMinimizado() {
+        long startTime = System.nanoTime(); // Conteo inicial de la simulación.
+        System.out.println("Ingrese la cadena a evaluar: ");
+        Scanner sc = new Scanner(System.in);
+        String cadena = sc.nextLine();
+
+        System.out.println("La cadena es: " + cadena);
+
+        // Ingresando la cadena a un ArrayList.
+        ArrayList<String> cadena_array = new ArrayList<String>();
+
+        // Guardando el estado inicial del AFD en una variable.
+        // Conviritendo el HashSet a un arreglo.
+        StatesAFD[] estadosAFD_array = estadosAFD.toArray(new StatesAFD[estadosAFD.size()]);
+
+        // Sacando el primer elemento del arreglo.
+        StatesAFD estado_inicial = estadosAFD_array[0];
+
+        // System.out.println("Estado inicial: " + estado_inicial);
+
+        // Imprimiendo el HashSet de resultados.
+        // System.out.println("HashSet de resultados: " + resultado.toString());
+
+        HashSet<Estado> es = (HashSet<Estado>) estado_inicial_AFD.toArray()[0];
+
+        System.out.println("Primera posición del HashSet: " + es);
+
+        HashSet<StatesAFD> es2 = new HashSet<StatesAFD>(); // HashSet de estados del AFD.
+
+        // Agregando cada caracter de la cadena a un ArrayList.
+        for (int i = 0; i < cadena.length(); i++) {
+            cadena_array.add(String.valueOf(cadena.charAt(i)));
+
+            // Si la cadena contiene un caracter que no está en el alfabeto, se termina la
+            // simulación.
+            if (!alfabetoAFDs.contains(String.valueOf(cadena.charAt(i)))) {
+                System.out.println("La cadena contiene un caracter que no está en el alfabeto.");
+                return;
+            }
+
+            AFD afd = new AFD();
+
+            afd.getTransicionesEstado(AFDConverter.estado_inicial);
+
+            // System.out.println("Tipo del estado inicial: " +
+            // AFDConverter.estado_inicial.getClass());
+
+            // Calculando el move del estado.
+            // es = move(AFDConverter.estado_inicial.getClass(),
+            // String.valueOf(cadena.charAt(i)));
+
+            System.out.println(
+                    "Resultado del move: " + moves(AFDConverter.estado_inicial, String.valueOf(cadena.charAt(i))));
+
+            // Guardando el resultado del move en una variable.
+            es2 = moves(AFDConverter.estado_inicial, String.valueOf(cadena.charAt(i)));
+
+            long endTime = System.nanoTime(); // Tiempo de finalización.
+
+            double duracion = (endTime - startTime) / (1e6); // Tiempo de duración de la simulación.
+
+            System.out.println("El tiempo de duración fue: " + duracion + "ms.");
+
+            // Verificando si el estado es de aceptación.
+            if (estados_aceptacion.contains(es2)) {
+                System.out.println("La cadena es aceptada.");
+            } else {
+                System.out.println("La cadena no es aceptada.");
+            }
+        }
+    }
 }
