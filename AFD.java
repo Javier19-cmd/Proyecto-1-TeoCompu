@@ -10,6 +10,7 @@ public class AFD {
     private static Set<Integer>[] followPos;
     private static Node root;
     private static Set<State> DStates;
+    private static HashSet<String> AFDResult;
 
     private static Set<String> input; //Set de caracteres de entrada que se usan en la expresion regular
     /*
@@ -100,20 +101,19 @@ public class AFD {
         SyntaxTree st = new SyntaxTree(regex);
         root = st.getRoot(); //root of the syntax tree
         followPos = st.getFollowPos(); //the followpos of the syntax tree
-
-        /**
-         * creating the DFA using the syntax tree were created upside and
-         * returning the start state of the resulted DFA
-         */
+        /*
+         * Creando el AFD usando el árbol de sintaxis que se creó arriba y
+         * devolviendo el estado de inicio del AFD resultante
+        */
         State q0 = createDFA();
         DfaTraversal dfat = new DfaTraversal(q0, input);
-        //System.out.println("DFA:" + tmp.toString());
+        //System.out.println("DFA:" + dfat.toString());
         boolean acc = false;
         for (char c : cadena.toCharArray()) {
             if (dfat.setCharacter(c)) {
                 acc = dfat.traverse();
             } else {
-                System.out.println("CARACTER NO DEFECTUOSO!");
+                System.out.println("CARACTER DEFECTUOSO!");
                 System.exit(0);
             }
         }
@@ -160,6 +160,7 @@ public class AFD {
     private static State createDFA() {
         int id = 0;
         Set<Integer> firstpos_n0 = root.getFirstPos();
+        AFDResult = new HashSet<String>();
 
         State q0 = new State(id++);
         q0.asignarTodoNombre(firstpos_n0);
@@ -168,7 +169,7 @@ public class AFD {
         }
         DStates.clear();
         DStates.add(q0);
-        System.out.println("Estado inicial: " + q0.getName());
+        //System.out.println("Estado inicial: " + q0.getName());
         while (true) {
             boolean exit = true;
             State s = null;
@@ -185,7 +186,7 @@ public class AFD {
             if (s.getIsMarked()) {
                 continue;
             }
-            s.setIsMarked(true); //mark the state Marcar el estado
+            s.setIsMarked(true); //Marcar el estado
             Set<Integer> name = s.getName();
             for (String a : input) {
                 Set<Integer> U = new HashSet<>();
@@ -213,6 +214,11 @@ public class AFD {
                     tmp = q;
                 }
                 s.move(a, tmp);
+                //System.out.println("Estados: " + tmp.getName().toString());
+                //System.out.println("Transiciones: " + a.toString());
+            System.out.println("Estado: " + s.getName().toString());
+                AFDResult.add(s.getName().toString() + " - " + a.toString() + " -> " + tmp.getName().toString());
+                
             }
         }
         
@@ -220,8 +226,7 @@ public class AFD {
     }
 
     public String toStringRegexAFD(){
-        
-        return createDFA().getName()+ "-" + this.input.toString() + "->" + this.DStates.toString();
+        return AFDResult.toString();
     }
 
 }

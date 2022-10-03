@@ -31,11 +31,11 @@ public class State {
         nombre.addAll(number);
     }
     
-    public void setIsMarked(boolean bool){
+    public void setIsMarked(boolean bool){ //Para marcar los estados de aceptación
         IsMarked = bool;
     }
     
-    public boolean getIsMarked(){
+    public boolean getIsMarked(){ //Para marcar los estados de aceptación
         return IsMarked;
     }
     
@@ -43,11 +43,11 @@ public class State {
         return nombre;
     }
 
-    public void setAccept() {
+    public void setAccept() { // Para setear los estados de aceptación
         IsAcceptable = true;
     }
     
-    public boolean getIsAcceptable(){
+    public boolean getIsAcceptable(){ // Obtener los estados de aceptación
         return  IsAcceptable;
     }
     

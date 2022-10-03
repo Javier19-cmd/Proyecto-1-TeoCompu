@@ -146,7 +146,7 @@ class BinaryTree {
 
                 default:
                     System.out.println(">>" + charAt);
-                    System.out.println("Unkown Symbol !");
+                    System.out.println("No se reconoce el simbolo!");
                     System.exit(1);
                     break;
             }

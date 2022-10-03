@@ -84,7 +84,7 @@ public class Lector {
         System.out.println("Intruoduzca la cadena a evaluar: ");
         String cadena = teclado.nextLine(); // lee la cadena a evaluar
         afd.initialize(r, cadena);
-        System.out.println("AFD generado: " + afd.toStringRegexAFD());
+        //System.out.println("AFD generado: " + afd.toStringRegexAFD());
         
 
     }

@@ -23,6 +23,7 @@ public class DfaTraversal {
     
     public boolean traverse(){
         curr = curr.siguienteEstadoConSimbolo(""+c);
+        //System.out.println("Estado actual: " + curr.getName().toString());
         return curr.getIsAcceptable();
     }
 }
