@@ -2,6 +2,9 @@
  * Clase de construcción para lo de subconjuntos AFD.
  */
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 
 public class AFD {
@@ -118,9 +121,9 @@ public class AFD {
             }
         }
         if (acc) {
-            System.out.println((char) 27 + "[32m" + "La cadena ingresada es aceptada por el regex!");
+            System.out.println("La cadena ingresada es aceptada por el regex!");
         } else {
-            System.out.println((char) 27 + "[31m" + "La cadena ingresada no es aceptada por el regex!");
+            System.out.println("La cadena ingresada no es aceptada por el regex!");
         }
     }
 
@@ -191,19 +194,28 @@ public class AFD {
             for (String a : input) {
                 Set<Integer> U = new HashSet<>();
                 for (int p : name) {
+                    //System.out.println("p: " + p);
                     if (symbNum.get(p).equals(a)) {
+                        //System.out.println("symbNum: " + symbNum.get(p));
                         U.addAll(followPos[p - 1]);
+                        
                     }
                 }
+                //System.out.println("U: " + U);
                 boolean flag = false;
                 State tmp = null;
                 for (State state : DStates) {
                     if (state.getName().equals(U)) {
                         tmp = state;
                         flag = true;
+                        //System.out.println("Estado: " + state.getName());
                         break;
                     }
+                    
                 }
+
+                
+                
                 if (!flag) {
                     State q = new State(id++);
                     q.asignarTodoNombre(U);
@@ -212,21 +224,63 @@ public class AFD {
                     }
                     DStates.add(q);
                     tmp = q;
+                    AFDResult.add(s.getName() + " -- " + a + " --> " + q.getName());
                 }
                 s.move(a, tmp);
                 //System.out.println("Estados: " + tmp.getName().toString());
                 //System.out.println("Transiciones: " + a.toString());
-            System.out.println("Estado: " + s.getName().toString());
-                AFDResult.add(s.getName().toString() + " - " + a.toString() + " -> " + tmp.getName().toString());
+            //System.out.println("Estado: " + s.getName().toString());
+            //AFDResult.add(s.getName().toString() + " - " + a.toString() + " -> " + tmp.getName().toString());
                 
             }
         }
         
+        //System.out.println("AFD: " + q0.getName().toString());
+
         return q0;
     }
 
     public String toStringRegexAFD(){
         return AFDResult.toString();
+    }
+
+    //Escritura del AFD a un archivo de texto
+
+    public static void writeAFDDirecto() {
+        try {
+            // Creando el archivo con codificado UTF-8.
+            File archivo = new File("AFDdirecto.txt");
+
+            // Creando el archivo si no existe.
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+
+            // Creando el escritor.
+            FileWriter escritor = new FileWriter(archivo);
+
+            BufferedWriter bw = new BufferedWriter(escritor);
+
+            // System.out.println("Expresión regular en el método escribirArchivo: " +
+            // expresion_postfixs + "");
+
+            // escritor.write("Expresión regular: " + expresion_postfixs);
+
+            // Escribiendo las transiciones.
+            bw.write("Transiciones:" + AFDResult.toString());
+            bw.newLine();
+
+            // Escribiendo el alfabeto.
+            bw.write("Alfabeto: " + input.toString());
+            bw.newLine();
+
+            // Cerrando el escritor.
+            bw.close();
+
+            // Escribiendo en el archivo.
+        } catch (Exception e) {
+            System.out.println("Error al escribir el archivo.");
+        }
     }
 
 }
