@@ -1,22 +1,19 @@
 import java.util.HashSet;
 import java.util.Set;
 
-/* 
- * Clase que representa un nodo de un arbol de expresiones regulares.
-*/
 
-public class Nodo {
+public class Node {
 
     private String simbolo;
-    private Nodo origen;
-    private Nodo izquierda;
-    private Nodo derecha;
+    private Node origen;
+    private Node izquierda;
+    private Node derecha;
 
     private Set<Integer> firstPos;
     private Set<Integer> lastPos;
     private boolean nullable;
 
-    public Nodo(String simbolo) {
+    public Node(String simbolo) {
         this.simbolo = simbolo;
         origen = null;
         izquierda = null;
@@ -28,58 +25,58 @@ public class Nodo {
     }
 
     /**
-     * @return el simbolo del nodo
-	 */
-    public String obtenerSimbolo() {
+     * @return el simbolo
+     */
+    public String getSimbolo() {
         return simbolo;
     }
 
     /**
-     * @param simbolo setea el simbolo del nodo
+     * @param simbolo para setear
      */
-    public void setSimbolo(String simbolo) {
+    public void setSymbol(String simbolo) {
         this.simbolo = simbolo;
     }
 
     /**
-     * @return el orgien del nodo
+     * @return el origen del nodo
      */
-    public Nodo getOrigen() {
+    public Node getOrigen() {
         return origen;
     }
 
     /**
-     * @param origen setea el padre del nodo
+     * @param origen para setear
      */
-    public void setOrigen(Nodo origen) {
+    public void setOrigen(Node parent) {
         this.origen = origen;
     }
 
     /**
-     * @return  obtiene la rama izquierda del nodo
+     * @return la izquierda del nodo
      */
-    public Nodo getIzquierda() {
+    public Node getIzquierda() {
         return izquierda;
     }
 
     /**
-     * @param izquierda setea la rama izquierda del nodo
+     * @param izquierda para setear
      */
-    public void setIzquierda(Nodo izquierda) {
+    public void setLeft(Node izquierda) {
         this.izquierda = izquierda;
     }
 
     /**
-     * @return obtiene la rama derecha del nodo
+     * @return la derecha del nodo
      */
-    public Nodo getDerecha() {
+    public Node getDerecha() {
         return derecha;
     }
 
     /**
-     * @param derecha setea la rama derecha del nodo
+     * @param derecha para setear
      */
-    public void setDerecha(Nodo derecha) {
+    public void setRight(Node derecha) {
         this.derecha = derecha;
     }
 
@@ -98,31 +95,30 @@ public class Nodo {
     }
 
     /**
-     * @return firstPos
+     * @return el firstPos
      */
     public Set<Integer> getFirstPos() {
         return firstPos;
     }
 
     /**
-     * @return lastPos
+     * @return el lastPos
      */
     public Set<Integer> getLastPos() {
         return lastPos;
     }
 
     /**
-     * @return nullable
+     * @return the nullable
      */
     public boolean isNullable() {
         return nullable;
     }
 
     /**
-     * @param nullable el nullable a setear
+     * @param nullable the nullable to set
      */
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
 }
-

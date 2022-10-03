@@ -2,16 +2,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class regextoafdStates{
+
+public class StateAFD {
     
     private int ID;
     private Set<Integer> name;
-    private HashMap<String, regextoafdStates> move;
+    private HashMap<String, StateAFD> move;
     
     private boolean IsAcceptable;
     private boolean IsMarked;
     
-    public regextoafdStates(int ID){
+    public StateAFD(int ID){
         this.ID = ID;
         move = new HashMap<>();
         name = new HashSet<>();
@@ -19,7 +20,7 @@ public class regextoafdStates{
         IsMarked = false;
     }
     
-    public void addMove(String symbol, regextoafdStates s){
+    public void addMove(String symbol, StateAFD s){
         move.put(symbol, s);
     }
     
@@ -50,11 +51,11 @@ public class regextoafdStates{
         return  IsAcceptable;
     }
     
-    public regextoafdStates getNextStateBySymbol(String str){
+    public StateAFD getNextStateBySymbol(String str){
         return this.move.get(str);
     }
     
-    public HashMap<String, regextoafdStates> getAllMoves(){
+    public HashMap<String, StateAFD> getAllMoves(){
         return move;
     }
     

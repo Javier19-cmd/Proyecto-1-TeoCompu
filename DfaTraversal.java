@@ -1,12 +1,13 @@
 import java.util.Set;
-public class RecorridoRegextoAFD {
+
+public class DfaTraversal {
     
-    private final regextoafdStates q0;
-    private regextoafdStates curr;
+    private final State q0;
+    private State curr;
     private char c;
     private final Set<String> input;
     
-    public RecorridoRegextoAFD(regextoafdStates q0, Set<String> input){
+    public DfaTraversal(State q0, Set<String> input){
         this.q0 = q0;
         this.curr = this.q0;
         this.input = input;
@@ -21,7 +22,7 @@ public class RecorridoRegextoAFD {
     }
     
     public boolean traverse(){
-        curr = curr.getNextStateBySymbol(""+c);
+        curr = curr.siguienteEstadoConSimbolo(""+c);
         return curr.getIsAcceptable();
     }
 }

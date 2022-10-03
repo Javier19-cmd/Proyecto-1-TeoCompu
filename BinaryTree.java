@@ -1,10 +1,10 @@
 import java.util.*;
 
-class ArbolBinario {
+class BinaryTree {
     
     /*
         ***
-            (a|b)*a => creando la sintaxis de la expresión regular para el arbol binario.
+            (a|b)*a => creando el arbol sintactico binario: 
                                 .
                                / \
                               *   a
@@ -17,21 +17,22 @@ class ArbolBinario {
 
     private int leafNodeID = 0;
     
-    //Creamos dos pilas, una para los simbolos y otra para los operadores.
-    private Stack<Nodo> stackNode = new Stack<>();
+    // Stacks para los nodos de simbolos y operadores
+    private Stack<Node> stackNode = new Stack<>();
     private Stack<Character> operator = new Stack<Character>();
 
-    // Set de caracteres que representan los operadores
+    //Set de entradas
     private Set<Character> input = new HashSet<Character>();
     private ArrayList<Character> op = new ArrayList<>();
 
-    //Gerando el arbol binario con la expresion regular y retornando su raiz.
-    public Nodo generateTree(String regular) {
+    // Genera el arbol sintactico binario usando la expresion regular y retorna la raiz del arbol
+    public Node generateTree(String regular) {
 
         Character[] ops = {'*', '|', '&'};
         op.addAll(Arrays.asList(ops));
 
-        //Solamente los simbolos disponibles del alfabeto
+        // Solamente se permiten los siguientes simbolos
+        // a-z, A-Z, 0-9, *, |, &, (, ), #
         Character ch[] = new Character[26 + 26];
         for (int i = 65; i <= 90; i++) {
             ch[i - 65] = (char) i;
@@ -43,33 +44,33 @@ class ArbolBinario {
         input.addAll(Arrays.asList(integer));
         input.addAll(Arrays.asList(others));
 
-
-        //Generar la expresion regular con la concatenacion
+        // Se agrega el simbolo de concatenacion
+        // Generar la expresion regular con la concatenacion
         regular = AddConcat(regular);
         
-        // Limpiando las pilas
+        // Se limpian los stacks
         stackNode.clear();
         operator.clear();
 
-
-        // Marca que es verdadero cuando hay algo como: \( o \* o etc
-        boolean esSimbolo = false;
+        // Se recorre la expresion regular
+        // Marcar cuando hay algo como: \( o \* o etc
+        boolean isSymbol = false;
 
         for (int i = 0; i < regular.length(); i++) {
 
             if (regular.charAt(i) == '\\') {
-                esSimbolo = true;
+                isSymbol = true;
                 continue;
             }
-            if (esSimbolo || isInputCharacter(regular.charAt(i))) {
-                if (esSimbolo) {
-                    //Creando un nodo con el simbolo "\{simbolo}"
+            if (isSymbol || isInputCharacter(regular.charAt(i))) {
+                if (isSymbol) {
+                    // Crear un nodo con el simbolo "\{simbolo}" 
                     pushStack("\\"+Character.toString(regular.charAt(i)));
                 }
                 else{
                     pushStack(Character.toString(regular.charAt(i)));
                 }
-                esSimbolo = false;
+                isSymbol = false;
             } else if (operator.isEmpty()) {
                 operator.push(regular.charAt(i));
 
@@ -78,55 +79,55 @@ class ArbolBinario {
 
             } else if (regular.charAt(i) == ')') {
                 while (operator.get(operator.size() - 1) != '(') {
-                    realizarOperacion();
+                    doOperation();
                 }
 
-                //Pop el '(' izquierdo parentesis
+                // Se popea el '(' izquierdo de la pila de operadores
                 operator.pop();
 
             } else {
                 while (!operator.isEmpty()
-                        && simbolosPrioritarios(regular.charAt(i), operator.get(operator.size() - 1))) {
-                    realizarOperacion();
+                        && Priority(regular.charAt(i), operator.get(operator.size() - 1))) {
+                    doOperation();
                 }
                 operator.push(regular.charAt(i));
             }
         }
 
-        // Limpia los elementos restantes en la pila
+        // Se limpian los elementos restantes en la pila
         while (!operator.isEmpty()) {
-            realizarOperacion();
+            doOperation();
         }
 
-        // Obtiene el arbol completo
-        Nodo completeTree = stackNode.pop();
+        // Se retornar el arbol completo
+        Node completeTree = stackNode.pop();
         return completeTree;
     }
 
-    private boolean simbolosPrioritarios(char primero, Character segundo) {
-        if (primero == segundo) {
+    private boolean Priority(char first, Character second) {
+        if (first == second) {
             return true;
         }
-        if (primero == '*') {
+        if (first == '*') {
             return false;
         }
-        if (segundo == '*') {
+        if (second == '*') {
             return true;
         }
-        if (primero == '&') {
+        if (first == '&') {
             return false;
         }
-        if (segundo == '&') {
+        if (second == '&') {
             return true;
         }
-        if (primero == '|') {
+        if (first == '|') {
             return false;
         }
         return true;
     }
 
-    // Hace la operacion deseada basado en el tope de la pila
-    private void realizarOperacion() {
+    // Hacer el operador deseado basado en el tope de la pila
+    private void doOperation() {
         if (this.operator.size() > 0) {
             char charAt = operator.pop();
 
@@ -136,11 +137,11 @@ class ArbolBinario {
                     break;
 
                 case ('&'):
-                    Concatenacion();
+                    concatenation();
                     break;
 
                 case ('*'):
-                    Kleen();
+                    Kleene();
                     break;
 
                 default:
@@ -152,45 +153,47 @@ class ArbolBinario {
         }
     }
 
-    // Hacer la operación de Kleen
-    private void Kleen() {
+    // Se hace la operacion de cerradura de Kleene
+    private void Kleene() {
         // Recuperar el nodo superior de la pila
-        Nodo node = stackNode.pop();
+        Node node = stackNode.pop();
 
-        Nodo root = new Nodo("*");
-        root.setIzquierda(node);
-        root.setDerecha(null);
+        Node root = new Node("*");
+        root.setLeft(node);
+        root.setRight(null);
         node.setOrigen(root);
 
         // Poner el nodo de nuevo en la pila
         stackNode.push(root);
     }
 
-    // Hacer la operación de concatenación
-    private void Concatenacion() {
+    // Se hace la operacion de concatenacion
+    private void concatenation() {
         // Recuperar el nodo 1 y 2 de la pila
-        Nodo node2 = stackNode.pop();
-        Nodo node1 = stackNode.pop();
+        Node node2 = stackNode.pop();
+        Node node1 = stackNode.pop();
 
-        Nodo root = new Nodo("&");
-        root.setDerecha(node1);
-        root.setDerecha(node2);
+        Node root = new Node("&");
+        root.setLeft(node1);
+        root.setRight(node2);
         node1.setOrigen(root);
         node2.setOrigen(root);
 
+        // Put node back to stackNode
         // Poner el nodo de nuevo en la pila
         stackNode.push(root);
     }
 
-    // Hacer union de sub nodo 1 con sub nodo 2
+    // Se hace la operacion de union
+    // Hacer la union de los sub nodos 1 y con el sub nodo 2
     private void union() {
         // Cargar dos nodos en la pila en variables
-        Nodo node2 = stackNode.pop();
-        Nodo node1 = stackNode.pop();
+        Node node2 = stackNode.pop();
+        Node node1 = stackNode.pop();
 
-        Nodo root = new Nodo("|");
-        root.setIzquierda(node1);
-        root.setDerecha(node2);
+        Node root = new Node("|");
+        root.setLeft(node1);
+        root.setRight(node2);
         node1.setOrigen(root);
         node2.setOrigen(root);
 
@@ -198,35 +201,33 @@ class ArbolBinario {
         stackNode.push(root);
     }
 
-    // Pushear el simbolo de entrada en la pila
+    // Poner el simbolo de entrada en la pila
     private void pushStack(String symbol) {
-        Nodo node = new hojaNodo(symbol, ++leafNodeID);
-        node.setIzquierda(null);
-        node.setDerecha(null);
+        Node node = new LeafNode(symbol, ++leafNodeID);
+        node.setLeft(null);
+        node.setRight(null);
 
-        // POner el nodo de nuevo en la pila
+        // Poner el nodo de nuevo en la pila
         stackNode.push(node);
     }
 
-
-    // Añade "." cuando es concatenacion entre dos simbolos que: "." -> "&"
+    // Agregar "." cuando es concatenacion entre dos simbolos que: "." -> "&"
     // se concatenan entre si
     private String AddConcat(String regular) {
         String newRegular = new String("");
 
         for (int i = 0; i < regular.length() - 1; i++) {
-             /*
-                * Considerando que a y b son caracteres en Σ
+             /* 
+              * Considerar que a y b son caracteres en Σ
                 * y el conjunto: {'(', ')', '*', '+', '&', '|'} son los operadores
-                * entonces, si '&' es el símbolo de concatenación, tenemos que concatenar tales expresiones:
+                * entonces, si '&' es el simbolo de concatenacion, tenemos que concatenar las siguientes expresiones:
                 * a & b
                 * a & (
                 * ) & a
                 * * & a
                 * * & (
                 * ) & (
-              */
-
+             */
             if (regular.charAt(i) == '\\' && isInputCharacter(regular.charAt(i + 1))) {
                 newRegular += regular.charAt(i);
             } else if (regular.charAt(i) == '\\' && regular.charAt(i + 1) == '(') {
@@ -258,7 +259,7 @@ class ArbolBinario {
         return newRegular;
     }
 
-    // Retornar verdadero si es parte del lenguaje del autómata, de lo contrario es falso
+    // Retornar true si es parte del lenguaje del automata, de lo contrario es false
     private boolean isInputCharacter(char charAt) {
 
         if (op.contains(charAt)) {
@@ -272,21 +273,20 @@ class ArbolBinario {
         return false;
     }
     
-
-    // Método para probar el método buildTree()
-    public void printInorder(Nodo node) {
+    // Este metodo es solo para probar buildTree()
+    public void printInorder(Node node) {
         if (node == null) {
             return;
         }
 
-        // Primer recorrido en el hijo izquierdo
+
+        // Primero se recorre el hijo izquierdo
         printInorder(node.getIzquierda());
 
-        // Luego imprimir el dato del nodo
-        System.out.print(node.obtenerSimbolo() + " ");
+        // Después se imprime el nodo
+        System.out.print(node.getSimbolo() + " ");
 
-
-        // Ahora recorrer el hijo derecho
+        // Por ultimo se recorre el hijo derecho
         printInorder(node.getDerecha());
     }
     

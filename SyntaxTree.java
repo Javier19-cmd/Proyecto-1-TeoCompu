@@ -1,22 +1,20 @@
-
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class SyntaxTree {
 
     private String regex;
-    private ArbolBinario bt;
-    private Nodo root; //the head of raw syntax tree
+    private BinaryTree bt;
+    private Node root; //la cabeza del arbol sintactico
     private int numOfLeafs;
     private Set<Integer> followPos[];
 
     public SyntaxTree(String regex) {
         this.regex = regex;
-        bt = new ArbolBinario();
+        bt = new BinaryTree();
         
         /**
-         * generando el arbol binario de la expresion regular
+         * Generar el arbol binario del arbol sintactico
          */
         root = bt.generateTree(regex);
         numOfLeafs = bt.getNumberOfLeafs();
@@ -30,16 +28,16 @@ public class SyntaxTree {
         generateFollowPos(root);
     }
 
-    private void generateNullable(Nodo node) {
+    private void generateNullable(Node node) {
         if (node == null) {
             return;
         }
-        if (!(node instanceof hojaNodo)) {
-            Nodo left = node.getIzquierda();
-            Nodo right = node.getDerecha();
+        if (!(node instanceof LeafNode)) {
+            Node left = node.getIzquierda();
+            Node right = node.getDerecha();
             generateNullable(left);
             generateNullable(right);
-            switch (node.obtenerSimbolo()) {
+            switch (node.getSimbolo()) {
                 case "|":
                     node.setNullable(left.isNullable() | right.isNullable());
                     break;
@@ -53,23 +51,24 @@ public class SyntaxTree {
         }
     }
 
-    private void generateFirstposLastPos(Nodo node) {
+    private void generateFirstposLastPos(Node node) {
         if (node == null) {
             return;
         }
-        if (node instanceof hojaNodo) {
-            hojaNodo lnode = (hojaNodo) node;
+        if (node instanceof LeafNode) {
+            LeafNode lnode = (LeafNode) node;
             node.addToFirstPos(lnode.getNum());
             node.addToLastPos(lnode.getNum());
         } else {
-            Nodo left = node.getIzquierda();
-            Nodo right = node.getDerecha();
+            Node left = node.getIzquierda();
+            Node right = node.getDerecha();
             generateFirstposLastPos(left);
             generateFirstposLastPos(right);
-            switch (node.obtenerSimbolo()) {
+            switch (node.getSimbolo()) {
                 case "|":
                     node.addAllToFirstPos(left.getFirstPos());
                     node.addAllToFirstPos(right.getFirstPos());
+                    //
                     node.addAllToLastPos(left.getLastPos());
                     node.addAllToLastPos(right.getLastPos());
                     break;
@@ -96,13 +95,13 @@ public class SyntaxTree {
         }
     }
 
-    private void generateFollowPos(Nodo node) {
+    private void generateFollowPos(Node node) {
         if (node == null) {
             return;
         }
-        Nodo left = node.getIzquierda();
-        Nodo right = node.getDerecha();
-        switch (node.obtenerSimbolo()) {
+        Node left = node.getIzquierda();
+        Node right = node.getDerecha();
+        switch (node.getSimbolo()) {
             case "&":
                 Object lastpos_c1[] = left.getLastPos().toArray();
                 Set<Integer> firstpos_c2 = right.getFirstPos();
@@ -123,7 +122,7 @@ public class SyntaxTree {
 
     }
 
-    public void show(Nodo node) {
+    public void show(Node node) {
         if (node == null) {
             return;
         }
@@ -143,7 +142,7 @@ public class SyntaxTree {
         return followPos;
     }
 
-    public Nodo getRoot() {
+    public Node getRoot() {
         return this.root;
     }
 }

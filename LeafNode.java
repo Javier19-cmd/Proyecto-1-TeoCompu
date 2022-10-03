@@ -1,47 +1,48 @@
 import java.util.HashSet;
 import java.util.Set;
 
-public class hojaNodo extends Nodo {
+public class LeafNode extends Node {
 
     private int num;
     private Set<Integer> followPos;
 
-    public hojaNodo(String symbol, int num) {
+    public LeafNode(String symbol, int num) {
         super(symbol);
         this.num = num;
         followPos = new HashSet<>();
     }
 
     /**
-     * @return the num
+     * @return el número del nodo
      */
     public int getNum() {
         return num;
     }
 
     /**
-     * @param num the num to set
+     * @param num el número del nodo para setear
      */
     public void setNum(int num) {
         this.num = num;
     }
-    
+     /*
+      * Se calcula el followPos de un nodo hoja
+      */
     public void addToFollowPos(int number){
         followPos.add(number);
     }
 
     /**
-     * @return the followPos
+     * @return se retorna un set con los followPos
      */
     public Set<Integer> getFollowPos() {
         return followPos;
     }
 
     /**
-     * @param followPos the followPos to set
+     * @param followPos los followPos para setear
      */
     public void setFollowPos(Set<Integer> followPos) {
         this.followPos = followPos;
     }
 }
-
