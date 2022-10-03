@@ -388,7 +388,7 @@ public class AFDConverter {
     }
 
     /*
-     * Método para realizar la Minimización con el
+     * Método para realizar la minimización con el
      * algoritmo de Hopcroft
      */
     public static void MinimizacionAFD() {
@@ -610,7 +610,7 @@ public class AFDConverter {
                             String simbolos = getSymbol(estado_alcanzado, grupo);
 
                             // Armando la transición.
-                            String transicion = estado_desde_particion + " , " + simbolos + " , "
+                            String transicion = estado_desde_particion + " - " + simbolos + " -> "
                                     + estado_hasta_particion;
 
                             // System.out.println("Transición: " + transicion);

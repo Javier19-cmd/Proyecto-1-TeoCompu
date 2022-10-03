@@ -1,117 +1,128 @@
 import java.util.HashSet;
 import java.util.Set;
 
+/* 
+ * Clase que representa un nodo de un arbol de expresiones regulares.
+*/
+
 public class Nodo {
-	public String simbolo;
-	private Nodo prev;
-	private Nodo par;
-	private Nodo next;
-	private Set<Integer> primera_pos, ultima_pos;
-	private int pos;
-	private boolean nullable;
-	private int h;
-	private int index;
-	
-	public Nodo(String simbolo) {
-		this.simbolo = simbolo;
-		prev = null;
-		par = null;
-		next = null;
-		this.primera_pos = new HashSet<>();
-		this.ultima_pos = new HashSet<>();
-		h = 0;
-		index = 0;
-	}
-	
-	public String getSimbolo() {
-		return simbolo;
-	}
-	
-	public void setSimbolo(String simbolo) {
-		this.simbolo = simbolo;
-	}
-	
-	public Nodo getNextNodo() {
-		return this.next;
-	}
-	
-	public void setNextNodo(Nodo next) {
-		this.next = next;
-	}
-	
-	public Nodo getPrevNodo() {
-		return this.prev;
-	}
-	
-	public void setPrevNodo(Nodo prev) {
-		this.prev = prev;
-	}
-	
-	public Nodo getParNodo() {
-		return this.par;
-	}
-	
-	public void setParNodo(Nodo par) {
-		this.par = par;
-	}
-	
-	public int getPosicion() {
-        return pos;
+
+    private String simbolo;
+    private Nodo origen;
+    private Nodo izquierda;
+    private Nodo derecha;
+
+    private Set<Integer> firstPos;
+    private Set<Integer> lastPos;
+    private boolean nullable;
+
+    public Nodo(String simbolo) {
+        this.simbolo = simbolo;
+        origen = null;
+        izquierda = null;
+        derecha = null;
+
+        firstPos = new HashSet<>();
+        lastPos = new HashSet<>();
+        nullable = false;
     }
 
-    public void setPosicion(int pos) {
-        this.pos = pos;
+    /**
+     * @return el simbolo del nodo
+	 */
+    public String obtenerSimbolo() {
+        return simbolo;
     }
-    
-    public void addPrimPos(int num) {
-    	this.primera_pos.add(num);
+
+    /**
+     * @param simbolo setea el simbolo del nodo
+     */
+    public void setSimbolo(String simbolo) {
+        this.simbolo = simbolo;
     }
-    
-    public void addUltPos(int num) {
-    	this.ultima_pos.add(num);
+
+    /**
+     * @return el orgien del nodo
+     */
+    public Nodo getOrigen() {
+        return origen;
     }
-    
-    public Set<Integer> getPrimPos(){
-        return this.primera_pos;
+
+    /**
+     * @param origen setea el padre del nodo
+     */
+    public void setOrigen(Nodo origen) {
+        this.origen = origen;
     }
-    
-    public void setPrimPos(Set<Integer> primera_pos){
-        this.primera_pos = primera_pos;
+
+    /**
+     * @return  obtiene la rama izquierda del nodo
+     */
+    public Nodo getIzquierda() {
+        return izquierda;
     }
-    
-    public Set<Integer> getUltPos(){
-        return this.ultima_pos;
+
+    /**
+     * @param izquierda setea la rama izquierda del nodo
+     */
+    public void setIzquierda(Nodo izquierda) {
+        this.izquierda = izquierda;
     }
-    
-    public void setUltPos(Set<Integer> ultima_pos){
-        this.ultima_pos = ultima_pos;
+
+    /**
+     * @return obtiene la rama derecha del nodo
+     */
+    public Nodo getDerecha() {
+        return derecha;
     }
-    
-    public boolean esAnulable() {
+
+    /**
+     * @param derecha setea la rama derecha del nodo
+     */
+    public void setDerecha(Nodo derecha) {
+        this.derecha = derecha;
+    }
+
+    public void addToFirstPos(int number) {
+        firstPos.add(number);
+    }
+    public void addAllToFirstPos(Set set) {
+        firstPos.addAll(set);
+    }
+
+    public void addToLastPos(int number) {
+        lastPos.add(number);
+    }
+    public void addAllToLastPos(Set set) {
+        lastPos.addAll(set);
+    }
+
+    /**
+     * @return firstPos
+     */
+    public Set<Integer> getFirstPos() {
+        return firstPos;
+    }
+
+    /**
+     * @return lastPos
+     */
+    public Set<Integer> getLastPos() {
+        return lastPos;
+    }
+
+    /**
+     * @return nullable
+     */
+    public boolean isNullable() {
         return nullable;
     }
-    
+
+    /**
+     * @param nullable el nullable a setear
+     */
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
-    public int getNumHojas() {
-        return h;
-    }
-
-    public void setNumHojas(int h) {
-        this.h += h;
-    }
-    
-    public boolean esHoja(){
-        return next == null && prev == null;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
 }
-    
+
