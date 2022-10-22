@@ -8,7 +8,8 @@ import java.io.FileWriter;
 import java.util.*;
 
 public class AFD {
-    StatesAFD de, a;
+    StatesAFD de;
+    static StatesAFD a;
     String simbolo;
     private static Set<Integer>[] followPos;
     private static Node root;
@@ -224,18 +225,22 @@ public class AFD {
                     }
                     DStates.add(q);
                     tmp = q;
-                    AFDResult.add(s.getName() + " -- " + a + " --> " + q.getName());
+                    
                 }
                 s.move(a, tmp);
-                //System.out.println("Estados: " + tmp.getName().toString());
-                //System.out.println("Transiciones: " + a.toString());
+                System.out.println("Estados: " + tmp.getName().toString());
+                System.out.println("Transiciones: " + a.toString());
             //System.out.println("Estado: " + s.getName().toString());
             //AFDResult.add(s.getName().toString() + " - " + a.toString() + " -> " + tmp.getName().toString());
-                
+            //AFDResult.add(s.getName() + " -- " + a + " --> " + tmp.getName());
+
+            AFDResult.add(tmp.getName().toString()  + " - " + a.toString() + " -> " + s.getName().toString());
+            
             }
+
+            
+            
         }
-        
-        //System.out.println("AFD: " + q0.getName().toString());
 
         return q0;
     }
