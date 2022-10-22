@@ -1,4 +1,4 @@
-Transiciones:[[0, 5, 4, 1] - a -> [0, 5, 4, 1], [2, 3, 6, 7] - b -> [2, 3, 6, 7], [2, 3, 6, 7] - a -> [2, 3, 6, 7]]
+Transiciones:[[2, 0] - a -> [2, 0]]
 Alfabeto: [a, b]
-Subconjuntos de aceptación: [2, 3, 6, 7]
-Estado inicial: [0, 5, 4, 1]
+Subconjuntos de aceptaciÃ³n: [1]
+Estado inicial: [2, 0]

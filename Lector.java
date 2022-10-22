@@ -7,77 +7,78 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-
 public class Lector {
 
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
         regex postfix = new regex(); // Instanciando la clase regex para pasar a postfix la expresión regular.
-        //Thompson thompson = new Thompson(); // Instanciando la clase Thompson para crear el AFN.
+        Thompson thompson = new Thompson(); // Instanciando la clase Thompson para
+        // crear el AFN.
         AFDConverter afdConverter = new AFDConverter(); // Instanciando la clase AFDConverter para convertir el AFD a un
                                                         // AFD equivalente.
         AFD afd = new AFD(); // Instanciando la clase AFD para crear el AFD.
 
         String r = "";
 
-        //System.out.println("Introduzca la expresión regular: ");
-        //r = teclado.nextLine(); // lee la expresión regular
-        //String post_value = postfix.evaluar(r); // pasar a postfix la expresión regular
+        // System.out.println("Introduzca la expresión regular: ");
+        r = teclado.nextLine(); // lee la expresión regular
+        String post_value = postfix.evaluar(r); // pasar a postfix la expresión
+        // regular
         // System.out.println("Valor postfix: " + post_value);
 
-        //thompson.post(post_value); // Mando a evaluar la expresión regular.
+        thompson.post(post_value); // Mando a evaluar la expresión regular.
 
-        //thompson.escribirArchivo(); // Escribir el archivo de salida.
+        thompson.escribirArchivo(); // Escribir el archivo de salida.
 
         // Haciendo el getter de la lista de transiciones.
-        //List<Transiciones> tr = thompson.getTransiciones();
+        List<Transiciones> tr = thompson.getTransiciones();
 
-        // System.out.println("Transiciones: " + tr);
+        System.out.println("Transiciones: " + tr);
 
-        //Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
+        Estado inicial = thompson.getEstadoInicial(); // Obteniendo el estado inicial.
 
-        // System.out.println("Estado inicial: " + inicial);
+        System.out.println("Estado inicial: " + inicial);
 
         // Haciendo el getter de la lista de estados iniciales.
-        //List<Estado> estadosIniciales = thompson.getEstados_iniciales();
+        List<Estado> estadosIniciales = thompson.getEstados_iniciales();
 
         // Haciendo el getter de la lista de estados finales.
-        //List<Estado> estadosFinales = thompson.getEstados_aceptacion();
+        List<Estado> estadosFinales = thompson.getEstados_aceptacion();
 
-        // System.out.println("Estados inicial: " + estadosIniciales);
+        System.out.println("Estados inicial: " + estadosIniciales);
 
-        // System.out.println("Estados finales: " + estadosFinales);
+        System.out.println("Estados finales: " + estadosFinales);
 
         // Haciendo getter de los símbolos del alfabeto.
-        //ArrayList<String> alfabeto = thompson.getAlfabeto();
+        ArrayList<String> alfabeto = thompson.getAlfabeto();
 
         // Haciendo getter de los estados.
-        //Stack<Estado> estados = thompson.getEstadoss();
+        Stack<Estado> estados = thompson.getEstadoss();
 
         // Haciendo el getter del estado de aceptación.
-        //Estado aceptacion = thompson.getEstadoAceptacion();
+        Estado aceptacion = thompson.getEstadoAceptacion();
 
-        // System.out.println("Estado de aceptación: " + aceptacion);
+        System.out.println("Estado de aceptación: " + aceptacion);
 
         // Simulando el AFN construído.
-        //thompson.simulation(aceptacion);
+        thompson.simulation(aceptacion);
 
         // Creando el AFD.
-        //afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados,  aceptacion);
+        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados, aceptacion);
 
         // Escribiendo el archivo del AFD.
-        //AFDConverter.EscribirArchivo();
+        AFDConverter.EscribirArchivo();
 
         // Minimizando el AFD
-        //AFDConverter.MinimizacionAFD();
+        AFDConverter.MinimizacionAFD();
 
-        //AFDConverter.Simulacion(); // Simulando el AFD.
+        AFDConverter.Simulacion(); // Simulando el AFD.
 
         // Escribiendo el archivo del AFD minimizado.
-        //AFDConverter.writeAFDMinimizado();
+        AFDConverter.writeAFDMinimizado();
 
-        //AFDConverter.SimulacionMinimizado(); // Simulando el AFD.
-        
+        AFDConverter.SimulacionMinimizado(); // Simulando el AFD.
+
         // Construcción directa regex afd
         System.out.println("Introduzca la expresión regular: ");
         r = teclado.nextLine(); // lee la expresión regular
@@ -86,12 +87,7 @@ public class Lector {
         afd.initialize(r, cadena);
         System.out.println("AFD generado: " + afd.toStringRegexAFD());
         afd.writeAFDDirecto();
-        
 
     }
 
-   
-    
-
-      
 }
