@@ -16,7 +16,7 @@ public class Lector {
         System.out.println("Introduzca la expresión regular: ");
         r = teclado.nextLine(); // lee la expresión regular
         String post_value = postfix.evaluar(r); // pasar a postfix la expresión regular
-        // System.out.println("Valor postfix: " + post_value);
+        System.out.println("Valor postfix: " + post_value);
 
         thompson.post(post_value); // Mando a evaluar la expresión regular.
 
