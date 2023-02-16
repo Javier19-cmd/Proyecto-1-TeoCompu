@@ -50,6 +50,12 @@ public class Lector {
         // Haciendo el getter del estado de aceptación.
         Estado aceptacion = thompson.getEstadoAceptacion();
 
+        // System.out.println("Estado de aceptación: " + aceptacion);
+
+        // Creando el AFD.
+        afdConverter.Proceso(tr, inicial, estadosFinales, alfabeto, estados,
+                aceptacion);
+
         // Simulando el AFN construído.
         thompson.simulation(aceptacion);
 
